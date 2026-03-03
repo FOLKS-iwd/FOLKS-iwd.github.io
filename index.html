@@ -83,21 +83,12 @@ nav.scrolled { border-bottom-color: var(--border); }
   position: relative; padding: 120px 40px 80px;
 }
 .hero-content { max-width: 800px; position: relative; z-index: 1; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 16px; border-radius: 100px;
-  border: 1px solid var(--border); background: var(--surface);
-  font-size: 12px; color: var(--accent); font-weight: 500;
-  margin-bottom: 24px; font-family: 'JetBrains Mono', monospace;
+.hero-pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px; color: var(--text-dim); margin-bottom: 20px;
 }
-.hero-badge .pulse {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent); animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(0,255,136,0); }
-}
+.hero-pre .prompt { color: var(--accent); }
+.hero-pre .flag { color: var(--accent2); }
 .hero h1 {
   font-size: clamp(40px, 6vw, 72px); font-weight: 900;
   line-height: 1.05; margin-bottom: 20px;
@@ -460,10 +451,7 @@ footer .accent { color: var(--accent); }
 <!-- Hero Section -->
 <section class="hero" id="hero">
   <div class="hero-content">
-    <div class="hero-badge">
-      <div class="pulse"></div>
-      Available for opportunities
-    </div>
+    <p class="hero-pre"><span class="prompt">~$</span> ./whoami <span class="flag">--status</span> open_to_work</p>
     <h1>Alaaeddine Knani</h1>
     <div class="hero-subtitle">
       <span class="typed" id="typed-text"></span><span class="cursor"></span>
