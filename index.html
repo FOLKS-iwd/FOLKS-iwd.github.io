@@ -304,6 +304,54 @@ section { position: relative; z-index: 1; padding: 100px 40px; }
 .place.silver { color: var(--silver); }
 .achievement-info .year { font-size: 12px; color: var(--text-dim); }
 
+/* ===== CVE / RESEARCH ===== */
+#cves { background: var(--bg2); }
+.cve-table-wrap {
+  overflow-x: auto; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.cve-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px; white-space: nowrap;
+}
+.cve-table thead { background: var(--bg); }
+.cve-table th {
+  padding: 14px 20px; text-align: left; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--accent);
+  font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+.cve-table td {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  color: var(--text-dim); vertical-align: top;
+}
+.cve-table tr { transition: all 0.3s; }
+.cve-table tbody tr:hover { background: var(--accent-glow); }
+.cve-table tbody tr:last-child td { border-bottom: none; }
+.cve-id {
+  font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  color: var(--accent2);
+}
+.cve-title { white-space: normal; min-width: 280px; color: var(--text); line-height: 1.5; }
+.cvss-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 4px 12px; border-radius: 6px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+}
+.cvss-medium { background: rgba(255,170,0,0.15); color: #ffaa00; border: 1px solid rgba(255,170,0,0.3); }
+.cvss-high { background: rgba(255,107,107,0.15); color: var(--accent3); border: 1px solid rgba(255,107,107,0.3); }
+.cve-date { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.cve-table-wrap {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.cve-table-wrap.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 768px) {
+  .cve-table { font-size: 13px; }
+  .cve-table th, .cve-table td { padding: 12px 14px; }
+  .cve-title { min-width: 200px; }
+}
+
 /* ===== CERTIFICATIONS ===== */
 #certifications { background: var(--bg2); }
 .certs-grid {
@@ -400,6 +448,7 @@ footer .accent { color: var(--accent); }
     <li><a href="#experience">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#cves">CVEs</a></li>
     <li><a href="#certifications">Certifications</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -442,6 +491,10 @@ footer .accent { color: var(--accent); }
       <div class="stat-item">
         <h3 id="counter-years">0</h3>
         <p>Years Experience</p>
+      </div>
+      <div class="stat-item">
+        <h3 id="counter-cves">0</h3>
+        <p>CVEs Published</p>
       </div>
       <div class="stat-item">
         <h3 id="counter-certs">0</h3>
@@ -674,6 +727,55 @@ footer .accent { color: var(--accent); }
   </div>
 </section>
 
+<!-- CVEs / Security Research -->
+<section id="cves">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">// Security Research</p>
+      <h2 class="section-title">CVE Discoveries</h2>
+      <p class="section-subtitle">Vulnerabilities responsibly disclosed and assigned CVE identifiers</p>
+    </div>
+    <div class="cve-table-wrap">
+      <table class="cve-table">
+        <thead>
+          <tr>
+            <th>CVE ID</th>
+            <th>Vulnerability</th>
+            <th>CVSS</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="cve-id">CVE-2026-1512</span></td>
+            <td class="cve-title">Essential Addons for Elementor &lt;= 6.5.9 &mdash; Authenticated (Contributor+) Stored Cross-Site Scripting via Info Box Widget</td>
+            <td><span class="cvss-badge cvss-medium">6.4</span></td>
+            <td class="cve-date">Feb 13, 2026</td>
+          </tr>
+          <tr>
+            <td><span class="cve-id">CVE-2026-1271</span></td>
+            <td class="cve-title">ProfileGrid &lt;= 5.9.7.2 &mdash; Insecure Direct Object Reference to Authenticated (Subscriber+) Arbitrary User Profile and Cover Image Modification</td>
+            <td><span class="cvss-badge cvss-medium">5.3</span></td>
+            <td class="cve-date">Feb 4, 2026</td>
+          </tr>
+          <tr>
+            <td><span class="cve-id">CVE-2026-1210</span></td>
+            <td class="cve-title">Happy Addons for Elementor &lt;= 3.20.7 &mdash; Authenticated (Contributor+) Stored Cross-Site Scripting via '_elementor_data' Meta Field</td>
+            <td><span class="cvss-badge cvss-medium">6.4</span></td>
+            <td class="cve-date">Feb 2, 2026</td>
+          </tr>
+          <tr>
+            <td><span class="cve-id">CVE-2025-68999</span></td>
+            <td class="cve-title">Happy Addons for Elementor &lt;= 3.20.4 &mdash; Authenticated (Contributor+) SQL Injection</td>
+            <td><span class="cvss-badge cvss-medium">6.5</span></td>
+            <td class="cve-date">Jan 23, 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <!-- Certifications -->
 <section id="certifications">
   <div class="container">
@@ -825,6 +927,7 @@ const counterObserver = new IntersectionObserver((entries) => {
     if (e.isIntersecting) {
       animateCounter(document.getElementById('counter-wins'), 7, 1500);
       animateCounter(document.getElementById('counter-years'), 4, 1200);
+      animateCounter(document.getElementById('counter-cves'), 4, 800);
       animateCounter(document.getElementById('counter-certs'), 6, 1000);
       counterObserver.disconnect();
     }
@@ -836,7 +939,7 @@ counterObserver.observe(document.querySelector('.hero-stats'));
 const animObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.timeline-item, .skill-category, .achievement-card, .cert-card').forEach(el => animObserver.observe(el));
+document.querySelectorAll('.timeline-item, .skill-category, .achievement-card, .cve-table-wrap, .cert-card').forEach(el => animObserver.observe(el));
 
 /* ===== NAV SCROLL ===== */
 window.addEventListener('scroll', () => {
