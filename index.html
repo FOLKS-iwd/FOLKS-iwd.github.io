@@ -321,8 +321,9 @@ section { position: relative; z-index: 1; padding: 100px 40px; }
 .cve-table tbody tr:last-child td { border-bottom: none; }
 .cve-id {
   font-family: 'JetBrains Mono', monospace; font-weight: 600;
-  color: var(--accent2);
+  color: var(--accent2); text-decoration: none;
 }
+.cve-id:hover { text-decoration: underline; color: var(--accent); }
 .cve-title { white-space: normal; min-width: 280px; color: var(--text); line-height: 1.5; }
 .cvss-badge {
   display: inline-flex; align-items: center; justify-content: center;
@@ -735,25 +736,25 @@ footer .accent { color: var(--accent); }
         </thead>
         <tbody>
           <tr>
-            <td><span class="cve-id">CVE-2026-1512</span></td>
+            <td><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-1512" target="_blank" class="cve-id">CVE-2026-1512</a></td>
             <td class="cve-title">Essential Addons for Elementor &lt;= 6.5.9 &mdash; Authenticated (Contributor+) Stored Cross-Site Scripting via Info Box Widget</td>
             <td><span class="cvss-badge cvss-medium">6.4</span></td>
             <td class="cve-date">Feb 13, 2026</td>
           </tr>
           <tr>
-            <td><span class="cve-id">CVE-2026-1271</span></td>
+            <td><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-1271" target="_blank" class="cve-id">CVE-2026-1271</a></td>
             <td class="cve-title">ProfileGrid &lt;= 5.9.7.2 &mdash; Insecure Direct Object Reference to Authenticated (Subscriber+) Arbitrary User Profile and Cover Image Modification</td>
             <td><span class="cvss-badge cvss-medium">5.3</span></td>
             <td class="cve-date">Feb 4, 2026</td>
           </tr>
           <tr>
-            <td><span class="cve-id">CVE-2026-1210</span></td>
+            <td><a href="https://nvd.nist.gov/vuln/detail/CVE-2026-1210" target="_blank" class="cve-id">CVE-2026-1210</a></td>
             <td class="cve-title">Happy Addons for Elementor &lt;= 3.20.7 &mdash; Authenticated (Contributor+) Stored Cross-Site Scripting via '_elementor_data' Meta Field</td>
             <td><span class="cvss-badge cvss-medium">6.4</span></td>
             <td class="cve-date">Feb 2, 2026</td>
           </tr>
           <tr>
-            <td><span class="cve-id">CVE-2025-68999</span></td>
+            <td><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-68999" target="_blank" class="cve-id">CVE-2025-68999</a></td>
             <td class="cve-title">Happy Addons for Elementor &lt;= 3.20.4 &mdash; Authenticated (Contributor+) SQL Injection</td>
             <td><span class="cvss-badge cvss-high">8.5</span></td>
             <td class="cve-date">Jan 23, 2026</td>
