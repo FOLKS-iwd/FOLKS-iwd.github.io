@@ -914,7 +914,7 @@ const counterObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       animateCounter(document.getElementById('counter-wins'), 7, 1500);
-      animateCounter(document.getElementById('counter-years'), 4, 1200);
+      animateCounter(document.getElementById('counter-years'), 5, 1200);
       animateCounter(document.getElementById('counter-cves'), 4, 800);
       animateCounter(document.getElementById('counter-certs'), 6, 1000);
       counterObserver.disconnect();
