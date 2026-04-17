@@ -392,6 +392,33 @@ section { position: relative; z-index: 1; padding: 100px 40px; }
 .contact-card h4 { font-size: 14px; margin-bottom: 4px; }
 .contact-card p { font-size: 13px; color: var(--text-dim); word-break: break-all; }
 
+/* ===== TALKS ===== */
+.talks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin-top: 40px; }
+.talk-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px; transition: all 0.3s;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.talk-card:hover { border-color: var(--accent2); transform: translateY(-4px); box-shadow: 0 10px 40px rgba(0,204,255,0.1); }
+.talk-tag {
+  display: inline-block; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px;
+  background: var(--accent2-glow); color: var(--accent2); border: 1px solid rgba(0,204,255,0.2);
+  text-transform: uppercase; letter-spacing: 0.08em; width: fit-content;
+}
+.talk-title { font-size: 18px; font-weight: 700; line-height: 1.3; }
+.talk-meta { font-size: 13px; color: var(--text-dim); display: flex; gap: 16px; flex-wrap: wrap; }
+.talk-meta span { display: flex; align-items: center; gap: 6px; }
+.talk-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; flex: 1; }
+.talk-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  background: transparent; border: 1px solid var(--accent2); color: var(--accent2);
+  text-decoration: none; transition: all 0.3s; width: fit-content; margin-top: 4px;
+}
+.talk-btn:hover { background: var(--accent2); color: var(--bg); box-shadow: 0 0 20px rgba(0,204,255,0.3); }
+.talk-btn svg { width: 16px; height: 16px; }
+
 /* ===== FOOTER ===== */
 footer {
   text-align: center; padding: 40px;
@@ -442,6 +469,7 @@ footer .accent { color: var(--accent); }
     <li><a href="#skills">Skills</a></li>
     <li><a href="#achievements">Achievements</a></li>
     <li><a href="#cves">CVEs</a></li>
+    <li><a href="#talks">Talks</a></li>
     <li><a href="#certifications">Certifications</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -770,6 +798,36 @@ footer .accent { color: var(--accent); }
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<!-- Talks -->
+<section id="talks">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">// Public Speaking</p>
+      <h2 class="section-title">Talks & Presentations</h2>
+      <p class="section-subtitle">Research presented at security events and conferences</p>
+    </div>
+    <div class="talks-grid">
+      <div class="talk-card">
+        <span class="talk-tag">WordPress Security</span>
+        <div class="talk-title">Hunting 0-Days in the WordPress Ecosystem</div>
+        <div class="talk-meta">
+          <span>&#128197; 2026</span>
+          <span>&#9201; 45 min</span>
+          <span>&#127919; CVE-2025-68999 &middot; CVE-2026-2600</span>
+        </div>
+        <div class="talk-desc">
+          From zero to CVE — a practical guide to finding vulnerabilities in WordPress plugins.
+          Covers methodology, AI-assisted hunting, Semgrep rules, and two real case studies with live PoCs.
+        </div>
+        <a href="talks/wordpress-0day-talk.html" target="_blank" class="talk-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Presentation
+        </a>
+      </div>
     </div>
   </div>
 </section>
