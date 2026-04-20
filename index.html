@@ -419,6 +419,39 @@ section { position: relative; z-index: 1; padding: 100px 40px; }
 .talk-btn:hover { background: var(--accent2); color: var(--bg); box-shadow: 0 0 20px rgba(0,204,255,0.3); }
 .talk-btn svg { width: 16px; height: 16px; }
 
+/* ===== WRITEUPS ===== */
+#writeups { background: var(--bg); }
+.writeups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-top: 40px; }
+.writeup-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  text-decoration: none; color: inherit;
+}
+.writeup-card:hover { border-color: var(--accent3); transform: translateY(-3px); box-shadow: 0 10px 40px rgba(255,107,107,0.1); }
+.writeup-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.writeup-cve {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
+  color: var(--accent2);
+}
+.writeup-cvss {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 4px;
+  background: rgba(255,107,107,0.12); color: var(--accent3); border: 1px solid rgba(255,107,107,0.25);
+}
+.writeup-cvss.medium { background: rgba(255,170,0,0.12); color: #ffaa00; border-color: rgba(255,170,0,0.25); }
+.writeup-title { font-size: 16px; font-weight: 700; line-height: 1.35; color: var(--text); }
+.writeup-desc { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; flex: 1; }
+.writeup-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); }
+.writeup-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+.writeup-link {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
+  color: var(--accent3); display: flex; align-items: center; gap: 5px;
+  transition: gap 0.2s;
+}
+.writeup-card:hover .writeup-link { gap: 8px; }
+
 /* ===== FOOTER ===== */
 footer {
   text-align: center; padding: 40px;
@@ -467,6 +500,7 @@ footer .accent { color: var(--accent); }
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#talks">Talks</a></li>
+    <li><a href="#writeups">Writeups</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#achievements">Achievements</a></li>
     <li><a href="#cves">CVEs</a></li>
@@ -651,6 +685,33 @@ footer .accent { color: var(--accent); }
           View Presentation
         </a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Writeups -->
+<section id="writeups">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">// Research</p>
+      <h2 class="section-title">Writeups</h2>
+      <p class="section-subtitle">Technical deep-dives on CVEs I found and disclosed</p>
+    </div>
+    <div class="writeups-grid">
+      <a href="writeups/cve-2025-68999.html" class="writeup-card">
+        <div class="writeup-header">
+          <span class="writeup-cve">CVE-2025-68999</span>
+          <span class="writeup-cvss">8.5 HIGH</span>
+        </div>
+        <div class="writeup-title">Second-Order SQL Injection in Happy Addons for Elementor</div>
+        <div class="writeup-desc">
+          A Contributor-level account can dump the full WordPress database — password hashes, secret keys, anything — by storing a malicious custom field name and triggering the Happy Clone feature. Static analysis misses it because the injection source is a DB read, not a direct user input.
+        </div>
+        <div class="writeup-footer">
+          <span class="writeup-date">Jan 23, 2026</span>
+          <span class="writeup-link">read writeup →</span>
+        </div>
+      </a>
     </div>
   </div>
 </section>
@@ -1025,7 +1086,7 @@ counterObserver.observe(document.querySelector('.hero-stats'));
 const animObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.timeline-item, .skill-category, .achievement-card, .cve-table-wrap, .cert-card').forEach(el => animObserver.observe(el));
+document.querySelectorAll('.timeline-item, .skill-category, .achievement-card, .cve-table-wrap, .cert-card, .writeup-card').forEach(el => animObserver.observe(el));
 
 /* ===== NAV SCROLL ===== */
 window.addEventListener('scroll', () => {
