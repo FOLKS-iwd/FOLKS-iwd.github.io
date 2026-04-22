@@ -430,6 +430,10 @@ section { position: relative; z-index: 1; padding: 100px 40px; }
   text-decoration: none; color: inherit;
 }
 .writeup-card:hover { border-color: var(--accent3); transform: translateY(-3px); box-shadow: 0 10px 40px rgba(255,107,107,0.1); }
+.writeup-card.cert-card-item:hover { border-color: var(--accent2); box-shadow: 0 10px 40px rgba(0,204,255,0.1); }
+.writeup-cvss.cert-badge { background: rgba(0,204,255,0.12); color: var(--accent2); border-color: rgba(0,204,255,0.25); }
+.writeup-card.cert-card-item .writeup-link { color: var(--accent2); }
+.writeup-card.cert-card-item .writeup-cve { color: var(--gold); }
 .writeup-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .writeup-cve {
   font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
@@ -695,9 +699,23 @@ footer .accent { color: var(--accent); }
     <div class="section-header">
       <p class="section-tag">// Research</p>
       <h2 class="section-title">Writeups</h2>
-      <p class="section-subtitle">Technical deep-dives on CVEs I found and disclosed</p>
+      <p class="section-subtitle">Technical deep-dives on CVEs I found and disclosed — plus cert reviews &amp; research notes</p>
     </div>
     <div class="writeups-grid">
+      <a href="writeups/cbteamerx-review.html" class="writeup-card cert-card-item">
+        <div class="writeup-header">
+          <span class="writeup-cve">CBTeamerX</span>
+          <span class="writeup-cvss cert-badge">WITH MERIT</span>
+        </div>
+        <div class="writeup-title">Certified Blue Teamer eXpert — Exam Review & Tips</div>
+        <div class="writeup-desc">
+          Honest, spoiler-free review of the CBTeamerX by PentestingExams.com. What the 7-hour practical exam actually tests, how to prepare, essential tools, MITRE ATT&CK mapping, DFIR methodology, and tips that make the difference between passing and merit.
+        </div>
+        <div class="writeup-footer">
+          <span class="writeup-date">Apr 22, 2026</span>
+          <span class="writeup-link">read review →</span>
+        </div>
+      </a>
       <a href="writeups/cve-2025-68999.html" target="_blank" rel="noopener noreferrer" class="writeup-card">
         <div class="writeup-header">
           <span class="writeup-cve">CVE-2025-68999</span>

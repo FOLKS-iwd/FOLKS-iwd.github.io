@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBTeamerX Review: Certified Blue Teamer eXpert | iwd</title>
+<meta name="description" content="Honest review of the CBTeamerX (Certified Blue Teamer eXpert) exam by PentestingExams.com — exam format, required skills, preparation tips, and what to expect. Passed with Merit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#10101a;
+  --bg3:#161625;
+  --surface:#1a1a2e;
+  --border:#2a2a4a;
+  --text:#e0e0f0;
+  --text-dim:#8888aa;
+  --accent:#00ff88;
+  --accent2:#00ccff;
+  --accent3:#ff6b6b;
+  --accent-glow:rgba(0,255,136,0.15);
+  --accent2-glow:rgba(0,204,255,0.15);
+  --gold:#ffd700;
+  --blue-team:#1e6fff;
+  --blue-team-glow:rgba(30,111,255,0.15);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+::selection{background:var(--accent2);color:var(--bg)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:3px}
+
+#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.05;pointer-events:none}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:all 0.3s;
+}
+nav.scrolled{border-bottom-color:var(--border)}
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:18px;color:var(--accent);
+  text-decoration:none;letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--text-dim)}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  font-weight:500;transition:color 0.3s;position:relative;
+}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;background:var(--accent);transition:width 0.3s;
+}
+.nav-links a:hover::after{width:100%}
+.nav-back{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text-dim);text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:6px;
+  border:1px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+.post-hero{
+  min-height:70vh;display:flex;align-items:center;
+  padding:140px 40px 80px;
+  position:relative;z-index:1;
+  border-bottom:1px solid var(--border);
+}
+.post-hero::before{
+  content:'';position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,204,255,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;animation:fadeUp 0.9s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.post-tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;align-items:center}
+.ptag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  padding:3px 8px;border-radius:0;
+  letter-spacing:0.06em;background:none;border:none;
+}
+.ptag::before{content:'[';margin-right:2px;opacity:0.45}
+.ptag::after {content:']';margin-left:2px;opacity:0.45}
+.ptag-red  {color:var(--accent3)}
+.ptag-green{color:var(--accent)}
+.ptag-blue {color:var(--accent2)}
+.ptag-gold {color:var(--gold)}
+.ptag-cyan {color:#00e5ff}
+
+.post-title{
+  font-size:clamp(28px,5vw,54px);font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(135deg,var(--text) 0%,var(--accent2) 55%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.post-subtitle{
+  font-size:17px;color:var(--text-dim);
+  max-width:640px;line-height:1.7;margin-bottom:32px;
+}
+.post-meta-row{
+  display:flex;flex-wrap:wrap;gap:24px;
+  padding-top:24px;border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);
+}
+.post-meta-row span{display:flex;align-items:center;gap:6px}
+.post-meta-row .accent-val{color:var(--accent);font-weight:600}
+.post-meta-row .blue-val{color:var(--accent2)}
+.post-meta-row .gold-val{color:var(--gold);font-weight:700}
+
+.post-body{
+  max-width:860px;margin:0 auto;
+  padding:64px 40px 100px;
+  position:relative;z-index:1;
+}
+
+/* ── CERT CARD ── */
+.cert-showcase{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;margin:40px 0;
+  box-shadow:0 0 60px rgba(0,0,0,0.5);
+}
+.cert-showcase-header{
+  padding:24px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(0,204,255,0.06) 0%,transparent 60%);
+}
+.cert-name-block{display:flex;flex-direction:column;gap:4px}
+.cert-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:700;
+  color:var(--accent2);letter-spacing:-0.5px;
+}
+.cert-issuer{
+  font-size:12px;color:var(--text-dim);
+  font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;
+}
+.cert-badge-block{
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+}
+.cert-level-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent2);
+}
+.cert-score-big{
+  font-size:28px;font-weight:900;line-height:1;
+  color:var(--gold);
+  text-shadow:0 0 30px rgba(255,215,0,0.5);
+  letter-spacing:-1px;
+}
+.cert-bar-wrap{
+  padding:16px 28px 20px;
+  border-bottom:1px solid var(--border);
+}
+.cert-bar-label{
+  display:flex;justify-content:space-between;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-dim);letter-spacing:0.08em;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.cert-bar-label span:last-child{color:var(--gold)}
+.cert-bar-bg{height:6px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden}
+.cert-bar-fill{
+  height:100%;width:78%;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent2),var(--gold));
+  box-shadow:0 0 12px rgba(255,215,0,0.4);
+  position:relative;
+}
+.cert-bar-fill::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
+  background:white;border-radius:99px;opacity:0.7;
+}
+.cert-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.cert-stat{
+  padding:20px 24px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;
+}
+.cert-stat:last-child{border-right:none}
+.cert-stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;text-transform:uppercase;
+  letter-spacing:0.12em;color:var(--text-dim);
+}
+.cert-stat-val{font-size:15px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace}
+.cert-stat-val.green{color:var(--accent)}
+.cert-stat-val.blue{color:var(--accent2)}
+.cert-stat-val.gold{color:var(--gold)}
+.cert-stat-sub{font-size:11px;color:var(--text-dim);margin-top:2px}
+@media(max-width:600px){
+  .cert-stats{grid-template-columns:repeat(2,1fr)}
+  .cert-stat:nth-child(2){border-right:none}
+  .cert-stat:nth-child(3){border-top:1px solid var(--border)}
+  .cert-stat:nth-child(4){border-top:1px solid var(--border)}
+}
+
+/* ── CERT IMAGE ── */
+.cert-img-wrap{
+  margin:36px 0;border-radius:14px;overflow:hidden;
+  border:1px solid rgba(0,204,255,0.2);
+  box-shadow:0 0 60px rgba(0,204,255,0.1),0 8px 32px rgba(0,0,0,0.5);
+  position:relative;
+}
+.cert-img-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,204,255,0.04),transparent);
+  pointer-events:none;z-index:1;
+}
+.cert-img-wrap img{width:100%;display:block}
+
+/* ── SPONSOR BANNER ── */
+.sponsor-banner{
+  background:linear-gradient(135deg,rgba(255,215,0,0.07) 0%,rgba(0,204,255,0.04) 100%);
+  border:1px solid rgba(255,215,0,0.2);
+  border-radius:12px;padding:22px 26px;
+  margin:36px 0;
+  display:flex;align-items:center;gap:18px;
+}
+.sponsor-icon{font-size:28px;flex-shrink:0}
+.sponsor-text{flex:1}
+.sponsor-text strong{
+  display:block;font-size:14px;font-weight:700;
+  color:var(--gold);margin-bottom:6px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;
+}
+.sponsor-text p{font-size:13.5px;color:var(--text-dim);margin:0;line-height:1.6}
+.sponsor-text a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(0,204,255,0.3)}
+.sponsor-text a:hover{border-bottom-color:var(--accent2)}
+
+.post-body h2{
+  font-size:24px;font-weight:800;
+  margin:60px 0 20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.post-body h2 .sh-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--accent2);font-weight:500;
+}
+.post-body h3{
+  font-size:17px;font-weight:700;
+  color:var(--accent);margin:36px 0 14px;
+}
+.post-body p{
+  color:var(--text-dim);margin-bottom:18px;
+  font-size:15px;line-height:1.8;
+}
+.post-body p strong{color:var(--text)}
+.post-body a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(0,204,255,0.3);transition:all 0.2s}
+.post-body a:hover{border-bottom-color:var(--accent2)}
+
+.callout{
+  border-radius:10px;padding:20px 24px;
+  margin:28px 0;border-left:3px solid;
+  font-size:14px;line-height:1.7;
+}
+.callout strong{display:block;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.06em}
+.callout-red  {background:rgba(255,107,107,0.07);border-color:var(--accent3);color:var(--text-dim)}
+.callout-red  strong{color:var(--accent3)}
+.callout-green{background:rgba(0,255,136,0.06);border-color:var(--accent);color:var(--text-dim)}
+.callout-green strong{color:var(--accent)}
+.callout-blue {background:rgba(0,204,255,0.06);border-color:var(--accent2);color:var(--text-dim)}
+.callout-blue strong{color:var(--accent2)}
+.callout-yellow{background:rgba(255,215,0,0.06);border-color:var(--gold);color:var(--text-dim)}
+.callout-yellow strong{color:var(--gold)}
+
+.code-block{
+  background:#0d0d16;
+  border:1px solid var(--border);border-radius:10px;
+  margin:20px 0 28px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.code-block-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.code-block-header .dots{display:flex;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.code-block-header .file-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text-dim);
+}
+.code-block-header .lang-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:4px;
+  background:rgba(0,204,255,0.1);color:var(--accent2);
+  border:1px solid rgba(0,204,255,0.2);
+  text-transform:uppercase;
+}
+pre{
+  padding:22px 20px;
+  overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:1.65;
+  tab-size:4;
+}
+.kw{color:#ff79c6}
+.fn{color:#50fa7b}
+.str{color:#f1fa8c}
+.cmt{color:#6272a4;font-style:italic}
+.var{color:#8be9fd}
+.num{color:#bd93f9}
+.type{color:#ffb86c}
+.hl    {display:block;margin:0 -20px;padding:0 20px;background:rgba(0,204,255,0.06)}
+.bad   {display:block;margin:0 -20px;padding:0 20px;background:rgba(255,85,85,0.12)}
+.good  {display:block;margin:0 -20px;padding:0 20px;background:rgba(80,250,123,0.08)}
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:4px;padding:1px 6px;
+  color:#e0e0f0;
+}
+
+.flow{display:flex;flex-direction:column;gap:0;margin:28px 0}
+.flow-step{
+  display:flex;gap:20px;padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.flow-step:last-child{border-bottom:none}
+.step-num{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  flex-shrink:0;margin-top:2px;
+}
+.step-num.green{background:rgba(0,255,136,0.15);color:var(--accent);border:1px solid rgba(0,255,136,0.3)}
+.step-num.red  {background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.step-num.blue {background:rgba(0,204,255,0.15);color:var(--accent2);border:1px solid rgba(0,204,255,0.3)}
+.step-num.gold {background:rgba(255,215,0,0.15);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
+.step-body{flex:1}
+.step-body strong{color:var(--text);display:block;margin-bottom:6px;font-size:15px}
+.step-body p{margin:0;font-size:14px}
+
+.table-wrap{
+  border-radius:10px;border:1px solid var(--border);
+  overflow:hidden;margin:24px 0 32px;
+  background:var(--surface);
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg)}
+th{
+  padding:13px 18px;text-align:left;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--accent2);
+  font-weight:600;border-bottom:2px solid var(--border);
+}
+td{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  color:var(--text-dim);vertical-align:top;line-height:1.6;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background 0.2s}
+tbody tr:hover{background:rgba(0,204,255,0.03)}
+td strong{color:var(--text)}
+td code{font-size:12px}
+
+/* skill tags inline */
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 28px}
+.tag-item{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:4px 12px;border-radius:4px;
+  border:1px solid var(--border);color:var(--text-dim);
+  background:var(--surface);
+  transition:all 0.2s;
+}
+.tag-item.blue{border-color:rgba(0,204,255,0.3);color:var(--accent2);background:rgba(0,204,255,0.06)}
+.tag-item.green{border-color:rgba(0,255,136,0.3);color:var(--accent);background:rgba(0,255,136,0.06)}
+.tag-item.gold{border-color:rgba(255,215,0,0.3);color:var(--gold);background:rgba(255,215,0,0.06)}
+.tag-item.red{border-color:rgba(255,107,107,0.3);color:var(--accent3);background:rgba(255,107,107,0.06)}
+
+.disc-timeline{position:relative;padding-left:40px;margin:28px 0}
+.disc-timeline::before{
+  content:'';position:absolute;left:12px;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,var(--accent2),var(--accent),transparent);
+}
+.disc-item{position:relative;margin-bottom:32px}
+.disc-item::before{
+  content:'';position:absolute;left:-34px;top:6px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent2);
+  box-shadow:0 0 12px rgba(0,204,255,0.3);
+}
+.disc-date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--accent2);
+  margin-bottom:6px;letter-spacing:0.05em;
+}
+.disc-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.disc-card:hover{border-color:var(--accent2);box-shadow:0 0 20px var(--accent2-glow)}
+.disc-card strong{color:var(--text);display:block;margin-bottom:4px}
+.disc-card p{font-size:13.5px;margin:0}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.post-footer{
+  text-align:center;padding:48px 40px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text-dim);
+  position:relative;z-index:1;
+}
+.post-footer .accent{color:var(--accent)}
+.post-footer .back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;color:var(--text-dim);
+  text-decoration:none;border:1px solid var(--border);
+  padding:10px 20px;border-radius:8px;
+  font-size:12px;transition:all 0.3s;
+}
+.post-footer .back-link:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+.toc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:24px 28px;margin:40px 0;
+  position:relative;overflow:hidden;
+}
+.toc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+.toc-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--accent2);margin-bottom:14px;
+}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px;font-size:14px}
+.toc a{color:var(--text-dim);text-decoration:none;border:none;transition:color 0.2s}
+.toc a:hover{color:var(--accent2)}
+
+/* verdict section */
+.verdict-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin:28px 0;
+}
+.verdict-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:20px;text-align:center;
+}
+.verdict-icon{font-size:28px;margin-bottom:10px}
+.verdict-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--text-dim);margin-bottom:8px;
+}
+.verdict-val{font-size:15px;font-weight:700;color:var(--text)}
+.verdict-val.blue{color:var(--accent2)}
+.verdict-val.gold{color:var(--gold)}
+.verdict-val.green{color:var(--accent)}
+@media(max-width:600px){.verdict-grid{grid-template-columns:1fr 1fr}}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .post-hero{padding:110px 20px 60px}
+  .post-body{padding:40px 20px 80px}
+  pre{font-size:12px}
+  .sponsor-banner{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<nav id="navbar">
+  <a href="../" class="nav-logo">&lt;AK<span>/&gt;</span></a>
+  <ul class="nav-links">
+    <li><a href="../#about">About</a></li>
+    <li><a href="../#writeups">Writeups</a></li>
+    <li><a href="../#cves">CVEs</a></li>
+    <li><a href="../#contact">Contact</a></li>
+  </ul>
+  <a href="../" class="nav-back">← Back</a>
+</nav>
+
+<!-- ─────────────────── HERO ─────────────────── -->
+<div class="post-hero">
+  <div class="hero-inner">
+    <div class="post-tag-row">
+      <span class="ptag ptag-blue">CBTeamerX</span>
+      <span class="ptag ptag-gold">WITH MERIT</span>
+      <span class="ptag ptag-green">DFIR</span>
+      <span class="ptag ptag-cyan">7-HOUR EXAM</span>
+      <span class="ptag ptag-blue">BLUE TEAM</span>
+    </div>
+
+    <h1 class="post-title">Certified Blue Teamer eXpert<br>— Passed With Merit</h1>
+
+    <p class="post-subtitle">
+      An honest, spoiler-free review of the <strong style="-webkit-text-fill-color:initial;color:var(--accent2)">CBTeamerX</strong>
+      exam by <a href="https://pentestingexams.com" target="_blank" rel="noopener noreferrer" style="-webkit-text-fill-color:initial">PentestingExams.com</a>.
+      What the exam actually tests, how to prepare, what tools you need, and whether it's worth it — from someone who just passed it.
+    </p>
+
+    <div class="post-meta-row">
+      <span>// <span class="accent-val">Alaaeddine Knani</span></span>
+      <span>📅 <span class="blue-val">Apr 22, 2026</span></span>
+      <span>⏱ <span class="blue-val">12 min read</span></span>
+      <span>🏆 <span class="gold-val">MERIT — ID #11411905</span></span>
+      <span>🔗 <a href="https://pentestingexams.com/certifications/expert/certified-blue-teamer-expert/" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);border:none">Official Page ↗</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── BODY ─────────────────── -->
+<div class="post-body">
+
+  <!-- SPONSOR BANNER -->
+  <div class="sponsor-banner reveal">
+    <div class="sponsor-icon">🙌</div>
+    <div class="sponsor-text">
+      <strong>// Sponsored by The SecOps Group</strong>
+      <p>
+        A huge thank you to <a href="https://pentestingexams.com" target="_blank" rel="noopener noreferrer">PentestingExams.com</a>
+        by <strong style="color:var(--text)">The SecOps Group</strong> for sponsoring this certification.
+        Their practical, hands-on approach to blue team certifications is exactly what the industry needs —
+        no multiple choice, no memorization, just real investigation skills under real pressure.
+      </p>
+    </div>
+  </div>
+
+  <!-- CERT CARD -->
+  <div class="cert-showcase reveal">
+    <div class="cert-showcase-header">
+      <div class="cert-name-block">
+        <div class="cert-name">CBTeamerX</div>
+        <div class="cert-issuer">Certified Blue Teamer eXpert · PentestingExams.com</div>
+      </div>
+      <div class="cert-badge-block">
+        <div class="cert-level-label">Achievement Level</div>
+        <div class="cert-score-big">WITH MERIT</div>
+      </div>
+    </div>
+    <div class="cert-bar-wrap">
+      <div class="cert-bar-label"><span>Score Band</span><span>Merit &gt; 75%</span></div>
+      <div class="cert-bar-bg"><div class="cert-bar-fill"></div></div>
+    </div>
+    <div class="cert-stats">
+      <div class="cert-stat">
+        <div class="cert-stat-label">Duration</div>
+        <div class="cert-stat-val blue">7 Hours</div>
+        <div class="cert-stat-sub">Practical exam</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Pass Mark</div>
+        <div class="cert-stat-val green">60%</div>
+        <div class="cert-stat-sub">Merit at 75%+</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Date</div>
+        <div class="cert-stat-val">22-APR-2026</div>
+        <div class="cert-stat-sub">Cert #11411905</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Examiner</div>
+        <div class="cert-stat-val blue">S. Siddharth</div>
+        <div class="cert-stat-sub">The SecOps Group</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc reveal">
+    <div class="toc-title">// Table of Contents</div>
+    <ol>
+      <li><a href="#s1">What is CBTeamerX?</a></li>
+      <li><a href="#s2">Who should take it?</a></li>
+      <li><a href="#s3">Exam format &amp; environment</a></li>
+      <li><a href="#s4">Core skill areas tested</a></li>
+      <li><a href="#s5">My preparation approach</a></li>
+      <li><a href="#s6">The exam experience</a></li>
+      <li><a href="#s7">Essential tools to know</a></li>
+      <li><a href="#s8">Tips for candidates</a></li>
+      <li><a href="#s9">Verdict &amp; final thoughts</a></li>
+      <li><a href="#s10">The certificate</a></li>
+    </ol>
+  </div>
+
+  <!-- ── S1 ── -->
+  <h2 id="s1"><span class="sh-tag">01 //</span> What is CBTeamerX?</h2>
+
+  <p>
+    The <strong>Certified Blue Teamer eXpert (CBTeamerX)</strong> is an advanced, fully practical
+    incident response and digital forensics examination by
+    <a href="https://pentestingexams.com" target="_blank" rel="noopener noreferrer">PentestingExams.com</a>,
+    the certification arm of <strong>The SecOps Group</strong>. It sits at the top of their blue team track —
+    the "eXpert" tier — designed to test whether you can independently investigate a realistic,
+    multi-stage APT intrusion from initial access all the way through persistence, lateral movement,
+    and impact.
+  </p>
+
+  <p>
+    What sets CBTeamerX apart from most blue team certifications is the complete absence of
+    multiple-choice questions. <strong>Everything is practical.</strong> You receive a preconfigured
+    analysis environment containing SIEM data, forensic disk images, malware samples, memory dumps,
+    network captures, and cloud logs — and your job is to reconstruct the full attack chain, identify
+    every technique used, and answer a series of scenario-driven questions. No study guides tell you
+    what to look for. You either know how to investigate or you don't.
+  </p>
+
+  <div class="callout callout-blue reveal">
+    <strong>exam philosophy</strong>
+    CBTeamerX is built on the principle that blue teamers should be able to think like attackers.
+    Understanding why a technique was used — not just that it was used — is what separates
+    a true DFIR analyst from someone who just runs tools. Every question in the exam reflects
+    that philosophy.
+  </div>
+
+  <!-- ── S2 ── -->
+  <h2 id="s2"><span class="sh-tag">02 //</span> Who should take it?</h2>
+
+  <p>
+    The exam page recommends <strong>5+ years of blue team experience</strong> as a baseline.
+    That's not gatekeeping — it's accurate. This certification genuinely demands depth:
+    you need to know the Windows internals behind event IDs, understand how attackers abuse
+    AD protocols at the byte level, and feel comfortable pivoting between five different
+    toolsets under time pressure.
+  </p>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Role</th><th>How it fits</th><th>Min. recommended background</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SOC Analyst (L2/L3)</strong></td><td>Tests advanced detection and triage skills you use daily</td><td>2+ years, strong SIEM background</td></tr>
+        <tr><td><strong>DFIR Analyst</strong></td><td>Validates disk/memory forensics and malware triage capabilities</td><td>3+ years, FTK or Autopsy experience</td></tr>
+        <tr><td><strong>Threat Hunter</strong></td><td>Covers attack chain reconstruction and ATT&CK mapping</td><td>2+ years, Sysmon + EDR familiarity</td></tr>
+        <tr><td><strong>Offensive Security Engineer</strong></td><td>Verifies you truly understand the defensive implications of your attacks</td><td>Solid AD + Windows internals knowledge</td></tr>
+        <tr><td><strong>Cloud Security Engineer</strong></td><td>Cloud IR section adds AWS/Azure log investigation</td><td>CloudTrail + IAM fundamentals</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-yellow reveal">
+    <strong>honest prerequisite check</strong>
+    Before attempting CBTeamerX, you should be comfortable answering these without Googling:
+    what Windows event IDs indicate pass-the-hash, how unquoted service paths enable privilege
+    escalation, what NTFS journal entries reveal about deleted files, and how to reconstruct a
+    Kerberoasting attack from Splunk data alone. If any of those feel shaky, build them up first.
+  </div>
+
+  <!-- ── S3 ── -->
+  <h2 id="s3"><span class="sh-tag">03 //</span> Exam format &amp; environment</h2>
+
+  <p>
+    The exam is <strong>7 hours long</strong>, taken remotely via VPN, on-demand.
+    You connect to a dedicated analysis platform that includes everything you need:
+    no installation, no setup time. The clock starts the moment you connect.
+  </p>
+
+  <div class="flow reveal">
+    <div class="flow-step">
+      <div class="step-num blue">1</div>
+      <div class="step-body">
+        <strong>Connect via VPN</strong>
+        <p>You receive credentials and a VPN config file. Connect and your isolated analysis environment spins up with all evidence pre-staged.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num blue">2</div>
+      <div class="step-body">
+        <strong>Receive the scenario</strong>
+        <p>A realistic incident scenario is presented — a multi-stage intrusion against a corporate environment. Your role is the responding analyst.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num gold">3</div>
+      <div class="step-body">
+        <strong>Investigate across all evidence sources</strong>
+        <p>SIEM dashboards, disk images (E01), memory dumps, malware samples, PCAP files, and cloud logs are all available. You pivot between them as the investigation requires.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num green">4</div>
+      <div class="step-body">
+        <strong>Answer scenario-driven questions</strong>
+        <p>Questions cover every phase of the attack chain. Answers must be specific — technique IDs, file hashes, exact timestamps, tool names, attacker infrastructure. No room for vague answers.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num green">5</div>
+      <div class="step-body">
+        <strong>Submit before 7 hours</strong>
+        <p>No extensions. Pacing matters. An analyst who is systematic and builds a timeline as they go will consistently outperform one who jumps around reactively.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>scoring thresholds</strong>
+    60% to pass. 75%+ for Merit distinction. The exam is automated-graded with specific expected
+    answers, so precision matters enormously. Knowing a tool was used is worth nothing if you
+    can't name the exact technique, file, or timestamp the question asks for.
+  </div>
+
+  <!-- ── S4 ── -->
+  <h2 id="s4"><span class="sh-tag">04 //</span> Core skill areas tested</h2>
+
+  <p>
+    CBTeamerX covers a wide surface. Every domain below appeared in some form during the exam.
+    I'm deliberately keeping this section generic — specifics would leak exam content —
+    but this should give you a clear sense of where to invest your preparation time.
+  </p>
+
+  <h3>Log Analysis &amp; SIEM Investigation</h3>
+  <div class="tag-list">
+    <span class="tag-item blue">Splunk SPL</span>
+    <span class="tag-item blue">Windows Event Log</span>
+    <span class="tag-item blue">Sysmon (Event IDs)</span>
+    <span class="tag-item blue">Security Event Correlation</span>
+    <span class="tag-item blue">Process Genealogy</span>
+    <span class="tag-item blue">Logon Event Analysis</span>
+  </div>
+  <p>
+    The SIEM component is the backbone of the exam. You'll need to build queries from scratch,
+    correlate events across multiple sources, and reconstruct timelines. Strong <strong>Splunk SPL</strong>
+    fluency is the single highest-leverage skill you can develop for this exam. Know your
+    Sysmon event IDs cold — especially <code>EventCode 1</code> (Process Create),
+    <code>3</code> (Network Connection), <code>11</code> (File Create), and <code>22</code> (DNS Query).
+    Know Windows Security event IDs equally well: <code>4624</code>, <code>4648</code>,
+    <code>4672</code>, <code>4688</code>, and the Kerberos family.
+  </p>
+
+  <h3>Disk &amp; Artifact Forensics</h3>
+  <div class="tag-list">
+    <span class="tag-item green">FTK Imager / FTK</span>
+    <span class="tag-item green">NTFS Structures</span>
+    <span class="tag-item green">Registry Analysis</span>
+    <span class="tag-item green">Prefetch / ShimCache</span>
+    <span class="tag-item green">SQLite Databases</span>
+    <span class="tag-item green">E01 Disk Images</span>
+  </div>
+  <p>
+    You'll work with <strong>E01 forensic disk images</strong> containing real Windows file systems.
+    Know how to navigate NTFS structures, extract artifacts from known-location paths,
+    and parse SQLite databases for application artifacts. Browser history, sticky notes,
+    credential stores, scheduled tasks — any of these can contain pivotal evidence.
+    FTK is provided in the exam environment; be comfortable using it without a tutorial.
+  </p>
+
+  <h3>Malware Analysis &amp; Reverse Engineering</h3>
+  <div class="tag-list">
+    <span class="tag-item red">PE Analysis</span>
+    <span class="tag-item red">Static Analysis</span>
+    <span class="tag-item red">Obfuscated Scripts</span>
+    <span class="tag-item red">Deobfuscation</span>
+    <span class="tag-item red">Encryption Logic</span>
+    <span class="tag-item red">C2 Configuration Extraction</span>
+  </div>
+  <p>
+    Expect malware samples that require actual reverse engineering — not just running them
+    through VirusTotal. You'll need to understand <strong>PE structure</strong>, resolve import tables,
+    identify cryptographic routines (RC4, AES, XOR), and extract C2 configuration from
+    obfuscated loaders. PowerShell payloads with multi-layer encoding (Base64 + XOR + GZip)
+    are fair game. Python scripting to replicate encryption logic is a skill worth practicing.
+  </p>
+
+  <h3>Active Directory Attack Detection</h3>
+  <div class="tag-list">
+    <span class="tag-item blue">Kerberoasting</span>
+    <span class="tag-item blue">AS-REP Roasting</span>
+    <span class="tag-item blue">DCSync</span>
+    <span class="tag-item blue">Pass-the-Hash / -Ticket</span>
+    <span class="tag-item blue">GPO Abuse</span>
+    <span class="tag-item blue">MITRE ATT&amp;CK Mapping</span>
+  </div>
+  <p>
+    AD attacks are a major component. You need to <strong>identify them from logs</strong>,
+    not from a red team perspective. Know the MITRE ATT&CK technique ID for every major
+    AD technique — the exam expects exact IDs in answers. Privilege escalation paths,
+    lateral movement techniques, and credential access methods all appear.
+    Understanding <strong>why</strong> a technique leaves the artifacts it does
+    is far more valuable than memorizing technique names.
+  </p>
+
+  <h3>Cloud Incident Response</h3>
+  <div class="tag-list">
+    <span class="tag-item gold">AWS CloudTrail</span>
+    <span class="tag-item gold">IAM Event Analysis</span>
+    <span class="tag-item gold">S3 / EC2 Events</span>
+    <span class="tag-item gold">Credential Compromise</span>
+  </div>
+  <p>
+    The cloud component focuses on <strong>AWS CloudTrail log analysis</strong>. You'll need to
+    trace attacker activity through IAM events, identify compromised credentials,
+    and reconstruct cloud-side lateral movement. The concepts are the same as on-premise —
+    authentication, privilege escalation, data access — but the log format and
+    service-specific API calls are cloud-specific.
+  </p>
+
+  <!-- ── S5 ── -->
+  <h2 id="s5"><span class="sh-tag">05 //</span> My preparation approach</h2>
+
+  <p>
+    My background coming into this exam: 5+ years in offensive and defensive security,
+    strong Splunk and ELK skills from real SOC work, Windows event log analysis from
+    incident response engagements, and Wireshark/PCAP analysis. I had already passed
+    the <strong>eCTHP (88%)</strong> earlier this year, which built the DFIR and threat hunting
+    foundations that made CBTeamerX more manageable.
+  </p>
+
+  <div class="disc-timeline reveal">
+    <div class="disc-item">
+      <div class="disc-date">Foundation</div>
+      <div class="disc-card">
+        <strong>Built the SIEM muscle first</strong>
+        <p>Daily Splunk practice on real datasets. Built custom dashboards for process genealogy,
+        logon event correlation, and lateral movement detection. The ability to write SPL
+        queries under pressure — without autocomplete — is non-negotiable.</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">Forensics</div>
+      <div class="disc-card">
+        <strong>Disk forensics with real images</strong>
+        <p>Practiced with FTK on Windows disk images. Memorized key artifact paths:
+        registry hives, prefetch location, event log paths, browser databases.
+        The exam environment doesn't hold your hand — you need to know where to look instantly.</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">Malware RE</div>
+      <div class="disc-card">
+        <strong>Focused on cryptography and obfuscation</strong>
+        <p>Practiced identifying and reimplementing RC4, XOR-based obfuscation,
+        and multi-layer PowerShell deobfuscation. The ability to write a 20-line Python
+        script to decrypt a sample is worth hours of static analysis time.</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">ATT&CK</div>
+      <div class="disc-card">
+        <strong>Memorized the MITRE ATT&CK framework</strong>
+        <p>Not the whole matrix — but every technique in the Privilege Escalation,
+        Credential Access, Lateral Movement, Persistence, and Defense Evasion tactics.
+        The exam uses exact technique IDs in answers. Know the format:
+        <code>T1XXX.XXX</code> for sub-techniques.</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">Cloud IR</div>
+      <div class="disc-card">
+        <strong>AWS CloudTrail hands-on labs</strong>
+        <p>Spun up CloudTrail in a personal AWS account and generated attack scenarios
+        to understand what legitimate vs. malicious IAM activity looks like in logs.
+        Knowing the key API call names (<code>AssumeRole</code>, <code>GetSecretValue</code>,
+        <code>CreateAccessKey</code>, etc.) saves critical investigation time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S6 ── -->
+  <h2 id="s6"><span class="sh-tag">06 //</span> The exam experience</h2>
+
+  <p>
+    The scenario is realistic in a way that most training labs aren't.
+    The attacker in the scenario didn't use textbook techniques in isolation —
+    they chained multiple techniques across multiple systems, left realistic artifacts,
+    and used tools and methods that defenders actually encounter in the wild.
+  </p>
+
+  <p>
+    The investigation spans multiple machines and timeframes. You'll correlate events
+    across <strong>Windows endpoints, a SIEM with hundreds of thousands of log entries,
+    forensic disk images, and cloud logs</strong>. The attack chain has a clear narrative —
+    initial access, internal reconnaissance, privilege escalation, lateral movement,
+    persistence, and impact — but it's your job to reconstruct it from evidence,
+    not from a story.
+  </p>
+
+  <div class="callout callout-green reveal">
+    <strong>what makes it genuinely hard</strong>
+    It's not the difficulty of any single question — it's the volume and the
+    interdependency. Finding the answer to question 8 often requires the artifact
+    you discovered while answering question 3. Build your attack timeline as you go,
+    document everything, and treat it like a real incident report. The questions reward
+    analysts who work methodically over analysts who race.
+  </div>
+
+  <p>
+    The malware component surprised me most in its depth.
+    It goes well beyond "run strings and check VirusTotal" —
+    you're expected to understand the <em>logic</em> inside the samples,
+    extract configuration values, and understand what they reveal about
+    attacker infrastructure and campaign identifiers.
+  </p>
+
+  <div class="callout callout-blue reveal">
+    <strong>time management is a skill</strong>
+    7 hours feels like plenty until you're 4 hours in and realize you've been
+    deep in a single rabbit hole. Build a mental (or written) tracker: which
+    phases of the attack chain are confirmed, which are pending, and which questions
+    you've answered vs. flagged for review. The exam rewards breadth-first investigation
+    that dives deep only when you have strong directional evidence.
+  </div>
+
+  <!-- ── S7 ── -->
+  <h2 id="s7"><span class="sh-tag">07 //</span> Essential tools to know</h2>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Tool</th><th>Purpose in exam context</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Splunk</strong></td>
+          <td>Primary SIEM — log analysis, event correlation, SPL queries for process/network/auth events</td>
+          <td><span style="color:var(--accent3);font-family:'JetBrains Mono',monospace;font-weight:700">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>FTK / FTK Imager</strong></td>
+          <td>E01 disk image analysis, artifact extraction, NTFS navigation</td>
+          <td><span style="color:var(--accent3);font-family:'JetBrains Mono',monospace;font-weight:700">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Python</strong></td>
+          <td>Rapid scripting for deobfuscation, cryptographic logic reimplementation, log parsing</td>
+          <td><span style="color:var(--accent3);font-family:'JetBrains Mono',monospace;font-weight:700">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>x64dbg / IDA / Ghidra</strong></td>
+          <td>PE binary analysis, IAT resolution, function identification in malware samples</td>
+          <td><span style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Wireshark</strong></td>
+          <td>PCAP analysis, C2 traffic identification, protocol-level artifact extraction</td>
+          <td><span style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>MITRE ATT&amp;CK Navigator</strong></td>
+          <td>Attack chain mapping — know the matrix well enough to not need it during the exam</td>
+          <td><span style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>DB Browser for SQLite</strong></td>
+          <td>Parsing application databases embedded in disk images</td>
+          <td><span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>AWS CLI / CloudTrail Console</strong></td>
+          <td>Cloud log navigation and IAM event correlation</td>
+          <td><span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700">Medium</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── S8 ── -->
+  <h2 id="s8"><span class="sh-tag">08 //</span> Tips for candidates</h2>
+
+  <div class="flow reveal">
+    <div class="flow-step">
+      <div class="step-num blue">1</div>
+      <div class="step-body">
+        <strong>Build your attack timeline from minute one</strong>
+        <p>Open a blank document and start recording every artifact you find with its timestamp,
+        machine, and what it tells you. This document becomes your investigation log and
+        helps you connect dots that are hours apart in the evidence.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num blue">2</div>
+      <div class="step-body">
+        <strong>Master Splunk SPL before anything else</strong>
+        <p>If you can only invest preparation time in one thing, make it Splunk. The ability to
+        write <code>stats</code>, <code>transaction</code>, <code>rex</code>, and
+        <code>eval</code> queries fluently and quickly is the multiplier that makes
+        every other skill more effective.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num gold">3</div>
+      <div class="step-body">
+        <strong>Know ATT&CK sub-technique IDs by heart</strong>
+        <p>Answers expect the exact format: <code>T1574.009</code>, not "unquoted path."
+        Spend time on the Privilege Escalation, Credential Access, and Lateral Movement
+        tactics. Build flashcards if you have to — this alone can be the difference
+        between passing and merit.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num gold">4</div>
+      <div class="step-body">
+        <strong>Practice deobfuscation scripting</strong>
+        <p>Write Python scripts that implement XOR, RC4, and Base64+GZip decoding from scratch.
+        Doing it once from memory is worth ten hours reading about it. When you encounter
+        obfuscated malware during the exam, you want muscle memory, not a tutorial.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num green">5</div>
+      <div class="step-body">
+        <strong>Don't skip the cloud section in preparation</strong>
+        <p>Many blue teamers are strong on endpoint forensics but weak on cloud IR.
+        The cloud component of the exam is not trivial. Know your CloudTrail event types,
+        the IAM actions that signal credential abuse, and how to trace lateral movement
+        across AWS services.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num green">6</div>
+      <div class="step-body">
+        <strong>Accept imperfection, keep moving</strong>
+        <p>You will hit questions where the answer isn't immediately obvious.
+        Mark them, move on, and come back with fresh context gathered from other questions.
+        Many answers become obvious once you have 80% of the attack chain mapped.
+        Stalling on one question for 30 minutes is the main way analysts run out of time.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-green reveal">
+    <strong>the biggest differentiator</strong>
+    Analysts who treat every question as a standalone puzzle struggle.
+    Analysts who treat the exam as a single investigation they're narrating to a CISO —
+    building the story of what happened — consistently perform better.
+    The evidence is designed to tell a coherent story. Follow the story.
+  </div>
+
+  <!-- ── S9 ── -->
+  <h2 id="s9"><span class="sh-tag">09 //</span> Verdict &amp; final thoughts</h2>
+
+  <div class="verdict-grid reveal">
+    <div class="verdict-item">
+      <div class="verdict-icon">🎯</div>
+      <div class="verdict-label">Difficulty</div>
+      <div class="verdict-val blue">Expert</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">⚡</div>
+      <div class="verdict-label">Practical Value</div>
+      <div class="verdict-val green">Very High</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">🏆</div>
+      <div class="verdict-label">Worth it?</div>
+      <div class="verdict-val gold">Absolutely</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">⏱</div>
+      <div class="verdict-label">Format</div>
+      <div class="verdict-val blue">7-hr Practical</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">📚</div>
+      <div class="verdict-label">Prep Time</div>
+      <div class="verdict-val">Varies (3–6 mo)</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">✅</div>
+      <div class="verdict-label">My Result</div>
+      <div class="verdict-val gold">With Merit</div>
+    </div>
+  </div>
+
+  <p>
+    CBTeamerX is the kind of certification that actually means something.
+    It can't be passed by memorizing flashcards or gaming a question bank —
+    you either know how to investigate real incidents or you don't.
+    The 7-hour practical format is exactly how blue teamers should be evaluated,
+    and the scenario quality is among the best I've seen in any certification I've taken.
+  </p>
+
+  <p>
+    The breadth is its strongest feature and its hardest challenge simultaneously.
+    SIEM, disk forensics, malware RE, AD detection, cloud IR — most certifications
+    pick two or three. CBTeamerX covers all of them at depth. If you can pass this
+    with merit, you have genuinely validated skills across the full blue team spectrum,
+    not just a narrow slice of it.
+  </p>
+
+  <div class="callout callout-yellow reveal">
+    <strong>special thanks</strong>
+    I want to personally thank <strong>PentestingExams.com</strong> and
+    <strong>The SecOps Group</strong> for sponsoring this certification.
+    Building practical, high-quality certifications that reflect real-world incident response
+    is not easy or cheap — and the work they put into this exam shows.
+    For any blue teamer looking to benchmark their skills at the expert level:
+    this is the certification to take. Check it out at
+    <a href="https://pentestingexams.com/certifications/expert/certified-blue-teamer-expert/" target="_blank" rel="noopener noreferrer">pentestingexams.com</a>.
+  </div>
+
+  <!-- ── S10 ── -->
+  <h2 id="s10"><span class="sh-tag">10 //</span> The certificate</h2>
+
+  <p>
+    Certified Blue Teamer eXpert · 22-APR-2026 · Certificate ID: <code>11411905</code> ·
+    Exam Version 1.01 · With Merit · Examiner: S. Siddharth
+  </p>
+
+  <div class="cert-img-wrap reveal">
+    <img src="../assets/certs/cbteamerx-cert.png" alt="CBTeamerX Certificate — Alaaeddine Knani, With Merit, 22-APR-2026" loading="lazy">
+  </div>
+
+  <p style="margin-top:8px;font-size:13px;color:var(--text-dim)">
+    Validate at:
+    <a href="https://pentestingexams.com/certificate-validation/" target="_blank" rel="noopener noreferrer">pentestingexams.com/certificate-validation/</a>
+    · ID: <code>11411905</code>
+  </p>
+
+  <!-- References -->
+  <h2><span class="sh-tag">ref //</span> Resources &amp; Links</h2>
+  <ul style="color:var(--text-dim);line-height:2.2;font-size:14px;padding-left:20px">
+    <li><a href="https://pentestingexams.com/certifications/expert/certified-blue-teamer-expert/" target="_blank" rel="noopener noreferrer">CBTeamerX Official Page — PentestingExams.com</a></li>
+    <li><a href="https://pentestingexams.com/certificate-validation/" target="_blank" rel="noopener noreferrer">Certificate Validation Portal</a></li>
+    <li><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&CK Framework</a></li>
+    <li><a href="https://docs.splunk.com/Documentation/Splunk/latest/SearchReference/WhatsInThisManual" target="_blank" rel="noopener noreferrer">Splunk SPL Reference</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/security-auditing-overview" target="_blank" rel="noopener noreferrer">Windows Security Auditing Overview — Microsoft Docs</a></li>
+    <li><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html" target="_blank" rel="noopener noreferrer">AWS CloudTrail User Guide</a></li>
+    <li><a href="https://github.com/SwiftOnSecurity/sysmon-config" target="_blank" rel="noopener noreferrer">SwiftOnSecurity Sysmon Config — recommended baseline</a></li>
+  </ul>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="post-footer">
+  <div>written by <span class="accent">iwd</span> &nbsp;|&nbsp; CBTeamerX Review &nbsp;|&nbsp; Apr 2026</div>
+  <a href="../" class="back-link">← Back to portfolio</a>
+</footer>
+
+<script>
+(function(){
+  const c = document.getElementById('matrix-bg');
+  const ctx = c.getContext('2d');
+  function resize(){ c.width=innerWidth; c.height=innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}[]';
+  const fs = 13;
+  let cols, drops;
+  function init(){ cols=Math.floor(c.width/fs); drops=Array(cols).fill(1); }
+  init();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+  setInterval(()=>{
+    ctx.fillStyle='rgba(10,10,15,0.05)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ccff';
+    ctx.font=fs+'px JetBrains Mono,monospace';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fs, y*fs);
+      if(y*fs>c.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },50);
+})();
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY>40);
+});
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
