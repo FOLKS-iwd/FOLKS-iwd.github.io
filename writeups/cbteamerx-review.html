@@ -813,11 +813,47 @@ td code{font-size:12px}
     <span class="tag-item red">C2 Configuration Extraction</span>
   </div>
   <p>
-    Expect malware samples that require actual reverse engineering - not just running them
-    through VirusTotal. You'll need to understand <strong>PE structure</strong>, resolve import tables,
-    identify cryptographic routines (RC4, AES, XOR), and extract C2 configuration from
-    obfuscated loaders. PowerShell payloads with multi-layer encoding (Base64 + XOR + GZip)
-    are fair game. Python scripting to replicate encryption logic is a skill worth practicing.
+    This is the component that separates CBTeamerX from every other blue team certification.
+    You're not running samples through VirusTotal or checking hashes - you're reading code,
+    understanding the decode chain, and extracting actionable intelligence from obfuscated payloads.
+    The malware you'll encounter is realistic: <strong>multi-layer obfuscated PowerShell loaders</strong>
+    that combine Base64 encoding with XOR encryption to hide their true payload from static analysis.
+  </p>
+  <p>
+    The workflow is always the same: identify the outermost encoding layer, strip it, identify the next,
+    strip it, until you reach the plaintext. What you're looking for at the end is the
+    <strong>C2 configuration</strong> - the attacker's infrastructure, ports, beaconing behavior,
+    campaign identifiers, session token generation logic. Those details answer exam questions
+    and paint the full picture of who you're dealing with.
+  </p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <span class="file-label">deobfuscate.py — generic decode chain pattern</span>
+      <span class="lang-badge">Python</span>
+    </div>
+    <pre><span class="kw">import</span> base64
+
+<span class="cmt"># Layer 1: strip Base64 encoding</span>
+<span class="var">raw</span> = base64.b64decode(<span class="var">encoded_blob</span>)
+
+<span class="cmt"># Layer 2: XOR decrypt — key is always embedded in the loader</span>
+<span class="var">key</span> = <span class="num">0x23</span>  <span class="cmt"># found via static analysis of the loader script</span>
+<span class="var">decrypted</span> = <span class="fn">bytes</span>([<span class="var">b</span> ^ <span class="var">key</span> <span class="kw">for</span> <span class="var">b</span> <span class="kw">in</span> <span class="var">raw</span>])
+
+<span class="cmt"># Layer 3: read the plaintext - reveals function names, C2 config, campaign IDs</span>
+<span class="fn">print</span>(<span class="var">decrypted</span>.decode(<span class="str">'utf-8'</span>, errors=<span class="str">'ignore'</span>))</pre>
+  </div>
+
+  <p>
+    The key skill is not the Python itself - it's reading the obfuscated loader and identifying
+    <em>where</em> the key is embedded, <em>what</em> the decode order is, and <em>what</em> the
+    final payload reveals about attacker infrastructure. Expect to extract things like
+    C2 IP and port, HTTP user-agent strings used for blending in, campaign identifiers,
+    and the logic used to generate unique session tokens per victim host.
+    If you can't read a PowerShell script cold and trace its execution mentally,
+    practice until you can.
   </p>
 
   <h3>Active Directory Attack Detection</h3>
@@ -859,7 +895,7 @@ td code{font-size:12px}
   <p>
     My background coming into this exam: 5+ years in offensive and defensive security,
     strong Splunk and ELK skills from real SOC work, Windows event log analysis from
-    incident response engagements, and Wireshark/PCAP analysis. I had already passed
+    incident response engagements, and malware RE from prior CTF and consulting work. I had already passed
     the <strong>eCTHP (88%)</strong> earlier this year, which built the DFIR and threat hunting
     foundations that made CBTeamerX more manageable.
   </p>
@@ -946,8 +982,12 @@ td code{font-size:12px}
     The malware component surprised me most in its depth.
     It goes well beyond "run strings and check VirusTotal" -
     you're expected to understand the <em>logic</em> inside the samples,
-    extract configuration values, and understand what they reveal about
-    attacker infrastructure and campaign identifiers.
+    trace the full decode chain manually, and extract C2 configuration that
+    directly answers exam questions. The obfuscation is realistic: layered encoding
+    designed to defeat automated analysis. You need to read it, understand it,
+    reimplement the decryption in a few lines of Python, and pull out exactly
+    what the question is asking for - infrastructure details, campaign identifiers,
+    the session token algorithm. That's not a CTF challenge, that's real malware triage.
   </p>
 
   <div class="callout callout-blue reveal">
@@ -984,11 +1024,6 @@ td code{font-size:12px}
         <tr>
           <td><strong>x64dbg / IDA / Ghidra</strong></td>
           <td>PE binary analysis, IAT resolution, function identification in malware samples</td>
-          <td><span style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700">High</span></td>
-        </tr>
-        <tr>
-          <td><strong>Wireshark</strong></td>
-          <td>PCAP analysis, C2 traffic identification, protocol-level artifact extraction</td>
           <td><span style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700">High</span></td>
         </tr>
         <tr>
