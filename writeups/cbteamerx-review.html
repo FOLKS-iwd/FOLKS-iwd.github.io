@@ -488,13 +488,34 @@ td code{font-size:12px}
 .verdict-val.green{color:var(--accent)}
 @media(max-width:600px){.verdict-grid{grid-template-columns:1fr 1fr}}
 
+.tips-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin:24px 0 32px;
+}
+.tip-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:20px 22px;
+  display:flex;flex-direction:column;gap:8px;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.tip-item:hover{border-color:var(--accent2);box-shadow:0 0 20px var(--accent2-glow)}
+.tip-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;letter-spacing:0.12em;
+  color:var(--accent2);opacity:0.7;
+}
+.tip-item strong{font-size:14px;font-weight:700;color:var(--text);line-height:1.3}
+.tip-item p{font-size:13px;color:var(--text-dim);margin:0;line-height:1.6}
+.tip-item code{font-size:11.5px}
 @media(max-width:768px){
   nav{padding:12px 20px}
   .post-hero{padding:110px 20px 60px}
   .post-body{padding:40px 20px 80px}
   pre{font-size:12px}
   .sponsor-banner{flex-direction:column;gap:12px}
+  .tips-grid{grid-template-columns:1fr 1fr}
 }
+@media(max-width:480px){.tips-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -515,15 +536,20 @@ td code{font-size:12px}
 <!-- ─────────────────── HERO ─────────────────── -->
 <div class="post-hero">
   <div class="hero-inner">
-    <div class="post-tag-row">
-      <span class="ptag ptag-blue">CBTeamerX</span>
-      <span class="ptag ptag-gold">WITH MERIT</span>
-      <span class="ptag ptag-green">DFIR</span>
-      <span class="ptag ptag-cyan">7-HOUR EXAM</span>
-      <span class="ptag ptag-blue">BLUE TEAM</span>
+    <div style="display:flex;align-items:flex-start;gap:28px;flex-wrap:wrap;margin-bottom:28px">
+      <img src="../assets/certs/cbteamerx-badge.png" alt="CBTeamerX Badge — The SecOps Group"
+           style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(0,204,255,0.25));flex-shrink:0">
+      <div>
+        <div class="post-tag-row" style="margin-bottom:14px">
+          <span class="ptag ptag-blue">CBTeamerX</span>
+          <span class="ptag ptag-gold">WITH MERIT</span>
+          <span class="ptag ptag-green">DFIR</span>
+          <span class="ptag ptag-cyan">7-HOUR EXAM</span>
+          <span class="ptag ptag-blue">BLUE TEAM</span>
+        </div>
+        <h1 class="post-title" style="font-size:clamp(26px,4.5vw,50px)">Certified Blue Teamer eXpert<br>— Passed With Merit</h1>
+      </div>
     </div>
-
-    <h1 class="post-title">Certified Blue Teamer eXpert<br>— Passed With Merit</h1>
 
     <p class="post-subtitle">
       An honest, spoiler-free review of the <strong style="-webkit-text-fill-color:initial;color:var(--accent2)">CBTeamerX</strong>
@@ -987,73 +1013,43 @@ td code{font-size:12px}
   <!-- ── S8 ── -->
   <h2 id="s8"><span class="sh-tag">08 //</span> Tips for candidates</h2>
 
-  <div class="flow reveal">
-    <div class="flow-step">
-      <div class="step-num blue">1</div>
-      <div class="step-body">
-        <strong>Build your attack timeline from minute one</strong>
-        <p>Open a blank document and start recording every artifact you find with its timestamp,
-        machine, and what it tells you. This document becomes your investigation log and
-        helps you connect dots that are hours apart in the evidence.</p>
-      </div>
+  <div class="tips-grid reveal">
+    <div class="tip-item">
+      <div class="tip-num">01</div>
+      <strong>Build a timeline from minute one</strong>
+      <p>Document every artifact — timestamp, machine, meaning. It becomes your investigation log and connects dots hours apart.</p>
     </div>
-    <div class="flow-step">
-      <div class="step-num blue">2</div>
-      <div class="step-body">
-        <strong>Master Splunk SPL before anything else</strong>
-        <p>If you can only invest preparation time in one thing, make it Splunk. The ability to
-        write <code>stats</code>, <code>transaction</code>, <code>rex</code>, and
-        <code>eval</code> queries fluently and quickly is the multiplier that makes
-        every other skill more effective.</p>
-      </div>
+    <div class="tip-item">
+      <div class="tip-num">02</div>
+      <strong>Master Splunk SPL first</strong>
+      <p>If you invest in one skill, make it SPL. Fluent <code>stats</code>, <code>rex</code>, <code>transaction</code> queries under pressure are the real multiplier.</p>
     </div>
-    <div class="flow-step">
-      <div class="step-num gold">3</div>
-      <div class="step-body">
-        <strong>Know ATT&CK sub-technique IDs by heart</strong>
-        <p>Answers expect the exact format: <code>T1574.009</code>, not "unquoted path."
-        Spend time on the Privilege Escalation, Credential Access, and Lateral Movement
-        tactics. Build flashcards if you have to — this alone can be the difference
-        between passing and merit.</p>
-      </div>
+    <div class="tip-item">
+      <div class="tip-num">03</div>
+      <strong>Know ATT&amp;CK IDs cold</strong>
+      <p>Answers require exact format: <code>T1574.009</code>, not "unquoted path." Focus on Priv Esc, Cred Access, Lateral Movement.</p>
     </div>
-    <div class="flow-step">
-      <div class="step-num gold">4</div>
-      <div class="step-body">
-        <strong>Practice deobfuscation scripting</strong>
-        <p>Write Python scripts that implement XOR, RC4, and Base64+GZip decoding from scratch.
-        Doing it once from memory is worth ten hours reading about it. When you encounter
-        obfuscated malware during the exam, you want muscle memory, not a tutorial.</p>
-      </div>
+    <div class="tip-item">
+      <div class="tip-num">04</div>
+      <strong>Practice deobfuscation scripting</strong>
+      <p>Implement XOR, RC4, Base64+GZip in Python from memory. During the exam you want muscle memory, not Stack Overflow.</p>
     </div>
-    <div class="flow-step">
-      <div class="step-num green">5</div>
-      <div class="step-body">
-        <strong>Don't skip the cloud section in preparation</strong>
-        <p>Many blue teamers are strong on endpoint forensics but weak on cloud IR.
-        The cloud component of the exam is not trivial. Know your CloudTrail event types,
-        the IAM actions that signal credential abuse, and how to trace lateral movement
-        across AWS services.</p>
-      </div>
+    <div class="tip-item">
+      <div class="tip-num">05</div>
+      <strong>Don't skip cloud IR</strong>
+      <p>The cloud component is not trivial. Know your CloudTrail event types, IAM abuse patterns, and cross-service lateral movement.</p>
     </div>
-    <div class="flow-step">
-      <div class="step-num green">6</div>
-      <div class="step-body">
-        <strong>Accept imperfection, keep moving</strong>
-        <p>You will hit questions where the answer isn't immediately obvious.
-        Mark them, move on, and come back with fresh context gathered from other questions.
-        Many answers become obvious once you have 80% of the attack chain mapped.
-        Stalling on one question for 30 minutes is the main way analysts run out of time.</p>
-      </div>
+    <div class="tip-item">
+      <div class="tip-num">06</div>
+      <strong>Mark and move on</strong>
+      <p>If an answer isn't obvious, flag it and keep going. Most blocked answers unlock once you have 80% of the chain mapped.</p>
     </div>
   </div>
 
   <div class="callout callout-green reveal">
     <strong>the biggest differentiator</strong>
-    Analysts who treat every question as a standalone puzzle struggle.
-    Analysts who treat the exam as a single investigation they're narrating to a CISO —
-    building the story of what happened — consistently perform better.
-    The evidence is designed to tell a coherent story. Follow the story.
+    Treat it as one investigation you're narrating to a CISO — not a set of standalone puzzles.
+    The evidence tells a coherent story. Follow the story.
   </div>
 
   <!-- ── S9 ── -->
