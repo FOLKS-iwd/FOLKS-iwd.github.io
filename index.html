@@ -493,16 +493,21 @@ footer .accent { color: var(--accent); }
 }
 </style>
 <style>
-.resume-dl{position:relative;display:inline-block}
-.resume-dl>.btn{cursor:pointer}
-.resume-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:60;display:none;min-width:200px;background:rgba(15,18,24,.98);border:1px solid rgba(140,140,140,.35);border-radius:8px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.45)}
-.resume-menu.open{display:block}
-.resume-menu a{display:flex;gap:.5rem;align-items:center;padding:.62rem .9rem;font-size:.92rem;text-decoration:none;color:#e8e8e8;border-bottom:1px solid rgba(140,140,140,.16)}
-.resume-menu a:last-child{border-bottom:none}
-.resume-menu a:hover,.resume-menu a:focus{background:rgba(140,140,140,.16);outline:none}
-.resume-menu small{opacity:.55;margin-left:auto;font-size:.7rem;letter-spacing:.05em}
-.resume-dl .caret{transition:transform .18s}
-.resume-dl.open .caret{transform:rotate(180deg)}
+.resume-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.resume-modal.open{display:flex}
+.resume-modal__bd{position:absolute;inset:0;background:rgba(4,6,10,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.resume-modal__box{position:relative;z-index:1;width:100%;max-width:380px;background:#0e1218;border:1px solid rgba(140,140,140,.35);border-radius:14px;padding:26px 24px 24px;box-shadow:0 24px 60px rgba(0,0,0,.55);animation:resPop .18s ease-out}
+@keyframes resPop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.resume-modal__x{position:absolute;top:10px;right:14px;background:none;border:none;color:#9aa2ae;font-size:26px;line-height:1;cursor:pointer;padding:0}
+.resume-modal__x:hover{color:#fff}
+.resume-modal__box h3{margin:0 0 6px;font-size:1.15rem;color:#f0f2f5}
+.resume-modal__box p{margin:0 0 18px;font-size:.9rem;color:#98a1af}
+.resume-modal__opts{display:flex;flex-direction:column;gap:10px}
+.resume-modal__opts a{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid rgba(140,140,140,.3);border-radius:10px;text-decoration:none;color:#e8ebf0;font-size:1rem;transition:border-color .15s,background .15s}
+.resume-modal__opts a:hover,.resume-modal__opts a:focus{border-color:#3aa0ff;background:rgba(58,160,255,.1);outline:none}
+.resume-modal__opts .flag{font-size:1.5rem;line-height:1}
+.resume-modal__opts small{margin-left:auto;opacity:.55;font-size:.72rem;letter-spacing:.06em}
+@media (prefers-reduced-motion:reduce){.resume-modal__box{animation:none}}
 </style>
 </head>
 <body>
@@ -547,17 +552,10 @@ footer .accent { color: var(--accent); }
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Get in Touch
       </a>
-      <span class="resume-dl">
-        <button type="button" id="resumeBtn" class="btn btn-outline" aria-haspopup="true" aria-expanded="false" onclick="toggleResume(event)">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Resume
-          <svg class="caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="resume-menu" id="resumeMenu" role="menu">
-          <a href="resume-en.pdf" download role="menuitem">&#127468;&#127463; English <small>PDF</small></a>
-          <a href="resume-fr.pdf" download role="menuitem">&#127467;&#127479; Fran&ccedil;ais <small>PDF</small></a>
-        </div>
-      </span>
+      <button type="button" class="btn btn-outline" onclick="openResume()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Resume
+      </button>
       <a href="https://linkedin.com/in/knani-alaaeddine-b99b30189" target="_blank" class="btn btn-outline">
         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         LinkedIn
@@ -1156,10 +1154,22 @@ document.querySelectorAll('.nav-links a').forEach(a => {
   a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
 });
 </script>
+<div class="resume-modal" id="resumeModal" aria-hidden="true">
+  <div class="resume-modal__bd" onclick="closeResume()"></div>
+  <div class="resume-modal__box" role="dialog" aria-modal="true" aria-labelledby="resumeTitle">
+    <button class="resume-modal__x" onclick="closeResume()" aria-label="Close">&times;</button>
+    <h3 id="resumeTitle">Download resume</h3>
+    <p>Choose your preferred language.</p>
+    <div class="resume-modal__opts">
+      <a href="resume-en.pdf" download onclick="closeResume()"><span class="flag">&#127468;&#127463;</span><span>English</span><small>PDF</small></a>
+      <a href="resume-fr.pdf" download onclick="closeResume()"><span class="flag">&#127467;&#127479;</span><span>Fran&ccedil;ais</span><small>PDF</small></a>
+    </div>
+  </div>
+</div>
 <script>
-function toggleResume(e){e.preventDefault();e.stopPropagation();var w=document.querySelector(".resume-dl"),m=document.getElementById("resumeMenu"),b=document.getElementById("resumeBtn");var o=m.classList.toggle("open");w.classList.toggle("open",o);b.setAttribute("aria-expanded",o);}
-document.addEventListener("click",function(e){if(!e.target.closest(".resume-dl")){var m=document.getElementById("resumeMenu");if(m&&m.classList.contains("open")){m.classList.remove("open");document.querySelector(".resume-dl").classList.remove("open");document.getElementById("resumeBtn").setAttribute("aria-expanded","false");}}});
-document.addEventListener("keydown",function(e){if(e.key==="Escape"){var m=document.getElementById("resumeMenu");if(m){m.classList.remove("open");var w=document.querySelector(".resume-dl");if(w)w.classList.remove("open");}}});
+function openResume(){var m=document.getElementById("resumeModal");m.classList.add("open");m.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
+function closeResume(){var m=document.getElementById("resumeModal");m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow="";}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeResume();});
 </script>
 </body>
 </html>
