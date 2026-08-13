@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baggage: HackTheBox Sherlock Writeup - Shellbag Forensics | iwd</title>
+<meta name="description" content="Reconstructing an attacker's post-compromise data theft using Windows Shellbag forensics - from initial archive download to network share pillaging and data exfiltration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#10101a;
+  --bg3:#161625;
+  --surface:#1a1a2e;
+  --border:#2a2a4a;
+  --text:#e0e0f0;
+  --text-dim:#8888aa;
+  --accent:#00ff88;
+  --accent2:#00ccff;
+  --accent3:#ff6b6b;
+  --accent-glow:rgba(0,255,136,0.15);
+  --accent2-glow:rgba(0,204,255,0.15);
+  --gold:#ffd700;
+  --medium:#f59e0b;
+  --medium-glow:rgba(245,158,11,0.15);
+  --dfir:#00ccff;
+  --dfir-glow:rgba(0,204,255,0.15);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+::selection{background:var(--accent2);color:var(--bg)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:3px}
+
+#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.05;pointer-events:none}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:all 0.3s;
+}
+nav.scrolled{border-bottom-color:var(--border)}
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:18px;color:var(--accent);
+  text-decoration:none;letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--text-dim)}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  font-weight:500;transition:color 0.3s;position:relative;
+}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;background:var(--accent);transition:width 0.3s;
+}
+.nav-links a:hover::after{width:100%}
+.nav-back{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text-dim);text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:6px;
+  border:1px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-back:hover{color:var(--accent2);border-color:var(--accent2);background:var(--accent2-glow)}
+
+.post-hero{
+  min-height:70vh;display:flex;align-items:center;
+  padding:140px 40px 80px;
+  position:relative;z-index:1;
+  border-bottom:1px solid var(--border);
+}
+.post-hero::before{
+  content:'';position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,204,255,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;animation:fadeUp 0.9s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.post-tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;align-items:center}
+.ptag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  padding:3px 8px;border-radius:0;
+  letter-spacing:0.06em;background:none;border:none;
+}
+.ptag::before{content:'[';margin-right:2px;opacity:0.45}
+.ptag::after {content:']';margin-left:2px;opacity:0.45}
+.ptag-red  {color:var(--accent3)}
+.ptag-green{color:var(--accent)}
+.ptag-blue {color:var(--accent2)}
+.ptag-gold {color:var(--gold)}
+.ptag-medium{color:var(--medium)}
+
+.post-title{
+  font-size:clamp(28px,5vw,54px);font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(135deg,var(--text) 0%,var(--accent2) 60%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.post-subtitle{
+  font-size:17px;color:var(--text-dim);
+  max-width:640px;line-height:1.7;margin-bottom:32px;
+}
+.post-meta-row{
+  display:flex;flex-wrap:wrap;gap:24px;
+  padding-top:24px;border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);
+}
+.post-meta-row span{display:flex;align-items:center;gap:6px}
+.post-meta-row .accent-val{color:var(--accent);font-weight:600}
+.post-meta-row .blue-val{color:var(--accent2)}
+
+.post-body{
+  max-width:860px;margin:0 auto;
+  padding:64px 40px 100px;
+  position:relative;z-index:1;
+}
+
+/* Sherlock Info Card (replaces CVE card) */
+.sherlock-card{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;margin:40px 0;
+  box-shadow:0 0 60px rgba(0,0,0,0.5);
+}
+.sherlock-card-header{
+  padding:24px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(0,204,255,0.06) 0%,transparent 60%);
+}
+.sherlock-id-block{display:flex;flex-direction:column;gap:4px}
+.sherlock-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:700;
+  color:var(--accent2);letter-spacing:-0.5px;
+}
+.sherlock-sub{
+  font-size:12px;color:var(--text-dim);
+  font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;
+}
+.sherlock-difficulty-badge{
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+}
+.difficulty-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+}
+.difficulty-text{
+  font-size:28px;font-weight:900;line-height:1;
+  color:var(--accent);
+  text-shadow:0 0 30px rgba(0,255,136,0.4);
+}
+.sherlock-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.sherlock-stat{
+  padding:20px 24px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;
+}
+.sherlock-stat:last-child{border-right:none}
+.sherlock-stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;text-transform:uppercase;
+  letter-spacing:0.12em;color:var(--text-dim);
+}
+.sherlock-stat-val{font-size:15px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace}
+.sherlock-stat-val.green{color:var(--accent)}
+.sherlock-stat-val.blue{color:var(--accent2)}
+.sherlock-stat-val.red{color:var(--accent3)}
+.sherlock-stat-val.gold{color:var(--gold)}
+@media(max-width:600px){
+  .sherlock-stats{grid-template-columns:repeat(2,1fr)}
+  .sherlock-stat:nth-child(2){border-right:none}
+  .sherlock-stat:nth-child(3){border-top:1px solid var(--border)}
+  .sherlock-stat:nth-child(4){border-top:1px solid var(--border)}
+}
+
+.post-body h2{
+  font-size:24px;font-weight:800;
+  margin:60px 0 20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.post-body h2 .sh-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--accent2);font-weight:500;
+}
+.post-body h3{
+  font-size:17px;font-weight:700;
+  color:var(--accent2);margin:36px 0 14px;
+}
+.post-body p{
+  color:var(--text-dim);margin-bottom:18px;
+  font-size:15px;line-height:1.8;
+}
+.post-body p strong{color:var(--text)}
+.post-body a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(0,204,255,0.3);transition:all 0.2s}
+.post-body a:hover{border-bottom-color:var(--accent2)}
+
+.callout{
+  border-radius:10px;padding:20px 24px;
+  margin:28px 0;border-left:3px solid;
+  font-size:14px;line-height:1.7;
+}
+.callout strong{display:block;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.06em}
+.callout-red  {background:rgba(255,107,107,0.07);border-color:var(--accent3);color:var(--text-dim)}
+.callout-red  strong{color:var(--accent3)}
+.callout-green{background:rgba(0,255,136,0.06);border-color:var(--accent);color:var(--text-dim)}
+.callout-green strong{color:var(--accent)}
+.callout-blue {background:rgba(0,204,255,0.06);border-color:var(--accent2);color:var(--text-dim)}
+.callout-blue strong{color:var(--accent2)}
+.callout-yellow{background:rgba(255,215,0,0.06);border-color:var(--gold);color:var(--text-dim)}
+.callout-yellow strong{color:var(--gold)}
+
+.code-block{
+  background:#0d0d16;
+  border:1px solid var(--border);border-radius:10px;
+  margin:20px 0 28px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.code-block-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.code-block-header .dots{display:flex;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.code-block-header .file-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text-dim);
+}
+.code-block-header .lang-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:4px;
+  background:var(--accent2-glow);color:var(--accent2);
+  border:1px solid rgba(0,204,255,0.2);
+  text-transform:uppercase;
+}
+pre{
+  padding:22px 20px;
+  overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:1.65;
+  tab-size:4;
+}
+.kw{color:#ff79c6}
+.fn{color:#50fa7b}
+.str{color:#f1fa8c}
+.cmt{color:#6272a4;font-style:italic}
+.var{color:#8be9fd}
+.num{color:#bd93f9}
+.type{color:#ffb86c}
+.hl    {display:block;margin:0 -20px;padding:0 20px;background:rgba(0,204,255,0.06)}
+.bad   {display:block;margin:0 -20px;padding:0 20px;background:rgba(255,85,85,0.12)}
+.good  {display:block;margin:0 -20px;padding:0 20px;background:rgba(80,250,123,0.08)}
+
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:4px;padding:1px 6px;
+  color:#e0e0f0;
+}
+
+.table-wrap{
+  border-radius:10px;border:1px solid var(--border);
+  overflow:hidden;margin:24px 0 32px;
+  background:var(--surface);
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg)}
+th{
+  padding:13px 18px;text-align:left;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--accent2);
+  font-weight:600;border-bottom:2px solid var(--border);
+}
+td{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  color:var(--text-dim);vertical-align:top;line-height:1.6;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background 0.2s}
+tbody tr:hover{background:rgba(0,204,255,0.03)}
+td strong{color:var(--text)}
+td code{font-size:12px}
+
+/* Task answer box */
+.task-block{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin:36px 0 44px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+}
+.task-header{
+  padding:18px 24px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(0,204,255,0.06) 0%,transparent 60%);
+}
+.task-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;font-weight:700;
+  color:var(--accent2);
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,204,255,0.12);border:1px solid rgba(0,204,255,0.3);
+  flex-shrink:0;
+}
+.task-question{
+  font-size:15px;font-weight:600;color:var(--text);line-height:1.5;
+}
+.task-body{padding:20px 24px}
+.task-body p{font-size:14px;margin-bottom:14px}
+.task-body p:last-child{margin-bottom:0}
+.answer-box{
+  background:rgba(0,255,136,0.05);
+  border:1px solid rgba(0,255,136,0.25);
+  border-radius:8px;padding:14px 20px;
+  margin:16px 0;
+  display:flex;align-items:center;gap:12px;
+}
+.answer-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent);
+  flex-shrink:0;
+}
+.answer-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:15px;font-weight:700;
+  color:var(--accent);
+  word-break:break-all;
+}
+
+/* Timeline */
+.disc-timeline{position:relative;padding-left:40px;margin:28px 0}
+.disc-timeline::before{
+  content:'';position:absolute;left:12px;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,var(--accent2),var(--accent),transparent);
+}
+.disc-item{position:relative;margin-bottom:32px}
+.disc-item::before{
+  content:'';position:absolute;left:-34px;top:6px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent2);
+  box-shadow:0 0 12px rgba(0,204,255,0.3);
+}
+.disc-date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--accent2);
+  margin-bottom:6px;letter-spacing:0.05em;
+}
+.disc-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.disc-card:hover{border-color:var(--accent2);box-shadow:0 0 20px var(--accent2-glow)}
+.disc-card strong{color:var(--text);display:block;margin-bottom:4px}
+.disc-card p{font-size:13.5px;margin:0}
+
+/* Flow steps */
+.flow{display:flex;flex-direction:column;gap:0;margin:28px 0}
+.flow-step{
+  display:flex;gap:20px;padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.flow-step:last-child{border-bottom:none}
+.step-num{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  flex-shrink:0;margin-top:2px;
+}
+.step-num.green{background:rgba(0,255,136,0.15);color:var(--accent);border:1px solid rgba(0,255,136,0.3)}
+.step-num.red  {background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.step-num.blue {background:rgba(0,204,255,0.15);color:var(--accent2);border:1px solid rgba(0,204,255,0.3)}
+.step-body{flex:1}
+.step-body strong{color:var(--text);display:block;margin-bottom:6px;font-size:15px}
+.step-body p{margin:0;font-size:14px}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.post-footer{
+  text-align:center;padding:48px 40px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text-dim);
+  position:relative;z-index:1;
+}
+.post-footer .accent{color:var(--accent2)}
+.post-footer .back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;color:var(--text-dim);
+  text-decoration:none;border:1px solid var(--border);
+  padding:10px 20px;border-radius:8px;
+  font-size:12px;transition:all 0.3s;
+}
+.post-footer .back-link:hover{color:var(--accent2);border-color:var(--accent2);background:var(--accent2-glow)}
+
+.toc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:24px 28px;margin:40px 0;
+  position:relative;overflow:hidden;
+}
+.toc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+.toc-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--accent2);margin-bottom:14px;
+}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px;font-size:14px}
+.toc a{color:var(--text-dim);text-decoration:none;border:none;transition:color 0.2s}
+.toc a:hover{color:var(--accent2)}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .post-hero{padding:110px 20px 60px}
+  .post-body{padding:40px 20px 80px}
+  pre{font-size:12px}
+  .answer-box{flex-direction:column;align-items:flex-start;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<nav id="navbar">
+  <a href="../" class="nav-logo">iwd<span>.sec</span></a>
+  <ul class="nav-links">
+    <li><a href="../#writeups">writeups</a></li>
+    <li><a href="../talks/wordpress-0day-talk.html" target="_blank" rel="noopener noreferrer">talks</a></li>
+    <li><a href="../#skills">tools</a></li>
+  </ul>
+  <a href="../#writeups" class="nav-back">&larr; Back to writeups</a>
+</nav>
+
+<!-- HERO -->
+<div class="post-hero">
+  <div class="hero-inner">
+    <div class="post-tag-row">
+      <span class="ptag ptag-green">HTB</span>
+      <span class="ptag ptag-blue">SHERLOCK</span>
+      <span class="ptag ptag-blue">DFIR</span>
+      <span class="ptag ptag-gold">SHELLBAGS</span>
+      <span class="ptag ptag-green">VERY EASY</span>
+    </div>
+
+    <h1 class="post-title">Baggage - Reconstructing Post-Compromise<br>Data Theft via Shellbag Forensics</h1>
+
+    <p class="post-subtitle">
+      Reconstructing an attacker's post-compromise data theft using Windows Shellbag forensics -
+      from initial archive download to network share pillaging and data exfiltration.
+    </p>
+
+    <div class="post-meta-row">
+      <span>// <span class="accent-val">iwd</span></span>
+      <span>&#128197; <span class="blue-val">Aug 2026</span></span>
+      <span>&#9201; <span class="blue-val">14 min read</span></span>
+      <span>&#127942; <span class="blue-val">Very Easy</span></span>
+      <span>&#128274; <span class="accent-val">DFIR - Windows Forensics</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="post-body">
+
+  <!-- TOC -->
+  <div class="toc reveal">
+    <div class="toc-title">// Table of Contents</div>
+    <ol>
+      <li><a href="#s1">Scenario</a></li>
+      <li><a href="#s2">Evidence overview</a></li>
+      <li><a href="#s3">Tools and methodology</a></li>
+      <li><a href="#s4">Shellbag fundamentals</a></li>
+      <li><a href="#s5">Analysis and attack timeline</a></li>
+      <li><a href="#s6">Attack flow diagram</a></li>
+      <li><a href="#s7">Task solutions (1-10)</a></li>
+      <li><a href="#s8">Key forensic takeaways</a></li>
+    </ol>
+  </div>
+
+  <!-- Sherlock Info Card -->
+  <div class="sherlock-card reveal">
+    <div class="sherlock-card-header">
+      <div class="sherlock-id-block">
+        <div class="sherlock-id">Baggage</div>
+        <div class="sherlock-sub">HackTheBox Sherlock &middot; Windows Shellbag Forensics</div>
+      </div>
+      <div class="sherlock-difficulty-badge">
+        <div class="difficulty-label">Difficulty</div>
+        <div class="difficulty-text">Very Easy</div>
+      </div>
+    </div>
+    <div class="sherlock-stats">
+      <div class="sherlock-stat">
+        <div class="sherlock-stat-label">Category</div>
+        <div class="sherlock-stat-val blue">DFIR</div>
+      </div>
+      <div class="sherlock-stat">
+        <div class="sherlock-stat-label">Platform</div>
+        <div class="sherlock-stat-val green">HackTheBox</div>
+      </div>
+      <div class="sherlock-stat">
+        <div class="sherlock-stat-label">Tasks</div>
+        <div class="sherlock-stat-val gold">10</div>
+      </div>
+      <div class="sherlock-stat">
+        <div class="sherlock-stat-label">Author</div>
+        <div class="sherlock-stat-val">CyberJunkie</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1: Scenario -->
+  <h2 id="s1"><span class="sh-tag">01 //</span> Scenario</h2>
+
+  <p>
+    A production workstation (<code>PROD-WORKSTATIO</code>) has been compromised. The <strong>admin</strong> account was taken over by an attacker who used it to browse the local user <strong>steve</strong>'s profile, search for sensitive files, access network shares, and stage data for exfiltration.
+  </p>
+
+  <p>
+    We are provided with KAPE-collected registry hives and asked to reconstruct the attacker's post-compromise activity using <strong>Shellbag artifacts</strong> - Windows Explorer's persistent record of folder navigation history.
+  </p>
+
+  <!-- S2: Evidence Overview -->
+  <h2 id="s2"><span class="sh-tag">02 //</span> Evidence Overview</h2>
+
+  <p>
+    The KAPE collection (<code>Baggage.zip</code>, password: <code>hacktheblue</code>) contains registry hives from two user profiles and the system default:
+  </p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <span class="file-label">Baggage.zip file tree</span>
+      <span class="lang-badge">tree</span>
+    </div>
+    <pre>Baggage/
+&#9500;&#9472;&#9472; 2025-09-03T07_52_57_9138085_ConsoleLog.txt    <span class="cmt"># KAPE execution log</span>
+&#9500;&#9472;&#9472; 2025-09-03T07_52_57_9138085_CopyLog.csv        <span class="cmt"># File copy manifest with hashes</span>
+&#9492;&#9472;&#9472; C/
+    &#9500;&#9472;&#9472; Users/
+    &#9474;   &#9500;&#9472;&#9472; <span class="fn">admin/</span>
+    &#9474;   &#9474;   &#9500;&#9472;&#9472; <span class="fn">NTUSER.DAT</span> (+LOG1, LOG2)            <span class="cmt"># Admin's user registry hive</span>
+    &#9474;   &#9474;   &#9492;&#9472;&#9472; AppData/Local/Microsoft/Windows/
+    &#9474;   &#9474;       &#9492;&#9472;&#9472; <span class="fn">UsrClass.dat</span> (+LOG1, LOG2)       <span class="cmt"># Admin's shellbag hive</span>
+    &#9474;   &#9500;&#9472;&#9472; <span class="fn">steve/</span>
+    &#9474;   &#9474;   &#9500;&#9472;&#9472; <span class="fn">NTUSER.DAT</span> (+LOG1, LOG2)            <span class="cmt"># Steve's user registry hive</span>
+    &#9474;   &#9474;   &#9492;&#9472;&#9472; AppData/Local/Microsoft/Windows/
+    &#9474;   &#9474;       &#9492;&#9472;&#9472; <span class="fn">UsrClass.dat</span> (+LOG1, LOG2)       <span class="cmt"># Steve's shellbag hive</span>
+    &#9474;   &#9492;&#9472;&#9472; Default/
+    &#9474;       &#9492;&#9472;&#9472; NTUSER.DAT (+LOG1, LOG2)
+    &#9492;&#9472;&#9472; Windows/System32/config/
+        &#9492;&#9472;&#9472; DEFAULT (+LOG1, LOG2)</pre>
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>KAPE collection metadata</strong>
+    <strong>Machine name:</strong> <code>PROD-WORKSTATIO</code> &nbsp;|&nbsp;
+    <strong>OS:</strong> Windows 10 (Build 22621) &nbsp;|&nbsp;
+    <strong>Collection time:</strong> 2025-09-03 07:52:57 UTC &nbsp;|&nbsp;
+    <strong>Target:</strong> <code>RegistryHivesUser</code> (18 files collected)
+  </div>
+
+  <!-- S3: Tools -->
+  <h2 id="s3"><span class="sh-tag">03 //</span> Tools and Methodology</h2>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Tool</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>regipy</strong> (v6.3.0)</td><td>Python-based Windows registry parser with shellbag plugin support</td></tr>
+        <tr><td><strong>regipy-plugins-run</strong></td><td>CLI tool to run the <code>usrclass_shellbag_plugin</code> against <code>UsrClass.dat</code> hives</td></tr>
+        <tr><td><strong>Python 3</strong></td><td>JSON processing and timeline correlation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <span class="file-label">installation and parsing</span>
+      <span class="lang-badge">bash</span>
+    </div>
+    <pre><span class="cmt"># Install regipy with full shellbag support</span>
+pip install <span class="str">"regipy[full]"</span>
+
+<span class="cmt"># The [full] extra installs libfwsi-python and libfwps-python</span>
+<span class="cmt"># (required for proper shellbag item parsing)</span>
+
+<span class="cmt"># Parse both UsrClass.dat hives</span>
+regipy-plugins-run -o admin_shellbags.json /path/to/admin/UsrClass.dat
+regipy-plugins-run -o steve_shellbags.json /path/to/steve/UsrClass.dat</pre>
+  </div>
+
+  <!-- S4: Shellbag Fundamentals -->
+  <h2 id="s4"><span class="sh-tag">04 //</span> Shellbag Fundamentals</h2>
+
+  <div class="callout callout-blue reveal">
+    <strong>What are Shellbags?</strong>
+    Shellbags are Windows registry artifacts that record a user's folder navigation history in Windows Explorer. Every time a user opens a folder - whether local, on a network share, or inside a zip archive - Windows stores metadata about that interaction in the registry.
+  </div>
+
+  <h3>Where are they stored?</h3>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Hive</th><th>Registry Path</th><th>What It Records</th></tr></thead>
+      <tbody>
+        <tr><td><code>UsrClass.dat</code></td><td><code>Local Settings\Software\Microsoft\Windows\Shell\BagMRU</code></td><td>Folder tree structure and navigation order</td></tr>
+        <tr><td><code>UsrClass.dat</code></td><td><code>Local Settings\Software\Microsoft\Windows\Shell\Bags</code></td><td>View settings (icon size, sort order, column widths)</td></tr>
+        <tr><td><code>NTUSER.DAT</code></td><td><code>Software\Microsoft\Windows\Shell\BagMRU</code></td><td>Desktop and special folder navigation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Timestamp types</h3>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Timestamp</th><th>Source</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>creation_time</code></td><td>File/folder metadata</td><td>When the folder was created on disk</td></tr>
+        <tr><td><code>access_time</code></td><td>File/folder metadata</td><td>When the folder was last accessed on disk</td></tr>
+        <tr><td><code>modification_time</code></td><td>File/folder metadata</td><td>When the folder was last modified on disk</td></tr>
+        <tr><td><strong><code>last_write</code></strong></td><td><strong>Registry key</strong></td><td><strong>When Windows Explorer wrote this shellbag entry - when the user navigated to this folder</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-green reveal">
+    <strong>Key forensic insight</strong>
+    For forensic investigations, <code>last_write</code> is the most reliable indicator of when navigation actually occurred. The file-level timestamps (<code>creation_time</code>, <code>access_time</code>, <code>modification_time</code>) reflect the file system metadata at the time the shellbag was created, which may differ from when the attacker browsed to that location.
+  </div>
+
+  <h3>Shell types</h3>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>Root Folder</code></td><td>Top-level namespace (My Computer, Network, etc.)</td></tr>
+        <tr><td><code>Volume</code></td><td>Drive letter or special folder (Downloads, Documents)</td></tr>
+        <tr><td><code>Directory</code></td><td>A regular folder</td></tr>
+        <tr><td><code>Network Location</code></td><td>A UNC path (network share)</td></tr>
+        <tr><td><code>Users Property View</code></td><td>A network computer in the Network Neighborhood</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- S5: Analysis -->
+  <h2 id="s5"><span class="sh-tag">05 //</span> Analysis and Attack Timeline</h2>
+
+  <p>
+    Parsing both <code>UsrClass.dat</code> files produced <strong>14 shellbag entries</strong> for the admin account and <strong>30 entries</strong> for steve. The admin's shellbags show the attacker navigating from <code>My Computer</code> into <code>C:\Users\steve</code>. Steve's shellbags contain a richer set of entries because the attacker's navigation through steve's profile folders updated the shell namespace tracked in steve's own <code>UsrClass.dat</code>.
+  </p>
+
+  <h3>Attack timeline</h3>
+
+  <p>
+    The following timeline is reconstructed from the shellbag <code>last_write</code> timestamps:
+  </p>
+
+  <div class="disc-timeline reveal">
+    <div class="disc-item">
+      <div class="disc-date">07:08:55 - 07:08:58</div>
+      <div class="disc-card">
+        <strong>Initial access - navigating to victim's profile</strong>
+        <p>Attacker navigates <code>C:\</code> &rarr; <code>C:\Users</code> &rarr; <code>C:\Users\steve</code></p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:09:02 - 07:12:26</div>
+      <div class="disc-card">
+        <strong>Reconnaissance - browsing steve's Documents</strong>
+        <p><code>Documents\Engineers Tab</code> (engineering documentation) &rarr;
+        <code>Documents\OT Station 3 internal VPN</code> (VPN configs for OT network) &rarr;
+        <code>Documents\OnePassword MasterPass</code> (password vault directory)</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:19:47 - 07:23:52</div>
+      <div class="disc-card">
+        <strong>Lateral movement - network share access</strong>
+        <p>Attacker discovers and navigates to <code>\\Prod-ns-2\prodshare</code> on the network</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:25:48 - 07:26:24</div>
+      <div class="disc-card">
+        <strong>Tool deployment - Everything search utility</strong>
+        <p>Downloads <code>1.zip</code> containing <code>Everything-1.4.1.1028.x64.zip</code> -
+        a legitimate filesystem search utility used to rapidly locate sensitive files</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:31:05 - 07:34:04</div>
+      <div class="disc-card">
+        <strong>Collection - gathering sensitive data</strong>
+        <p>VPN folder re-accessed (likely copying configs) &rarr;
+        Network share <code>prodshare\Construction 2027</code> browsed &rarr;
+        <code>Dam Construction Engineer Plans.zip</code> identified for exfiltration</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:33:16 - 07:34:30</div>
+      <div class="disc-card">
+        <strong>Staging and exfiltration prep</strong>
+        <p>Staging folder created at <code>C:\Users\steve\Pictures\a</code> (using Pictures to avoid detection) &rarr;
+        Folder compressed to <code>a.zip</code> (exfiltration archive ready)</p>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-date">07:52:57</div>
+      <div class="disc-card">
+        <strong>KAPE collection by IR team</strong>
+        <p>Incident response team executes KAPE to collect registry hives - 18 minutes after the last attacker activity</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6: Attack Flow -->
+  <h2 id="s6"><span class="sh-tag">06 //</span> Attack Flow Diagram</h2>
+
+  <div class="code-block reveal" style="overflow-x:auto">
+    <div class="code-block-header">
+      <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <span class="file-label">visual attack flow</span>
+      <span class="lang-badge">diagram</span>
+    </div>
+    <pre style="text-align:center;display:flex;justify-content:center">                      &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+                      &#9474;  Compromised Admin   &#9474;
+                      &#9474;     Account          &#9474;
+                      &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                 &#9474;
+                    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+                    &#9474;  Navigate to steve's    &#9474;
+                    &#9474;  profile (C:\Users\     &#9474;
+                    &#9474;  steve)                 &#9474;
+                    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                 &#9474;
+              &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+              &#9474;                  &#9474;                   &#9474;
+    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;  &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+    &#9474;   Documents    &#9474;  &#9474;   Downloads    &#9474;  &#9474;   Network    &#9474;
+    &#9474;                &#9474;  &#9474;                &#9474;  &#9474;   Share      &#9474;
+    &#9474; - Engineers Tab&#9474;  &#9474; - 1.zip        &#9474;  &#9474;              &#9474;
+    &#9474; - VPN configs  &#9474;  &#9474;   (Everything  &#9474;  &#9474; \\Prod-ns-2\ &#9474;
+    &#9474; - Passwords    &#9474;  &#9474;    search)     &#9474;  &#9474;  prodshare\  &#9474;
+    &#9474;   (OnePass)    &#9474;  &#9474;                &#9474;  &#9474;  Construction&#9474;
+    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;  &#9474;  2027\       &#9474;
+            &#9474;                   &#9474;           &#9474;  Dam Plans   &#9474;
+            &#9474;                   &#9474;           &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+            &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                &#9474;
+                    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+                    &#9474;  Staging Folder       &#9474;
+                    &#9474;  C:\Users\steve\      &#9474;
+                    &#9474;  Pictures\a           &#9474;
+                    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;
+                                &#9474;
+                    &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+                    &#9474;  Exfiltration Archive &#9474;
+                    &#9474;  Pictures\a.zip       &#9474;
+                    &#9474;  (ready for exfil)    &#9474;
+                    &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</pre>
+  </div>
+
+  <!-- S7: Task Solutions -->
+  <h2 id="s7"><span class="sh-tag">07 //</span> Task Solutions</h2>
+
+  <!-- Task 1 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">1</div>
+      <div class="task-question">What was the name of the archive file downloaded by the compromised account?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">1.zip</span>
+      </div>
+      <p>
+        <strong>How to find:</strong> Parse steve's <code>UsrClass.dat</code> with <code>regipy-plugins-run</code>. Look through the output for entries under <code>My Computer\Downloads</code> with a <code>.zip</code> extension. The entry <code>My Computer\Downloads\1.zip</code> appears with <code>creation_time: 2025-09-03T07:25:48</code> and <code>last_write: 2025-09-03T07:26:18</code>, showing when the archive was downloaded and first opened.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 2 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">2</div>
+      <div class="task-question">What was the name of the utility brought in by the attacker to search for sensitive data?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">Everything 1.4.1.1028</span>
+      </div>
+      <p>
+        Inside the downloaded archive, the shellbag tree shows:
+      </p>
+      <div class="code-block" style="margin:12px 0 14px">
+        <div class="code-block-header">
+          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <span class="file-label">shellbag path</span>
+          <span class="lang-badge">tree</span>
+        </div>
+        <pre>Temp1_1.zip\1\Everything-1.4.1.1028.x64.zip</pre>
+      </div>
+      <p>
+        <strong>How to find:</strong> In the shellbag output, follow the temp extraction path created when Windows Explorer opens a zip file: <code>AppData\Local\Temp\Temp1_1.zip\1\Everything-1.4.1.1028.x64.zip</code>. The <code>Temp1_</code> prefix is Windows' naming convention for zip contents browsed in Explorer. The tool name and version are in the filename. Strip the <code>.x64</code> suffix per the answer format.
+      </p>
+      <p>
+        <a href="https://www.voidtools.com/" target="_blank" rel="noopener noreferrer">Everything</a> is a legitimate Windows search utility that indexes the entire NTFS filesystem in seconds. Attackers commonly use it during post-exploitation to rapidly locate sensitive files without relying on the slower Windows Search.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 3 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">3</div>
+      <div class="task-question">When was the VPN folder accessed by the attacker?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">2025-09-03 07:31:05</span>
+      </div>
+      <p>
+        Steve's shellbag entry for <code>OT Station 3 internal VPN</code>:
+        <code>creation_time: 2025-09-03T07:10:58</code>,
+        <code>access_time: 2025-09-03T07:11:50</code>,
+        <strong><code>last_write: 2025-09-03T07:31:05</code></strong>.
+      </p>
+      <p>
+        <strong>How to find:</strong> In steve's shellbag output, search for entries containing "VPN". The entry <code>OT Station 3 internal VPN</code> appears under <code>My Computer\Documents</code>. The key insight: use the <code>last_write</code> timestamp (when the shellbag registry key was updated), NOT <code>access_time</code> or <code>creation_time</code>. The <code>last_write</code> of <code>07:31:05</code> indicates the attacker re-visited the VPN folder later (likely to copy its contents). The earlier <code>creation_time</code> of <code>07:10:58</code> is when the folder was first discovered.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 4 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">4</div>
+      <div class="task-question">What was the name of the directory containing the victim's passwords?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">OnePassword MasterPass</span>
+      </div>
+      <p>
+        Shellbag entry at <code>My Computer\Documents\OnePassword MasterPass</code>:
+        <code>creation_time: 2025-09-03T07:12:18</code>,
+        <code>last_write: 2025-09-03T07:31:05</code>.
+        <strong>How to find:</strong> In steve's shellbag output, look at the subdirectories under <code>My Computer\Documents</code>. Three folders appear: <code>Engineers Tab</code>, <code>OT Station 3 internal VPN</code>, and <code>OnePassword MasterPass</code>. The name "OnePassword MasterPass" clearly indicates a password storage directory. The attacker accessed it at <code>creation_time: 07:12:18</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 5 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">5</div>
+      <div class="task-question">The attacker also accessed a network share to pillage network data. What is the UNC path?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">\\Prod-ns-2\prodshare</span>
+      </div>
+      <p>
+        Shellbag entry under <code>Computers and Devices\Prod-ns-2</code>:
+        <code>shell_type: Network Location</code>,
+        <code>location_description: Microsoft Network</code>,
+        <code>last_write: 2025-09-03T07:32:23</code> (steve) / <code>07:23:52</code> (admin).
+        <strong>How to find:</strong> In the shellbag output, look for entries under the <code>Computers and Devices</code> root folder. This is where Windows stores network browsing history. The entry <code>Prod-ns-2</code> (type: <code>Users Property View</code>) has a child entry <code>\\Prod-ns-2\prodshare</code> (type: <code>Network Location</code>, description: <code>Microsoft Network</code>). The UNC path is the full network share path.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 6 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">6</div>
+      <div class="task-question">When is the dam construction planned?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">2027</span>
+      </div>
+      <p>
+        The network share contained a folder named <code>Construction 2027</code> at path
+        <code>\\Prod-ns-2\prodshare\Construction 2027</code>
+        (<code>creation_time: 2025-09-03T07:00:26</code>,
+        <code>access_time: 2025-09-03T07:21:46</code>).
+        <strong>How to find:</strong> Follow the network share path in the shellbag tree: <code>Computers and Devices\Prod-ns-2\\\Prod-ns-2\prodshare\Construction 2027</code>. The folder name <code>Construction 2027</code> directly contains the year. This folder was the only subfolder accessed on the share.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 7 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">7</div>
+      <div class="task-question">What was the name of the archive file present on the network share?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">Dam Construction Engineer Plans.zip</span>
+      </div>
+      <p>
+        When the attacker browsed the staging folder (<code>a.zip</code>), the shellbag tree shows:
+      </p>
+      <div class="code-block" style="margin:12px 0 14px">
+        <div class="code-block-header">
+          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+          <span class="file-label">shellbag path</span>
+          <span class="lang-badge">tree</span>
+        </div>
+        <pre>Temp1_a.zip\a\Dam Construction Engineer Plans.zip</pre>
+      </div>
+      <p>
+        <strong>How to find:</strong> In steve's shellbag output, look for the temp extraction paths created when zip files are browsed in Explorer. The path <code>AppData\Local\Temp\Temp1_a.zip\a\Dam Construction Engineer Plans.zip</code> reveals the archive that was inside the staging folder <code>a.zip</code>. The <code>Temp1_a.zip</code> prefix tells you it was extracted from <code>a.zip</code>, and the archive name <code>Dam Construction Engineer Plans.zip</code> is the file from the network share. Original creation: <code>2024-02-16T12:35:02</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 8 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">8</div>
+      <div class="task-question">When was the archive file from the network share accessed?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">2025-09-03 07:34:04</span>
+      </div>
+      <p>
+        The <code>Construction 2027</code> folder's shellbag <code>last_write: 2025-09-03T07:34:04</code> records when the shellbag key was last updated - corresponding to when the attacker navigated into this folder on the network share to access the <code>Dam Construction Engineer Plans.zip</code> archive.
+      </p>
+      <p>
+        <strong>How to find:</strong> Look at the <code>Construction 2027</code> folder entry in steve's shellbags (under the network share path). Use the <code>last_write</code> timestamp on this parent folder's shellbag key (<code>07:34:04</code>), NOT the archive file's own timestamps (<code>2024-02-16</code> is when the archive was originally created in 2024, not when the attacker accessed it). The <code>last_write</code> records when the attacker navigated into this folder.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 9 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">9</div>
+      <div class="task-question">The attacker created a staging folder to prepare for collection and exfiltration. What is the full path of the staging folder?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">C:\Users\steve\Pictures\a</span>
+      </div>
+      <p>
+        Shellbag entry at <code>My Computer\Pictures\a</code>:
+        <code>creation_time: 2025-09-03T07:33:16</code>,
+        <code>last_write: 2025-09-03T07:34:30</code>.
+        <strong>How to find:</strong> In steve's shellbag output, look for entries under <code>My Computer\Pictures</code>. The entry <code>a</code> (a single-letter folder name) stands out as suspicious. Its <code>creation_time: 07:33:16</code> is late in the attack timeline (after the attacker already found sensitive files). The location in Pictures (rather than Documents or Desktop) is a basic OPSEC technique. The full Windows path is <code>C:\Users\steve\Pictures\a</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Task 10 -->
+  <div class="task-block reveal">
+    <div class="task-header">
+      <div class="task-num">10</div>
+      <div class="task-question">The attacker compressed the staging folder to prepare the data for exfiltration. When was the exfiltration archive file accessed?</div>
+    </div>
+    <div class="task-body">
+      <div class="answer-box">
+        <span class="answer-label">Answer</span>
+        <span class="answer-val">2025-09-03 07:34:30</span>
+      </div>
+      <p>
+        Shellbag entry for <code>My Computer\Pictures\a.zip</code>:
+        <code>creation_time: 2025-09-03T07:34:24</code>,
+        <code>access_time: 2025-09-03T07:34:26</code>,
+        <strong><code>last_write: 2025-09-03T07:34:30</code></strong>.
+      </p>
+      <p>
+        <strong>How to find:</strong> In steve's shellbag output, look for <code>a.zip</code> under <code>My Computer\Pictures</code> (right next to the staging folder <code>a</code>). The answer uses the <code>last_write</code> timestamp (<code>07:34:30</code>), which records when the shellbag registry key was written - the moment Windows Explorer registered the new archive file. The <code>creation_time</code> (<code>07:34:24</code>) is when the file was created on disk, and <code>access_time</code> (<code>07:34:26</code>) is when it was first opened. The archive was ready for exfiltration 18 minutes before KAPE collection.
+      </p>
+    </div>
+  </div>
+
+  <!-- S8: Key Takeaways -->
+  <h2 id="s8"><span class="sh-tag">08 //</span> Key Forensic Takeaways</h2>
+
+  <div class="callout callout-blue reveal">
+    <strong>Shellbag last_write is the investigation timestamp</strong>
+    The <code>last_write</code> field records when the Windows Explorer shell wrote the registry key - this is the actual moment of user navigation. File-level timestamps (<code>creation_time</code>, <code>access_time</code>) embedded in the shellbag entry are copied from the file system at the time the entry was first created and may not reflect subsequent access.
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>Archive browsing creates temp-path shellbag entries</strong>
+    When a user opens a zip file in Windows Explorer, the OS extracts contents to a temporary folder with the naming pattern: <code>AppData\Local\Temp\Temp1_&lt;archivename&gt;.zip\&lt;contents&gt;</code>.
+    These shellbag entries reveal exactly what the attacker examined inside downloaded or network-share archives - even if the archive and temp files are later deleted.
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>Network share access is recorded in shellbags</strong>
+    UNC paths (<code>\\Server\Share</code>) appear under the <code>Computers and Devices</code> root folder in the shellbag tree. This provides evidence of which network servers the attacker discovered, which shares were accessed, which folders within shares were navigated, and when each navigation occurred.
+  </div>
+
+  <div class="callout callout-green reveal">
+    <strong>Two hives tell the full story</strong>
+    The admin's <code>UsrClass.dat</code> records the attacker's top-level navigation (entering steve's profile). Steve's <code>UsrClass.dat</code> records the detailed folder-by-folder browsing within steve's namespace. Cross-referencing both provides the complete picture.
+  </div>
+
+  <!-- MITRE ATT&CK -->
+  <h3>MITRE ATT&CK mapping</h3>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Technique</th><th>ID</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Local Data Staging</strong></td><td><code>T1074.001</code></td><td>Created <code>C:\Users\steve\Pictures\a</code> as a staging directory</td></tr>
+        <tr><td><strong>Archive Collected Data</strong></td><td><code>T1560.001</code></td><td>Compressed staging folder to <code>a.zip</code></td></tr>
+        <tr><td><strong>Data from Local System</strong></td><td><code>T1005</code></td><td>Accessed Documents (VPN configs, passwords, engineering data)</td></tr>
+        <tr><td><strong>Data from Network Shared Drive</strong></td><td><code>T1039</code></td><td>Accessed <code>\\Prod-ns-2\prodshare</code> for construction plans</td></tr>
+        <tr><td><strong>File and Directory Discovery</strong></td><td><code>T1083</code></td><td>Used Everything search utility for rapid filesystem enumeration</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--text-dim)">
+    Analysis performed using <code>regipy</code> for registry parsing. All shellbag timestamps are UTC.
+    Challenge created by CyberJunkie on HackTheBox.
+  </p>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="post-footer">
+  <div>written by <span class="accent">iwd</span> &nbsp;|&nbsp; Baggage - HTB Sherlock &nbsp;|&nbsp; Aug 2026</div>
+  <a href="../#writeups" class="back-link">&larr; Back to writeups</a>
+</footer>
+
+<script>
+(function(){
+  const c = document.getElementById('matrix-bg');
+  const ctx = c.getContext('2d');
+  function resize(){ c.width=innerWidth; c.height=innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}[]';
+  const fs = 13;
+  let cols, drops;
+  function init(){ cols=Math.floor(c.width/fs); drops=Array(cols).fill(1); }
+  init();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+  setInterval(()=>{
+    ctx.fillStyle='rgba(10,10,15,0.05)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ccff';
+    ctx.font=fs+'px JetBrains Mono,monospace';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fs, y*fs);
+      if(y*fs>c.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },50);
+})();
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY>40);
+});
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
