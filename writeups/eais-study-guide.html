@@ -353,7 +353,7 @@ td code{font-size:12px}
     <h1 class="post-title">INE eAIS Study Guide:<br>Complete Curriculum Breakdown</h1>
 
     <p class="post-subtitle">
-      Everything you need to know across all <strong style="-webkit-text-fill-color:initial;color:var(--accent2)">7 courses</strong> for the INE eAIS certification &mdash;
+      Everything you need to know across all <strong style="-webkit-text-fill-color:initial;color:var(--accent2)">7 courses</strong> for the INE eAIS certification  -
       AI fundamentals, prompt injection, agent abuse, secure engineering, security testing, SOC integration, and operational safety.
     </p>
 
@@ -387,14 +387,14 @@ td code{font-size:12px}
 
   <div class="callout callout-blue reveal">
     <strong>about this guide</strong>
-    These are my personal study notes compiled from all 7 INE eAIS course slide decks. I wrote this to have everything in one place for exam prep. This is not a replacement for the courses &mdash; watch the videos and do the labs. But if you need a single reference to review before the exam, this is it.
+    These are my personal study notes compiled from all 7 INE eAIS course slide decks. I wrote this to have everything in one place for exam prep. This is not a replacement for the courses  - watch the videos and do the labs. But if you need a single reference to review before the exam, this is it.
   </div>
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- COURSE 1 -->
   <!-- ═══════════════════════════════════════════════ -->
   <h2 id="c1"><span class="sh-tag">01 //</span> AI/LLM Systems &amp; Security Architecture</h2>
-  <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px">Instructor: <strong>Alexis Ahmed</strong> &mdash; Offensive &amp; Defensive Security Instructor, AI Systems Engineer</p>
+  <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px">Instructor: <strong>Alexis Ahmed</strong>  - Offensive &amp; Defensive Security Instructor, AI Systems Engineer</p>
 
   <h3>What Is Artificial Intelligence?</h3>
   <p>
@@ -402,8 +402,8 @@ td code{font-size:12px}
     Key idea: AI is about behavior, not consciousness. If a system can perform a task that usually needs human judgment, it gets labeled as AI.
   </p>
   <p>
-    The critical shift to understand: <strong>traditional software is deterministic</strong> (If X, then Y &mdash; 100% certainty).
-    <strong>AI is probabilistic</strong> (If X, then probably Y &mdash; 90% probability). This shift from deterministic logic to probabilistic reasoning is fundamental to understanding how modern AI works and why it introduces new security risks.
+    The critical shift to understand: <strong>traditional software is deterministic</strong> (If X, then Y  - 100% certainty).
+    <strong>AI is probabilistic</strong> (If X, then probably Y  - 90% probability). This shift from deterministic logic to probabilistic reasoning is fundamental to understanding how modern AI works and why it introduces new security risks.
   </p>
   <p>
     AI systems do not explicitly program rules. Instead, developers supply thousands or millions of examples and the system identifies regularities (patterns) within the data, generalizing them into predictive behavior. The model <em>learns</em> how to solve a problem by analyzing large volumes of data rather than being told how.
@@ -428,10 +428,22 @@ td code{font-size:12px}
   </div>
 
   <h3>AI vs ML vs DL</h3>
+  <div style="text-align:center;margin:24px 0">
+    <svg viewBox="0 0 500 220" style="max-width:460px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="480" height="200" rx="16" fill="none" stroke="#00ccff" stroke-width="2" opacity="0.5"/>
+      <text x="250" y="38" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700">Artificial Intelligence (AI)</text>
+      <rect x="60" y="55" width="380" height="140" rx="12" fill="none" stroke="#00ff88" stroke-width="2" opacity="0.5"/>
+      <text x="250" y="80" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700">Machine Learning (ML)</text>
+      <rect x="120" y="95" width="260" height="85" rx="10" fill="none" stroke="#ffd700" stroke-width="2" opacity="0.5"/>
+      <text x="250" y="118" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700">Deep Learning (DL)</text>
+      <text x="250" y="145" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="11">Transformers, LLMs</text>
+      <text x="250" y="165" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="11">GPT, Claude, Gemini, Llama</text>
+    </svg>
+  </div>
   <ul>
-    <li><strong>Artificial Intelligence (AI)</strong> &mdash; The broad umbrella. Any technique enabling systems to perform tasks requiring human intelligence (understanding language, recognizing patterns, making decisions). <strong>AI = the "what"</strong></li>
-    <li><strong>Machine Learning (ML)</strong> &mdash; A subset of AI. Focused on algorithms that learn patterns from data rather than being explicitly programmed. Tasks: classification (spam/not spam), clustering (grouping), regression (predicting values). <strong>ML = the "how"</strong></li>
-    <li><strong>Deep Learning (DL)</strong> &mdash; A subset of ML using neural networks with many layers (deep neural networks). Excels at image recognition, speech recognition, language understanding, generative AI. Made possible by larger datasets, GPU acceleration, and Transformer architectures. <strong>DL = ML using deep neural networks</strong></li>
+    <li><strong>Artificial Intelligence (AI)</strong> - The broad umbrella. Any technique enabling systems to perform tasks requiring human intelligence (understanding language, recognizing patterns, making decisions). <strong>AI = the "what"</strong></li>
+    <li><strong>Machine Learning (ML)</strong> - A subset of AI. Focused on algorithms that learn patterns from data rather than being explicitly programmed. Tasks: classification (spam/not spam), clustering (grouping), regression (predicting values). <strong>ML = the "how"</strong></li>
+    <li><strong>Deep Learning (DL)</strong> - A subset of ML using neural networks with many layers (deep neural networks). Excels at image recognition, speech recognition, language understanding, generative AI. Made possible by larger datasets, GPU acceleration, and Transformer architectures. <strong>DL = ML using deep neural networks</strong></li>
   </ul>
 
   <h3>Large Language Models (LLMs)</h3>
@@ -448,7 +460,7 @@ td code{font-size:12px}
 
   <h4>What is a "Model" in AI?</h4>
   <p>
-    A model is a mathematical function that maps inputs &rarr; outputs. In LLMs: Input = text (prompt), Output = predicted next tokens (response). Think of a model as a <strong>compressed representation of patterns learned from data</strong> &mdash; a system of parameters (weights) that encode relationships between words.
+    A model is a mathematical function that maps inputs &rarr; outputs. In LLMs: Input = text (prompt), Output = predicted next tokens (response). Think of a model as a <strong>compressed representation of patterns learned from data</strong>  - a system of parameters (weights) that encode relationships between words.
   </p>
   <ul>
     <li><strong>Parameters:</strong> millions to trillions of learned weights</li>
@@ -458,10 +470,30 @@ td code{font-size:12px}
 
   <h4>How LLMs Are Built (The Training Process)</h4>
   <p>Training is exposing the model to enormous amounts of text and letting it adjust itself to predict patterns:</p>
+  <div style="text-align:center;margin:24px 0">
+    <svg viewBox="0 0 600 80" style="max-width:580px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="20" width="105" height="40" rx="6" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+      <text x="54" y="44" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">Data Collection</text>
+      <path d="M110 40 L130 40" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <rect x="133" y="20" width="95" height="40" rx="6" fill="#1a1a2e" stroke="#00ff88" stroke-width="1.5"/>
+      <text x="180" y="44" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">Tokenization</text>
+      <path d="M231 40 L251 40" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <rect x="254" y="20" width="100" height="40" rx="6" fill="#1a1a2e" stroke="#ffd700" stroke-width="1.5"/>
+      <text x="304" y="38" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">Transformer</text>
+      <text x="304" y="52" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="9">Architecture</text>
+      <path d="M357 40 L377 40" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <rect x="380" y="20" width="95" height="40" rx="6" fill="#1a1a2e" stroke="#bd93f9" stroke-width="1.5"/>
+      <text x="427" y="44" text-anchor="middle" fill="#bd93f9" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">Pre-training</text>
+      <path d="M478 40 L498 40" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+      <rect x="501" y="20" width="90" height="40" rx="6" fill="#1a1a2e" stroke="#ff6b6b" stroke-width="1.5"/>
+      <text x="546" y="44" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">Fine-tuning</text>
+      <defs><marker id="arrowGray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8888aa" stroke-width="1"/></marker></defs>
+    </svg>
+  </div>
   <ol>
-    <li><strong>Data Collection</strong> &mdash; massive text corpora</li>
-    <li><strong>Tokenization</strong> &mdash; text broken into tokens (words, subwords, characters). Example: "cybersecurity" &rarr; ["cyber", "security"]</li>
-    <li><strong>Model Architecture (Transformers)</strong> &mdash; uses attention mechanisms to understand context</li>
+    <li><strong>Data Collection</strong> - massive text corpora</li>
+    <li><strong>Tokenization</strong> - text broken into tokens (words, subwords, characters). Example: "cybersecurity" &rarr; ["cyber", "security"]</li>
+    <li><strong>Model Architecture (Transformers)</strong> - uses attention mechanisms to understand context</li>
     <li><strong>Training Process:</strong>
       <ul>
         <li><strong>Pre-training:</strong> objective is to predict next token. Learns general language patterns. Repeated billions of times.</li>
@@ -471,22 +503,44 @@ td code{font-size:12px}
   </ol>
   <p><strong>Security note:</strong> The training data is a potential attack surface. Biases and harmful content from training can surface in model outputs.</p>
 
+  <h4>LLM Input &rarr; Output Flow</h4>
+  <div style="text-align:center;margin:24px 0">
+    <svg viewBox="0 0 500 110" style="max-width:480px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="15" width="130" height="80" rx="8" fill="#1a1a2e" stroke="#ffb86c" stroke-width="1.5"/>
+      <text x="75" y="42" text-anchor="middle" fill="#ffb86c" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700">User Input</text>
+      <text x="75" y="58" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="9">(prompt)</text>
+      <text x="75" y="78" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="8">text, instructions,</text>
+      <text x="75" y="88" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="8">docs, system prompt</text>
+      <path d="M145 55 L180 55" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG4)"/>
+      <rect x="183" y="25" width="130" height="60" rx="8" fill="#1a1a2e" stroke="#00ccff" stroke-width="2"/>
+      <text x="248" y="52" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700">LLM</text>
+      <text x="248" y="70" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="9">weights + context</text>
+      <path d="M318 55 L353 55" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG4)"/>
+      <rect x="356" y="15" width="130" height="80" rx="8" fill="#1a1a2e" stroke="#00ff88" stroke-width="1.5"/>
+      <text x="421" y="42" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700">Output</text>
+      <text x="421" y="58" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="9">(completion)</text>
+      <text x="421" y="78" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="8">text, JSON, code,</text>
+      <text x="421" y="88" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="8">tool calls, decisions</text>
+      <defs><marker id="arrowG4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8888aa" stroke-width="1"/></marker></defs>
+    </svg>
+  </div>
+
   <h4>How LLMs Work Internally</h4>
   <ol>
-    <li><strong>Tokens &rarr; Embeddings</strong> &mdash; tokens are converted into vectors (numbers)</li>
-    <li><strong>Attention Mechanism</strong> &mdash; determines which words in a sentence matter most. Example: "The server that the admin configured crashed" &mdash; attention links "server" &harr; "crashed"</li>
-    <li><strong>Neural Network Layers</strong> &mdash; multiple stacked layers transform the data, each refining understanding of context</li>
-    <li><strong>Prediction</strong> &mdash; model outputs probabilities for the next token, highest probability selected (or sampled)</li>
-    <li><strong>Iteration</strong> &mdash; process repeats token by token (autoregressive generation). Each token becomes part of the context for the next. Same prompt can produce different outputs each time (randomness/sampling)</li>
+    <li><strong>Tokens &rarr; Embeddings</strong>  - tokens are converted into vectors (numbers)</li>
+    <li><strong>Attention Mechanism</strong>  - determines which words in a sentence matter most. Example: "The server that the admin configured crashed"  - attention links "server" &harr; "crashed"</li>
+    <li><strong>Neural Network Layers</strong>  - multiple stacked layers transform the data, each refining understanding of context</li>
+    <li><strong>Prediction</strong>  - model outputs probabilities for the next token, highest probability selected (or sampled)</li>
+    <li><strong>Iteration</strong>  - process repeats token by token (autoregressive generation). Each token becomes part of the context for the next. Same prompt can produce different outputs each time (randomness/sampling)</li>
   </ol>
 
   <h3>LLM Core Architecture Components</h3>
   <ul>
-    <li><strong>Model Endpoints</strong> &mdash; API interface to the LLM</li>
-    <li><strong>Orchestrators</strong> &mdash; layer that manages steps, routes decisions, coordinates between components</li>
-    <li><strong>Agents</strong> &mdash; autonomous components that use the model + tools to complete goals</li>
-    <li><strong>Tools</strong> &mdash; external functions the agent can call (web search, database, email, code execution, APIs)</li>
-    <li><strong>RAG Pipelines</strong> &mdash; Retrieval-Augmented Generation: retrieves external documents/data to provide context to the model</li>
+    <li><strong>Model Endpoints</strong>  - API interface to the LLM</li>
+    <li><strong>Orchestrators</strong>  - layer that manages steps, routes decisions, coordinates between components</li>
+    <li><strong>Agents</strong>  - autonomous components that use the model + tools to complete goals</li>
+    <li><strong>Tools</strong>  - external functions the agent can call (web search, database, email, code execution, APIs)</li>
+    <li><strong>RAG Pipelines</strong>  - Retrieval-Augmented Generation: retrieves external documents/data to provide context to the model</li>
   </ul>
 
   <h3>AI Attack Surface vs Traditional</h3>
@@ -515,7 +569,7 @@ td code{font-size:12px}
   <!-- COURSE 2 -->
   <!-- ═══════════════════════════════════════════════ -->
   <h2 id="c2"><span class="sh-tag">02 //</span> AI in the SOC</h2>
-  <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px">Instructor: <strong>Tracy Wallace</strong> &mdash; Cloud Architect, Cloud Security Engineer, Senior Instructor @ INE</p>
+  <p style="font-size:13px;color:var(--text-dim);margin-bottom:24px">Instructor: <strong>Tracy Wallace</strong>  - Cloud Architect, Cloud Security Engineer, Senior Instructor @ INE</p>
 
   <h3>Formal AI Definitions</h3>
   <ul>
@@ -534,6 +588,22 @@ td code{font-size:12px}
       </tbody>
     </table>
   </div>
+  <div style="text-align:center;margin:24px 0">
+    <svg viewBox="0 0 620 60" style="max-width:600px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="10" width="130" height="40" rx="6" fill="#1a1a2e" stroke="#ffd700" stroke-width="1.5"/>
+      <text x="67" y="34" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="500">ML identifies</text>
+      <path d="M135 30 L155 30" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG2)"/>
+      <rect x="158" y="10" width="130" height="40" rx="6" fill="#1a1a2e" stroke="#00ff88" stroke-width="1.5"/>
+      <text x="223" y="34" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="500">AI correlates</text>
+      <path d="M291 30 L311 30" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG2)"/>
+      <rect x="314" y="10" width="140" height="40" rx="6" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+      <text x="384" y="34" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="500">Automation executes</text>
+      <path d="M457 30 L477 30" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG2)"/>
+      <rect x="480" y="10" width="130" height="40" rx="6" fill="#1a1a2e" stroke="#bd93f9" stroke-width="1.5"/>
+      <text x="545" y="34" text-anchor="middle" fill="#bd93f9" font-family="JetBrains Mono,monospace" font-size="9.5" font-weight="500">Analysts decide</text>
+      <defs><marker id="arrowG2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8888aa" stroke-width="1"/></marker></defs>
+    </svg>
+  </div>
   <p><strong>How they work together in a SOC:</strong> ML identifies unusual or risky behavior &rarr; AI correlates and explains findings &rarr; Automation executes predefined responses &rarr; Analysts oversee and decide.</p>
 
   <h3>Generative AI &amp; LLMs in the SOC</h3>
@@ -544,7 +614,7 @@ td code{font-size:12px}
     <strong>LLMs</strong> are a type of generative AI trained on large amounts of text data. They predict the next word in a sentence based on context. SOC uses: interactive chatbots, text-based content creation, summarization of security log data.
   </p>
 
-  <h3>AI in Cybersecurity &mdash; Who Uses What</h3>
+  <h3>AI in Cybersecurity  - Who Uses What</h3>
   <ul>
     <li><strong>Behavior Analytics:</strong> Splunk, Rapid7, SentinelOne</li>
     <li><strong>Advanced Phishing Detection:</strong> CrowdStrike, Darktrace, Proofpoint</li>
@@ -582,7 +652,25 @@ td code{font-size:12px}
 
   <h3>Anomaly Detection</h3>
   <p>
-    Anomaly detection detects behavior that deviates from normal, based on historical patterns. It focuses on <strong>"unusual"</strong>, not "malicious". Detection evolution: <strong>Signature &rarr; Rules &rarr; Behavior &rarr; Anomalies</strong>. Signatures are discrete; anomalies are not.
+    Anomaly detection detects behavior that deviates from normal, based on historical patterns. It focuses on <strong>"unusual"</strong>, not "malicious". Signatures are discrete; anomalies are not.
+  </p>
+  <div style="text-align:center;margin:20px 0">
+    <svg viewBox="0 0 520 55" style="max-width:500px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="10" width="105" height="35" rx="5" fill="#1a1a2e" stroke="#ffd700" stroke-width="1.5"/>
+      <text x="54" y="32" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="11" font-weight="500">Signature</text>
+      <path d="M110 27 L130 27" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG3)"/>
+      <rect x="133" y="10" width="85" height="35" rx="5" fill="#1a1a2e" stroke="#00ff88" stroke-width="1.5"/>
+      <text x="175" y="32" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="11" font-weight="500">Rules</text>
+      <path d="M221 27 L241 27" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG3)"/>
+      <rect x="244" y="10" width="105" height="35" rx="5" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+      <text x="296" y="32" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="11" font-weight="500">Behavior</text>
+      <path d="M352 27 L372 27" stroke="#8888aa" stroke-width="1.5" marker-end="url(#arrowG3)"/>
+      <rect x="375" y="10" width="115" height="35" rx="5" fill="#1a1a2e" stroke="#bd93f9" stroke-width="1.5"/>
+      <text x="432" y="32" text-anchor="middle" fill="#bd93f9" font-family="JetBrains Mono,monospace" font-size="11" font-weight="500">Anomalies</text>
+      <defs><marker id="arrowG3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8888aa" stroke-width="1"/></marker></defs>
+    </svg>
+  </div>
+  <p style="display:none">
   </p>
   <h4>What Anomaly Detection Is Good At</h4>
   <ul>
@@ -642,10 +730,10 @@ td code{font-size:12px}
 
   <h4>How Pentesters Use ATLAS</h4>
   <ol>
-    <li><strong>Threat Modeling AI Systems</strong> &mdash; Identify attack points per layer: Input &rarr; Prompt injection. Data &rarr; RAG/embeddings. Model &rarr; inference manipulation. Tool &rarr; API/tool abuse.</li>
-    <li><strong>Mapping Attacks to Techniques</strong> &mdash; Instead of ad-hoc testing: Test: <code>Prompt Injection</code> &rarr; ATLAS technique. Test: <code>Data extraction</code> &rarr; ATLAS technique. Ensures coverage, consistency, standardization.</li>
-    <li><strong>Developing Test Cases</strong> &mdash; Inject malicious instructions into prompts, poison vector databases, manipulate retrieval results, attempt system prompt extraction, abuse tool integrations.</li>
-    <li><strong>Reporting &amp; Communication</strong> &mdash; Instead of vague findings: <code>Finding: Prompt Injection (MITRE ATLAS) | Impact: Data exfiltration from system context</code>. Improves clarity, aligns with industry frameworks, increases credibility.</li>
+    <li><strong>Threat Modeling AI Systems</strong>  - Identify attack points per layer: Input &rarr; Prompt injection. Data &rarr; RAG/embeddings. Model &rarr; inference manipulation. Tool &rarr; API/tool abuse.</li>
+    <li><strong>Mapping Attacks to Techniques</strong>  - Instead of ad-hoc testing: Test: <code>Prompt Injection</code> &rarr; ATLAS technique. Test: <code>Data extraction</code> &rarr; ATLAS technique. Ensures coverage, consistency, standardization.</li>
+    <li><strong>Developing Test Cases</strong>  - Inject malicious instructions into prompts, poison vector databases, manipulate retrieval results, attempt system prompt extraction, abuse tool integrations.</li>
+    <li><strong>Reporting &amp; Communication</strong>  - Instead of vague findings: <code>Finding: Prompt Injection (MITRE ATLAS) | Impact: Data exfiltration from system context</code>. Improves clarity, aligns with industry frameworks, increases credibility.</li>
   </ol>
   <div class="callout callout-green reveal">
     <strong>key takeaway</strong>
@@ -662,16 +750,43 @@ td code{font-size:12px}
 
   <h4>What Makes Prompt Injection Unique</h4>
   <p>
-    Traditional injection (SQLi): filtering malicious input is relatively straightforward &mdash; filter special characters like single quotes.
+    Traditional injection (SQLi): filtering malicious input is relatively straightforward  - filter special characters like single quotes.
     Prompt injection: prompts are <strong>complex natural language</strong>. An attacker can embed syntactically and grammatically correct English that leads the LLM to perform undesirable actions.
     The advanced, human-like understanding of natural language that LLMs possess is <strong>precisely what makes them so vulnerable</strong>.
     The fluid nature of LLM output makes these conditions hard to test for.
   </p>
 
   <h4>Direct vs Indirect Prompt Injection</h4>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0">
+    <div style="text-align:center">
+      <svg viewBox="0 0 220 120" style="width:100%;max-width:210px" xmlns="http://www.w3.org/2000/svg">
+        <text x="110" y="14" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700">DIRECT INJECTION</text>
+        <rect x="55" y="22" width="110" height="30" rx="5" fill="#1a1a2e" stroke="#ff6b6b" stroke-width="1"/>
+        <text x="110" y="42" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono,monospace" font-size="9">Attacker</text>
+        <path d="M110 52 L110 68" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+        <rect x="40" y="70" width="140" height="35" rx="5" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+        <text x="110" y="92" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">LLM</text>
+        <defs><marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#ff6b6b" stroke-width="1"/></marker></defs>
+      </svg>
+    </div>
+    <div style="text-align:center">
+      <svg viewBox="0 0 220 120" style="width:100%;max-width:210px" xmlns="http://www.w3.org/2000/svg">
+        <text x="110" y="14" text-anchor="middle" fill="#ffb86c" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700">INDIRECT INJECTION</text>
+        <rect x="10" y="22" width="85" height="30" rx="5" fill="#1a1a2e" stroke="#ff6b6b" stroke-width="1"/>
+        <text x="52" y="42" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono,monospace" font-size="8">Attacker</text>
+        <path d="M97 37 L118 37" stroke="#ff6b6b" stroke-width="1" marker-end="url(#arrowOr)"/>
+        <rect x="120" y="22" width="90" height="30" rx="5" fill="#1a1a2e" stroke="#ffd700" stroke-width="1"/>
+        <text x="165" y="42" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="8">RAG / Doc</text>
+        <path d="M165 52 L110 68" stroke="#ffd700" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrowOr)"/>
+        <rect x="40" y="70" width="140" height="35" rx="5" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+        <text x="110" y="92" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="10" font-weight="500">LLM</text>
+        <defs><marker id="arrowOr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#ffd700" stroke-width="1"/></marker></defs>
+      </svg>
+    </div>
+  </div>
   <ul>
     <li><strong>Direct:</strong> attacker sends the malicious prompt directly to the LLM through its input interface. Goal: override system instructions, extract system prompts, bypass guardrails.</li>
-    <li><strong>Indirect:</strong> malicious instructions are hidden in external content the model retrieves &mdash; documents, web pages, RAG data, emails. The model processes this as trusted data and follows the hidden instructions.</li>
+    <li><strong>Indirect:</strong> malicious instructions are hidden in external content the model retrieves - documents, web pages, RAG data, emails. The model processes this as trusted data and follows the hidden instructions.</li>
   </ul>
 
   <!-- ═══════════════════════════════════════════════ -->
@@ -702,13 +817,33 @@ td code{font-size:12px}
   <p>
     <strong>"Agent"</strong> usually refers to the goal-pursuing entity. <strong>"Agentic System"</strong> refers to the whole architecture around it. In practice people use the terms loosely, but the distinction is critical for security: <strong>vulnerabilities often exist in the system around the model</strong> (the tools, the orchestrator, the data flows), not just in the model itself.
   </p>
+  <div style="text-align:center;margin:24px 0">
+    <svg viewBox="0 0 440 260" style="max-width:420px;width:100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="430" height="250" rx="12" fill="#0a0a0f" stroke="#2a2a4a" stroke-width="1"/>
+      <text x="220" y="28" text-anchor="middle" fill="#8888aa" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" letter-spacing="2">AGENTIC SYSTEM</text>
+      <rect x="145" y="40" width="150" height="38" rx="6" fill="#1a1a2e" stroke="#00ccff" stroke-width="1.5"/>
+      <text x="220" y="64" text-anchor="middle" fill="#00ccff" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700">ORCHESTRATOR</text>
+      <path d="M220 78 L220 100" stroke="#8888aa" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="145" y="100" width="150" height="38" rx="6" fill="#1a1a2e" stroke="#bd93f9" stroke-width="1.5"/>
+      <text x="220" y="124" text-anchor="middle" fill="#bd93f9" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700">MODEL (LLM)</text>
+      <path d="M220 138 L220 160" stroke="#8888aa" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="50" y="160" width="90" height="35" rx="5" fill="#1a1a2e" stroke="#00ff88" stroke-width="1"/>
+      <text x="95" y="182" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono,monospace" font-size="9" font-weight="500">TOOLS</text>
+      <rect x="175" y="160" width="90" height="35" rx="5" fill="#1a1a2e" stroke="#ffd700" stroke-width="1"/>
+      <text x="220" y="182" text-anchor="middle" fill="#ffd700" font-family="JetBrains Mono,monospace" font-size="9" font-weight="500">MEMORY</text>
+      <rect x="300" y="160" width="95" height="35" rx="5" fill="#1a1a2e" stroke="#ff6b6b" stroke-width="1"/>
+      <text x="347" y="182" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono,monospace" font-size="9" font-weight="500">GUARDRAILS</text>
+      <rect x="100" y="210" width="240" height="30" rx="5" fill="none" stroke="#8888aa" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="220" y="230" text-anchor="middle" fill="#8888aa" font-family="Inter,sans-serif" font-size="9">Web Search | DB | Email | Code | APIs</text>
+    </svg>
+  </div>
   <p>A typical agentic AI system includes:</p>
   <ul>
-    <li><strong>The Model</strong> &mdash; the reasoning engine that makes decisions</li>
-    <li><strong>Tools</strong> &mdash; functions the agent can call (web search, database query, send email, run code, call API)</li>
-    <li><strong>An Orchestrator</strong> &mdash; the layer that runs the loop, passes the model's decisions to the right tools, feeds results back</li>
-    <li><strong>Memory/State</strong> &mdash; what the agent remembers about the current task, and sometimes across tasks (short-term and long-term)</li>
-    <li><strong>Guardrails</strong> &mdash; checks and limits on what the agent is allowed to do</li>
+    <li><strong>The Model</strong> - the reasoning engine that makes decisions</li>
+    <li><strong>Tools</strong> - functions the agent can call (web search, database query, send email, run code, call API)</li>
+    <li><strong>An Orchestrator</strong> - the layer that runs the loop, passes the model's decisions to the right tools, feeds results back</li>
+    <li><strong>Memory/State</strong> - what the agent remembers about the current task, and sometimes across tasks (short-term and long-term)</li>
+    <li><strong>Guardrails</strong> - checks and limits on what the agent is allowed to do</li>
   </ul>
 
   <h3>The Agent Loop: Plan &rarr; Act &rarr; Observe</h3>
@@ -718,7 +853,7 @@ td code{font-size:12px}
       <div class="step-num blue">P</div>
       <div class="step-body">
         <strong>Plan</strong>
-        <p>Agent looks at goal and current situation, decides next action. Determines: what info is needed, which tools might be required, what sequence of actions. No actions taken yet &mdash; just deciding.</p>
+        <p>Agent looks at goal and current situation, decides next action. Determines: what info is needed, which tools might be required, what sequence of actions. No actions taken yet  - just deciding.</p>
       </div>
     </div>
     <div class="flow-step">
@@ -741,7 +876,7 @@ td code{font-size:12px}
   <div class="callout callout-red reveal">
     <strong>critical vulnerability pattern</strong>
     Two things make the agent loop the heart of security risk:<br><br>
-    <strong>1)</strong> The agent is steering itself &mdash; nobody scripted the sequence in advance, so the path it takes depends on what it reasons and observes along the way.<br><br>
+    <strong>1)</strong> The agent is steering itself  - nobody scripted the sequence in advance, so the path it takes depends on what it reasons and observes along the way.<br><br>
     <strong>2)</strong> Every Observe phase pulls outside data back into the agent's reasoning, and that data isn't always trustworthy. A tool result or retrieved document can carry hidden instructions. Because the very next Plan phase acts on whatever the agent just observed, <strong>malicious content entering at Observe can hijack the next action.</strong><br><br>
     That feedback from untrusted observation into autonomous action is exactly where a lot of agent attacks live.
   </div>
@@ -751,7 +886,7 @@ td code{font-size:12px}
     An agent is a <strong>decision-maker</strong>, a tool is a <strong>single capability</strong>. The agent has a goal and makes decisions on what to do (which tool to use); the tool just performs one function when asked.
   </p>
   <p>
-    A tool works through <strong>function calling</strong>. Each tool is registered with a definition: a name, a plain-language description, and input parameters (schema). The tool itself is ordinary code &mdash; deterministic and "dumb". It doesn't reason, doesn't decide when it runs, doesn't know about the goal. It waits to be called, executes, and returns a result.
+    A tool works through <strong>function calling</strong>. Each tool is registered with a definition: a name, a plain-language description, and input parameters (schema). The tool itself is ordinary code  - deterministic and "dumb". It doesn't reason, doesn't decide when it runs, doesn't know about the goal. It waits to be called, executes, and returns a result.
   </p>
 
   <h3>Agent Chain Injection</h3>
@@ -765,16 +900,16 @@ td code{font-size:12px}
 
   <h3>What Is Security Engineering?</h3>
   <p>
-    Security engineering is the discipline of designing, building, implementing, and maintaining secure technology systems resilient against cyber threats. It applies security principles, controls, and best practices throughout the lifecycle to protect <strong>confidentiality, integrity, and availability (CIA Triad)</strong>. Unlike reactive security (monitoring and responding), security engineering is <strong>proactive</strong> &mdash; embedding security into system design from the outset.
+    Security engineering is the discipline of designing, building, implementing, and maintaining secure technology systems resilient against cyber threats. It applies security principles, controls, and best practices throughout the lifecycle to protect <strong>confidentiality, integrity, and availability (CIA Triad)</strong>. Unlike reactive security (monitoring and responding), security engineering is <strong>proactive</strong>  - embedding security into system design from the outset.
   </p>
   <h4>Core Security Principles</h4>
   <ul>
-    <li><strong>Defense in Depth</strong> &mdash; multiple overlapping layers of security</li>
-    <li><strong>Least Privilege</strong> &mdash; minimum necessary access</li>
-    <li><strong>Zero Trust</strong> &mdash; never trust, always verify</li>
-    <li><strong>Secure by Design</strong> &mdash; security built in from the start</li>
-    <li><strong>Fail-Safe / Fail Secure</strong> &mdash; system fails to a secure state</li>
-    <li><strong>Separation of Duties</strong> &mdash; no single point of control</li>
+    <li><strong>Defense in Depth</strong>  - multiple overlapping layers of security</li>
+    <li><strong>Least Privilege</strong>  - minimum necessary access</li>
+    <li><strong>Zero Trust</strong>  - never trust, always verify</li>
+    <li><strong>Secure by Design</strong>  - security built in from the start</li>
+    <li><strong>Fail-Safe / Fail Secure</strong>  - system fails to a secure state</li>
+    <li><strong>Separation of Duties</strong>  - no single point of control</li>
   </ul>
 
   <h3>What Is Secure AI Systems Engineering?</h3>
@@ -821,12 +956,12 @@ td code{font-size:12px}
 
   <h3>What Is AI Security Testing?</h3>
   <p>
-    AI Security Testing is the practice of <strong>systematically evaluating AI systems</strong> &mdash; especially LLMs and applications built on top of them &mdash; to identify vulnerabilities, weaknesses, and failure modes that could be exploited or cause harm. It sits at the intersection of traditional security testing and AI/ML engineering.
+    AI Security Testing is the practice of <strong>systematically evaluating AI systems</strong>  - especially LLMs and applications built on top of them  - to identify vulnerabilities, weaknesses, and failure modes that could be exploited or cause harm. It sits at the intersection of traditional security testing and AI/ML engineering.
   </p>
   <p>Just as penetration testers assess web apps, APIs, and networks, AI security testers assess AI-powered applications and services to determine whether they can be manipulated, abused, or compromised.</p>
 
   <h4>What Makes AI Systems Different to Test</h4>
-  <p>Traditional software is <strong>deterministic</strong> &mdash; same input reliably produces same output. AI systems are <strong>probabilistic and context-sensitive</strong>:</p>
+  <p>Traditional software is <strong>deterministic</strong>  - same input reliably produces same output. AI systems are <strong>probabilistic and context-sensitive</strong>:</p>
   <ul>
     <li>Behavior can vary across runs</li>
     <li>Vulnerabilities can be subtle and hard to reproduce consistently</li>
@@ -850,12 +985,12 @@ td code{font-size:12px}
 
   <h3>What Does an AI Security Tester Do?</h3>
   <ol>
-    <li><strong>Understand the System</strong> &mdash; How the application works, what AI capabilities are used, what data is processed, what external services are connected</li>
-    <li><strong>Map Data Flows</strong> &mdash; Input sources, AI components, retrieval systems, databases, tool integrations, output destinations. This helps identify trust boundaries and potential attack paths.</li>
-    <li><strong>Threat Modeling</strong> &mdash; What can an attacker influence? What assets need protection? Where does untrusted input enter the system? Which components present the highest risk?</li>
-    <li><strong>Develop Test Cases</strong> &mdash; What will be tested, how testing will be performed, expected outcomes, success criteria. Ensures testing remains systematic and repeatable.</li>
-    <li><strong>Execute Security Tests</strong> &mdash; Prompt injection attempts, tool abuse testing, rate limit testing, access control validation, logging review, code review, configuration analysis</li>
-    <li><strong>Report Findings</strong> &mdash; The vulnerability, evidence of exploitation, impact, risk level, recommended remediation. Goal: help stakeholders understand and fix, not just find.</li>
+    <li><strong>Understand the System</strong>  - How the application works, what AI capabilities are used, what data is processed, what external services are connected</li>
+    <li><strong>Map Data Flows</strong>  - Input sources, AI components, retrieval systems, databases, tool integrations, output destinations. This helps identify trust boundaries and potential attack paths.</li>
+    <li><strong>Threat Modeling</strong>  - What can an attacker influence? What assets need protection? Where does untrusted input enter the system? Which components present the highest risk?</li>
+    <li><strong>Develop Test Cases</strong>  - What will be tested, how testing will be performed, expected outcomes, success criteria. Ensures testing remains systematic and repeatable.</li>
+    <li><strong>Execute Security Tests</strong>  - Prompt injection attempts, tool abuse testing, rate limit testing, access control validation, logging review, code review, configuration analysis</li>
+    <li><strong>Report Findings</strong>  - The vulnerability, evidence of exploitation, impact, risk level, recommended remediation. Goal: help stakeholders understand and fix, not just find.</li>
   </ol>
 
   <h3>The AI Security Assessment Lifecycle</h3>
@@ -987,7 +1122,7 @@ td code{font-size:12px}
         <tr><td><strong>Guardrails</strong></td><td>Controls that limit what the model can see, do, or output</td></tr>
         <tr><td><strong>Agent Loop</strong></td><td>The Plan &rarr; Act &rarr; Observe cycle that drives autonomous AI agent behavior</td></tr>
         <tr><td><strong>Function Calling</strong></td><td>The mechanism by which an LLM invokes external tools via structured API calls</td></tr>
-        <tr><td><strong>RLHF</strong></td><td>Reinforcement Learning from Human Feedback &mdash; fine-tuning method to align model behavior</td></tr>
+        <tr><td><strong>RLHF</strong></td><td>Reinforcement Learning from Human Feedback  - fine-tuning method to align model behavior</td></tr>
       </tbody>
     </table>
   </div>
@@ -1000,37 +1135,37 @@ td code{font-size:12px}
 
   <div class="study-order reveal">
     <div class="so-item">
-      <strong style="font-size:15px;color:var(--text)">01 &mdash; AI/LLM Systems &amp; Security Architecture</strong>
+      <strong style="font-size:15px;color:var(--text)">01  - AI/LLM Systems &amp; Security Architecture</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Understand what LLMs are, how they work, and the architecture around them before attacking or defending anything.</p>
       <span class="so-tag foundation">FOUNDATION</span>
     </div>
     <div class="so-item">
-      <strong style="font-size:15px;color:var(--text)">02 &mdash; AI in the SOC</strong>
+      <strong style="font-size:15px;color:var(--text)">02  - AI in the SOC</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">How AI/ML is operationalized in defensive security: SIEM, EDR, anomaly detection, GenAI for triage.</p>
       <span class="so-tag foundation">FOUNDATION</span>
     </div>
     <div class="so-item offense">
-      <strong style="font-size:15px;color:var(--text)">03 &mdash; Prompt Injection &amp; Abuse Techniques</strong>
+      <strong style="font-size:15px;color:var(--text)">03  - Prompt Injection &amp; Abuse Techniques</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Core offensive module. OWASP Top 10, MITRE ATLAS, direct/indirect injection, guardrail bypass, obfuscation.</p>
       <span class="so-tag offense">OFFENSE</span>
     </div>
     <div class="so-item offense">
-      <strong style="font-size:15px;color:var(--text)">04 &mdash; AI Agents &amp; Tool Abuse</strong>
+      <strong style="font-size:15px;color:var(--text)">04  - AI Agents &amp; Tool Abuse</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Advanced offense. Agentic systems, multi-agent workflows, agent chain injection, tool abuse.</p>
       <span class="so-tag offense">OFFENSE</span>
     </div>
     <div class="so-item defense">
-      <strong style="font-size:15px;color:var(--text)">05 &mdash; Secure AI Systems Engineering</strong>
+      <strong style="font-size:15px;color:var(--text)">05  - Secure AI Systems Engineering</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Defensive engineering. Input/output validation, prompt hardening, RAG security, secure tool access.</p>
       <span class="so-tag defense">DEFENSE</span>
     </div>
     <div class="so-item defense">
-      <strong style="font-size:15px;color:var(--text)">06 &mdash; AI Security Testing &amp; Validation</strong>
+      <strong style="font-size:15px;color:var(--text)">06  - AI Security Testing &amp; Validation</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Methodology. STRIDE for AI, test plans, end-to-end assessments, professional reporting, residual risk.</p>
       <span class="so-tag defense">DEFENSE</span>
     </div>
     <div class="so-item defense">
-      <strong style="font-size:15px;color:var(--text)">07 &mdash; Secure Operational Use of AI</strong>
+      <strong style="font-size:15px;color:var(--text)">07  - Secure Operational Use of AI</strong>
       <p style="font-size:13px;color:var(--text-dim);margin:4px 0 0">Operational safety. Hallucination risks, output validation, safe execution, rollback, data classification.</p>
       <span class="so-tag defense">DEFENSE</span>
     </div>
@@ -1040,9 +1175,9 @@ td code{font-size:12px}
   <h2><span class="sh-tag">links //</span> Resources &amp; External References</h2>
   <ul style="color:var(--text-dim);line-height:2.2;font-size:14px;padding-left:20px">
     <li><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 for LLM Applications 2025</a></li>
-    <li><a href="https://atlas.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATLAS &mdash; Adversarial Threat Landscape for AI Systems</a></li>
+    <li><a href="https://atlas.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATLAS  - Adversarial Threat Landscape for AI Systems</a></li>
     <li><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&amp;CK Framework</a></li>
-    <li><a href="https://ine.com" target="_blank" rel="noopener noreferrer">INE &mdash; eAIS Certification</a></li>
+    <li><a href="https://ine.com" target="_blank" rel="noopener noreferrer">INE  - eAIS Certification</a></li>
   </ul>
 
 </div>
