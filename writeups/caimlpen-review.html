@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C-AI/MLPen Review: Certified AI/ML Pentester | iwd</title>
+<meta name="description" content="Honest review of the C-AI/MLPen (Certified AI/ML Pentester) exam by The SecOps Group - exam format, required skills, preparation tips, and what to expect. Passed with 100% score.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#10101a;
+  --bg3:#161625;
+  --surface:#1a1a2e;
+  --border:#2a2a4a;
+  --text:#e0e0f0;
+  --text-dim:#8888aa;
+  --accent:#00ff88;
+  --accent2:#00ccff;
+  --accent3:#ff6b6b;
+  --accent-glow:rgba(0,255,136,0.15);
+  --accent2-glow:rgba(0,204,255,0.15);
+  --gold:#ffd700;
+  --purple:#bd93f9;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+::selection{background:var(--accent2);color:var(--bg)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent2);border-radius:3px}
+
+#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.05;pointer-events:none}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:all 0.3s;
+}
+nav.scrolled{border-bottom-color:var(--border)}
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:18px;color:var(--accent);
+  text-decoration:none;letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--text-dim)}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  font-weight:500;transition:color 0.3s;position:relative;
+}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;background:var(--accent);transition:width 0.3s;
+}
+.nav-links a:hover::after{width:100%}
+.nav-back{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text-dim);text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:6px;
+  border:1px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+.post-hero{
+  min-height:70vh;display:flex;align-items:center;
+  padding:140px 40px 80px;
+  position:relative;z-index:1;
+  border-bottom:1px solid var(--border);
+}
+.post-hero::before{
+  content:'';position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,204,255,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;animation:fadeUp 0.9s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.post-tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;align-items:center}
+.ptag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  padding:3px 8px;border-radius:0;
+  letter-spacing:0.06em;background:none;border:none;
+}
+.ptag::before{content:'[';margin-right:2px;opacity:0.45}
+.ptag::after {content:']';margin-left:2px;opacity:0.45}
+.ptag-red  {color:var(--accent3)}
+.ptag-green{color:var(--accent)}
+.ptag-blue {color:var(--accent2)}
+.ptag-gold {color:var(--gold)}
+.ptag-cyan {color:#00e5ff}
+
+.post-title{
+  font-size:clamp(28px,5vw,54px);font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(135deg,var(--text) 0%,var(--accent2) 55%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.post-subtitle{
+  font-size:17px;color:var(--text-dim);
+  max-width:640px;line-height:1.7;margin-bottom:32px;
+}
+.post-meta-row{
+  display:flex;flex-wrap:wrap;gap:24px;
+  padding-top:24px;border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);
+}
+.post-meta-row span{display:flex;align-items:center;gap:6px}
+.post-meta-row .accent-val{color:var(--accent);font-weight:600}
+.post-meta-row .blue-val{color:var(--accent2)}
+.post-meta-row .gold-val{color:var(--gold);font-weight:700}
+
+.post-body{
+  max-width:860px;margin:0 auto;
+  padding:64px 40px 100px;
+  position:relative;z-index:1;
+}
+
+/* CERT CARD */
+.cert-showcase{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;margin:40px 0;
+  box-shadow:0 0 60px rgba(0,0,0,0.5);
+}
+.cert-showcase-header{
+  padding:24px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(0,204,255,0.06) 0%,transparent 60%);
+}
+.cert-name-block{display:flex;flex-direction:column;gap:4px}
+.cert-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:700;
+  color:var(--accent2);letter-spacing:-0.5px;
+}
+.cert-issuer{
+  font-size:12px;color:var(--text-dim);
+  font-family:'JetBrains Mono',monospace;letter-spacing:0.03em;
+}
+.cert-badge-block{
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+}
+.cert-level-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--accent2);
+}
+.cert-score-big{
+  font-size:28px;font-weight:900;line-height:1;
+  color:var(--gold);
+  text-shadow:0 0 30px rgba(255,215,0,0.5);
+  letter-spacing:-1px;
+}
+.cert-bar-wrap{
+  padding:16px 28px 20px;
+  border-bottom:1px solid var(--border);
+}
+.cert-bar-label{
+  display:flex;justify-content:space-between;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-dim);letter-spacing:0.08em;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.cert-bar-label span:last-child{color:var(--gold)}
+.cert-bar-bg{height:6px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden}
+.cert-bar-fill{
+  height:100%;width:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent2),var(--gold));
+  box-shadow:0 0 12px rgba(255,215,0,0.4);
+  position:relative;
+}
+.cert-bar-fill::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
+  background:white;border-radius:99px;opacity:0.7;
+}
+.cert-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.cert-stat{
+  padding:20px 24px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;
+}
+.cert-stat:last-child{border-right:none}
+.cert-stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;text-transform:uppercase;
+  letter-spacing:0.12em;color:var(--text-dim);
+}
+.cert-stat-val{font-size:15px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace}
+.cert-stat-val.green{color:var(--accent)}
+.cert-stat-val.blue{color:var(--accent2)}
+.cert-stat-val.gold{color:var(--gold)}
+.cert-stat-sub{font-size:11px;color:var(--text-dim);margin-top:2px}
+@media(max-width:600px){
+  .cert-stats{grid-template-columns:repeat(2,1fr)}
+  .cert-stat:nth-child(2){border-right:none}
+  .cert-stat:nth-child(3){border-top:1px solid var(--border)}
+  .cert-stat:nth-child(4){border-top:1px solid var(--border)}
+}
+
+/* SPONSOR BANNER */
+.sponsor-banner{
+  background:linear-gradient(135deg,rgba(255,215,0,0.07) 0%,rgba(0,204,255,0.04) 100%);
+  border:1px solid rgba(255,215,0,0.2);
+  border-radius:12px;padding:22px 26px;
+  margin:36px 0;
+  display:flex;align-items:center;gap:18px;
+}
+.sponsor-icon{font-size:28px;flex-shrink:0}
+.sponsor-text{flex:1}
+.sponsor-text strong{
+  display:block;font-size:14px;font-weight:700;
+  color:var(--gold);margin-bottom:6px;
+  font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;
+}
+.sponsor-text p{font-size:13.5px;color:var(--text-dim);margin:0;line-height:1.6}
+.sponsor-text a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(0,204,255,0.3)}
+.sponsor-text a:hover{border-bottom-color:var(--accent2)}
+
+.post-body h2{
+  font-size:24px;font-weight:800;
+  margin:60px 0 20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.post-body h2 .sh-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--accent2);font-weight:500;
+}
+.post-body h3{
+  font-size:17px;font-weight:700;
+  color:var(--accent);margin:36px 0 14px;
+}
+.post-body p{
+  color:var(--text-dim);margin-bottom:18px;
+  font-size:15px;line-height:1.8;
+}
+.post-body p strong{color:var(--text)}
+.post-body a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(0,204,255,0.3);transition:all 0.2s}
+.post-body a:hover{border-bottom-color:var(--accent2)}
+
+.callout{
+  border-radius:10px;padding:20px 24px;
+  margin:28px 0;border-left:3px solid;
+  font-size:14px;line-height:1.7;
+}
+.callout strong{display:block;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.06em}
+.callout-red  {background:rgba(255,107,107,0.07);border-color:var(--accent3);color:var(--text-dim)}
+.callout-red  strong{color:var(--accent3)}
+.callout-green{background:rgba(0,255,136,0.06);border-color:var(--accent);color:var(--text-dim)}
+.callout-green strong{color:var(--accent)}
+.callout-blue {background:rgba(0,204,255,0.06);border-color:var(--accent2);color:var(--text-dim)}
+.callout-blue strong{color:var(--accent2)}
+.callout-yellow{background:rgba(255,215,0,0.06);border-color:var(--gold);color:var(--text-dim)}
+.callout-yellow strong{color:var(--gold)}
+
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:4px;padding:1px 6px;
+  color:#e0e0f0;
+}
+
+.table-wrap{
+  border-radius:10px;border:1px solid var(--border);
+  overflow:hidden;margin:24px 0 32px;
+  background:var(--surface);
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg)}
+th{
+  padding:13px 18px;text-align:left;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--accent2);
+  font-weight:600;border-bottom:2px solid var(--border);
+}
+td{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  color:var(--text-dim);vertical-align:top;line-height:1.6;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background 0.2s}
+tbody tr:hover{background:rgba(0,204,255,0.03)}
+td strong{color:var(--text)}
+
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 28px}
+.tag-item{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:4px 12px;border-radius:4px;
+  border:1px solid var(--border);color:var(--text-dim);
+  background:var(--surface);
+  transition:all 0.2s;
+}
+.tag-item.blue{border-color:rgba(0,204,255,0.3);color:var(--accent2);background:rgba(0,204,255,0.06)}
+.tag-item.green{border-color:rgba(0,255,136,0.3);color:var(--accent);background:rgba(0,255,136,0.06)}
+.tag-item.gold{border-color:rgba(255,215,0,0.3);color:var(--gold);background:rgba(255,215,0,0.06)}
+.tag-item.red{border-color:rgba(255,107,107,0.3);color:var(--accent3);background:rgba(255,107,107,0.06)}
+.tag-item.purple{border-color:rgba(189,147,249,0.3);color:var(--purple);background:rgba(189,147,249,0.06)}
+
+.flow{display:flex;flex-direction:column;gap:0;margin:28px 0}
+.flow-step{
+  display:flex;gap:20px;padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.flow-step:last-child{border-bottom:none}
+.step-num{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  flex-shrink:0;margin-top:2px;
+}
+.step-num.green{background:rgba(0,255,136,0.15);color:var(--accent);border:1px solid rgba(0,255,136,0.3)}
+.step-num.red  {background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.step-num.blue {background:rgba(0,204,255,0.15);color:var(--accent2);border:1px solid rgba(0,204,255,0.3)}
+.step-num.gold {background:rgba(255,215,0,0.15);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
+.step-body{flex:1}
+.step-body strong{color:var(--text);display:block;margin-bottom:6px;font-size:15px}
+.step-body p{margin:0;font-size:14px}
+
+.verdict-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin:28px 0;
+}
+.verdict-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:20px;text-align:center;
+}
+.verdict-icon{font-size:28px;margin-bottom:10px}
+.verdict-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--text-dim);margin-bottom:8px;
+}
+.verdict-val{font-size:15px;font-weight:700;color:var(--text)}
+.verdict-val.blue{color:var(--accent2)}
+.verdict-val.gold{color:var(--gold)}
+.verdict-val.green{color:var(--accent)}
+@media(max-width:600px){.verdict-grid{grid-template-columns:1fr 1fr}}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+.post-footer{
+  text-align:center;padding:48px 40px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text-dim);
+  position:relative;z-index:1;
+}
+.post-footer .accent{color:var(--accent)}
+.post-footer .back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;color:var(--text-dim);
+  text-decoration:none;border:1px solid var(--border);
+  padding:10px 20px;border-radius:8px;
+  font-size:12px;transition:all 0.3s;
+}
+.post-footer .back-link:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+.toc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:24px 28px;margin:40px 0;
+  position:relative;overflow:hidden;
+}
+.toc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+.toc-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--accent2);margin-bottom:14px;
+}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px;font-size:14px}
+.toc a{color:var(--text-dim);text-decoration:none;border:none;transition:color 0.2s}
+.toc a:hover{color:var(--accent2)}
+
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .post-hero{padding:110px 20px 60px}
+  .post-body{padding:40px 20px 80px}
+  .sponsor-banner{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<nav id="navbar">
+  <a href="../" class="nav-logo">&lt;AK<span>/&gt;</span></a>
+  <ul class="nav-links">
+    <li><a href="../#about">About</a></li>
+    <li><a href="../#writeups">Writeups</a></li>
+    <li><a href="../#cves">CVEs</a></li>
+    <li><a href="../#contact">Contact</a></li>
+  </ul>
+  <a href="../" class="nav-back">&larr; Back</a>
+</nav>
+
+<!-- HERO -->
+<div class="post-hero">
+  <div class="hero-inner">
+    <div class="post-tag-row">
+      <span class="ptag ptag-red">AI-SECURITY</span>
+      <span class="ptag ptag-green">PROMPT-INJECTION</span>
+      <span class="ptag ptag-blue">LLM-HACKING</span>
+      <span class="ptag ptag-gold">CERTIFICATION</span>
+      <span class="ptag ptag-cyan">100%</span>
+    </div>
+    <h1 class="post-title">Certified AI/ML Pentester<br>- Passed With 100%</h1>
+
+    <p class="post-subtitle">
+      Honest review of <strong style="-webkit-text-fill-color:initial;color:var(--accent2)">The SecOps Group's</strong>
+      C-AI/MLPen certification - a practical, hands-on exam testing your ability to attack and extract secrets from AI/LLM chatbots using prompt injection techniques.
+    </p>
+
+    <div class="post-meta-row">
+      <span>// <span class="accent-val">Alaaeddine Knani</span></span>
+      <span>&#x1F3C6; <span class="gold-val">100% - WITH MERIT</span></span>
+      <span>&#x23F1; <span class="blue-val">152 min</span></span>
+      <span>&#x1F4C5; <span class="blue-val">Aug 20, 2026</span></span>
+      <span>&#x1F517; <a href="https://secops.group" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);border:none">SecOps Group &nearr;</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="post-body">
+
+  <!-- SPONSOR BANNER -->
+  <div class="sponsor-banner reveal">
+    <div class="sponsor-icon">&#x1F64C;</div>
+    <div class="sponsor-text">
+      <strong>// Sponsored by The SecOps Group</strong>
+      <p>
+        Huge thanks to <strong style="color:var(--text)">Sumit Siddharth</strong> and the team at
+        <a href="https://secops.group" target="_blank" rel="noopener noreferrer">The SecOps Group</a> /
+        <a href="https://pentestingexams.com" target="_blank" rel="noopener noreferrer">PentestingExams.com</a>
+        for sponsoring this certification voucher. Their commitment to practical, hands-on security certifications
+        continues to raise the bar for the industry.
+      </p>
+    </div>
+  </div>
+
+  <!-- CERT CARD -->
+  <div class="cert-showcase reveal">
+    <div class="cert-showcase-header">
+      <div class="cert-name-block">
+        <div class="cert-name">C-AI/MLPen</div>
+        <div class="cert-issuer">Certified AI/ML Pentester &middot; The SecOps Group / PentestingExams.com</div>
+      </div>
+      <div class="cert-badge-block">
+        <div class="cert-level-label">Achievement Level</div>
+        <div class="cert-score-big">100%</div>
+      </div>
+    </div>
+    <div class="cert-bar-wrap">
+      <div class="cert-bar-label"><span>Score</span><span>240/240 - Perfect Score</span></div>
+      <div class="cert-bar-bg"><div class="cert-bar-fill"></div></div>
+    </div>
+    <div class="cert-stats">
+      <div class="cert-stat">
+        <div class="cert-stat-label">Score</div>
+        <div class="cert-stat-val gold">240/240</div>
+        <div class="cert-stat-sub">100% - Perfect</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Questions</div>
+        <div class="cert-stat-val green">8/8</div>
+        <div class="cert-stat-sub">All flags captured</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Time Used</div>
+        <div class="cert-stat-val blue">152:44</div>
+        <div class="cert-stat-sub">minutes</div>
+      </div>
+      <div class="cert-stat">
+        <div class="cert-stat-label">Result</div>
+        <div class="cert-stat-val gold">WITH MERIT</div>
+        <div class="cert-stat-sub">Aug 20, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc reveal">
+    <div class="toc-title">// Table of Contents</div>
+    <ol>
+      <li><a href="#s1">What is C-AI/MLPen?</a></li>
+      <li><a href="#s2">Exam format</a></li>
+      <li><a href="#s3">What skills do you need?</a></li>
+      <li><a href="#s4">How to prepare</a></li>
+      <li><a href="#s5">My experience</a></li>
+      <li><a href="#s6">Verdict</a></li>
+    </ol>
+  </div>
+
+  <!-- S1 -->
+  <h2 id="s1"><span class="sh-tag">01 //</span> What is C-AI/MLPen?</h2>
+
+  <p>
+    The <strong>Certified AI/ML Pentester (C-AI/MLPen)</strong> is a practical certification by
+    <a href="https://secops.group" target="_blank" rel="noopener noreferrer">The SecOps Group</a>
+    that tests your ability to find and exploit vulnerabilities in AI-powered applications.
+    Unlike theory-heavy certifications, this one is entirely hands-on: you're given AI chatbots
+    to break, and your job is to extract their secrets.
+  </p>
+
+  <p>
+    The exam covers the full spectrum of AI/LLM attack techniques: prompt injection, NL2SQL injection,
+    indirect injection via file uploads, hallucination exploitation, and creative prompt engineering.
+    Each challenge is a different AI chatbot with progressively stronger defenses - from basic input
+    filters to multi-layered guardrails with output filtering, persona enforcement, and decoy outputs.
+  </p>
+
+  <div class="callout callout-blue reveal">
+    <strong>exam philosophy</strong>
+    C-AI/MLPen is built on the principle that AI security is a practical skill, not a theoretical one.
+    You can't study your way through this exam with flashcards. You either know how to break AI systems
+    or you don't. That's what makes it valuable.
+  </div>
+
+  <!-- S2 -->
+  <h2 id="s2"><span class="sh-tag">02 //</span> Exam format</h2>
+
+  <p>
+    The exam consists of <strong>8 practical challenges</strong>, each featuring an AI chatbot
+    guarding a secret flag. You interact with the bots through a web interface and try to extract
+    the hidden values using prompt injection techniques. Flags are submitted via the exam portal
+    for instant validation.
+  </p>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Detail</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Questions</strong></td><td>8 practical challenges</td></tr>
+        <tr><td><strong>Format</strong></td><td>CTF-style - interact with AI chatbots, extract flags</td></tr>
+        <tr><td><strong>Time</strong></td><td>~3 hours recommended (no hard cutoff observed)</td></tr>
+        <tr><td><strong>Passing score</strong></td><td>Not publicly disclosed</td></tr>
+        <tr><td><strong>Proctoring</strong></td><td>None - VPN-based access to exam platform</td></tr>
+        <tr><td><strong>Retakes</strong></td><td>1 free retake within 14 days</td></tr>
+        <tr><td><strong>Validity</strong></td><td>Lifetime</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-yellow reveal">
+    <strong>important note</strong>
+    The same prompt can yield different outputs between attempts due to LLM behavior.
+    If a technique doesn't work, try again - the model may respond differently the second time.
+    Persistence and creativity matter more than memorizing specific payloads.
+  </div>
+
+  <!-- S3 -->
+  <h2 id="s3"><span class="sh-tag">03 //</span> What skills do you need?</h2>
+
+  <div class="tag-list reveal">
+    <span class="tag-item red">Prompt Injection</span>
+    <span class="tag-item red">NL2SQL Injection</span>
+    <span class="tag-item red">Indirect Prompt Injection</span>
+    <span class="tag-item blue">Jailbreaking</span>
+    <span class="tag-item blue">Obfuscation</span>
+    <span class="tag-item blue">Context Switching</span>
+    <span class="tag-item green">Hallucination Exploitation</span>
+    <span class="tag-item green">Output Filter Bypass</span>
+    <span class="tag-item gold">OWASP Top 10 for LLMs</span>
+    <span class="tag-item purple">MITRE ATLAS</span>
+  </div>
+
+  <p>
+    The exam tests practical prompt hacking skills. You need to understand how LLMs process
+    instructions, where trust boundaries exist in AI applications, and how to creatively
+    bypass filters and guardrails. No single technique works on every level - the exam is
+    designed to force you to adapt your approach.
+  </p>
+
+  <p>
+    Traditional pentesting skills translate directly: <strong>thinking outside the box,
+    persistence when stuck, and a systematic methodology</strong> are what separate someone
+    who solves 3 levels from someone who solves all 8. If you've done web app pentesting
+    or CTFs, the mindset is the same - just applied to a new attack surface.
+  </p>
+
+  <!-- S4 -->
+  <h2 id="s4"><span class="sh-tag">04 //</span> How to prepare</h2>
+
+  <div class="flow reveal">
+    <div class="flow-step">
+      <div class="step-num blue">1</div>
+      <div class="step-body">
+        <strong>Learn the fundamentals</strong>
+        <p>Study the <strong style="color:var(--text)">OWASP Top 10 for LLMs (2025)</strong> and <strong style="color:var(--text)">MITRE ATLAS</strong>. Understand how LLMs work at a conceptual level: tokens, prompts, system prompts, context windows, and inference. You don't need to train models, but you need to know how they process input.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num green">2</div>
+      <div class="step-body">
+        <strong>Practice on CTF platforms</strong>
+        <p><strong style="color:var(--text)">Gandalf</strong> (Lakera AI), <strong style="color:var(--text)">Prompt(air)lines</strong>, <strong style="color:var(--text)">HackaPrompt</strong>, and <strong style="color:var(--text)">myllmbank.com</strong> are the closest to the actual exam format. If you can beat Gandalf's hardest levels, you have the right skillset. Also check <code>learnprompting.org</code> for prompt hacking techniques.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num gold">3</div>
+      <div class="step-body">
+        <strong>Study prompt hacking techniques</strong>
+        <p>Build a personal cheat sheet of techniques: direct/indirect injection, refusal suppression, context switching, obfuscation (base64, ROT13, token smuggling), payload splitting, virtualization, few-shot attacks, DAN-style jailbreaks, and dictionary attacks. Know when each one applies.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num red">4</div>
+      <div class="step-body">
+        <strong>Take the INE eAIS path (optional)</strong>
+        <p>INE's AI Security (eAIS) learning path covers the theory behind all these attacks across 7 courses. Not required for the exam, but gives solid foundations if you're new to AI security. I studied it alongside and it helped with understanding the "why" behind each technique.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-green reveal">
+    <strong>best single prep resource</strong>
+    If you can only do one thing: grind Gandalf by Lakera AI. It's free, it's the same format
+    (extract secrets from progressively harder AI chatbots), and the techniques that work there
+    will work on the exam. Get comfortable with creative prompting and recognizing when a bot
+    is deflecting vs actually leaking information.
+  </div>
+
+  <!-- S5 -->
+  <h2 id="s5"><span class="sh-tag">05 //</span> My experience</h2>
+
+  <p>
+    The exam is well-designed and genuinely tests practical skills. Each level requires a different
+    approach - there is no silver bullet prompt that works everywhere. The difficulty ramp is fair:
+    early levels fall quickly, while later ones require creative thinking and persistence.
+  </p>
+
+  <p>
+    The most interesting challenges were the ones involving <strong>AI systems connected to real backends</strong> -
+    databases, file systems, and document stores. These test whether you can exploit the full AI application stack,
+    not just the language model itself. Understanding how AI interacts with external tools and data sources is critical.
+  </p>
+
+  <p>
+    One level was particularly tricky because the bot generated <strong>convincing but fake outputs</strong> -
+    hallucinated "flags" that looked real but weren't. Recognizing when a bot is hallucinating vs revealing
+    actual secrets is a skill that only comes from practice. Don't trust the first answer that looks like a flag.
+  </p>
+
+  <p>
+    Overall, I finished in about <strong>2.5 hours with a perfect score</strong>. The exam is one of the most fun
+    and realistic AI security certifications available. It feels like a real engagement, not a test.
+  </p>
+
+  <div class="callout callout-blue reveal">
+    <strong>advice for exam day</strong>
+    Don't overthink it. Start with simple techniques and escalate. If a prompt doesn't work after 2-3 tries,
+    switch to a completely different approach. The bots are designed to resist specific attack patterns,
+    so creativity beats brute force every time. Also - read the level descriptions carefully. They contain hints.
+  </div>
+
+  <!-- S6 -->
+  <h2 id="s6"><span class="sh-tag">06 //</span> Verdict</h2>
+
+  <div class="verdict-grid reveal">
+    <div class="verdict-item">
+      <div class="verdict-icon">&#x1F4AA;</div>
+      <div class="verdict-label">Difficulty</div>
+      <div class="verdict-val blue">Medium-Hard</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">&#x1F4B0;</div>
+      <div class="verdict-label">Value</div>
+      <div class="verdict-val gold">High</div>
+    </div>
+    <div class="verdict-item">
+      <div class="verdict-icon">&#x2705;</div>
+      <div class="verdict-label">Recommend</div>
+      <div class="verdict-val green">Yes</div>
+    </div>
+  </div>
+
+  <div class="callout callout-green reveal">
+    <strong>bottom line</strong>
+    If you're in offensive security and want to add AI/LLM pentesting to your toolkit,
+    C-AI/MLPen is the best practical certification for it right now. It tests real skills,
+    not theory. The exam is engaging, the difficulty is fair, and the certificate proves you
+    can actually break AI systems - not just talk about it.
+  </div>
+
+  <div class="callout callout-yellow reveal">
+    <strong>special thanks</strong>
+    A personal thank you to <strong>Sumit Siddharth</strong> (CEO, The SecOps Group) and the entire
+    <strong>PentestingExams.com</strong> team for sponsoring this certification and for building
+    high-quality, practical exams that the security community actually needs.
+  </div>
+
+  <!-- Resources -->
+  <h2><span class="sh-tag">ref //</span> Resources &amp; Links</h2>
+  <ul style="color:var(--text-dim);line-height:2.2;font-size:14px;padding-left:20px">
+    <li><a href="https://secops.group" target="_blank" rel="noopener noreferrer">The SecOps Group - Official Website</a></li>
+    <li><a href="https://pentestingexams.com" target="_blank" rel="noopener noreferrer">PentestingExams.com - Certification Portal</a></li>
+    <li><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 for LLM Applications 2025</a></li>
+    <li><a href="https://atlas.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATLAS - Adversarial Threat Landscape for AI Systems</a></li>
+    <li><a href="https://gandalf.lakera.ai/" target="_blank" rel="noopener noreferrer">Gandalf by Lakera AI - Practice Prompt Injection</a></li>
+    <li><a href="https://learnprompting.org/docs/prompt_hacking/injection" target="_blank" rel="noopener noreferrer">Learn Prompting - Prompt Hacking Guide</a></li>
+  </ul>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="post-footer">
+  <div>written by <span class="accent">iwd</span> &nbsp;|&nbsp; C-AI/MLPen Review &nbsp;|&nbsp; Aug 2026</div>
+  <a href="../" class="back-link">&larr; Back to portfolio</a>
+</footer>
+
+<script>
+(function(){
+  const c = document.getElementById('matrix-bg');
+  const ctx = c.getContext('2d');
+  function resize(){ c.width=innerWidth; c.height=innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}[]';
+  const fs = 13;
+  let cols, drops;
+  function init(){ cols=Math.floor(c.width/fs); drops=Array(cols).fill(1); }
+  init();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+  setInterval(()=>{
+    ctx.fillStyle='rgba(10,10,15,0.05)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ccff';
+    ctx.font=fs+'px JetBrains Mono,monospace';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fs, y*fs);
+      if(y*fs>c.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },50);
+})();
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY>40);
+});
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
