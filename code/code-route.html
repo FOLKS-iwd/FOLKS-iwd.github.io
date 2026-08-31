@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قانون الطريق</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap">
+<style>
+:root{--ink:#1a365d;--text:#34394a;--accent:#b8860b;--accent-light:#f5e6c4;--surface:#faf8f4;--card:#fff;--card-border:#e8e2d8;--table-head:#1a365d;--table-head-text:#fff;--table-alt:#f7f4ef;--table-border:#d4cec4;--danger:#b91c1c;--success:#166534;--muted:#6b7280;--divider:#d1cdc5;--highlight-bg:#fef3c7}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#93b4e0;--text:#d1d5db;--accent:#daa520;--accent-light:#3b2f14;--surface:#111318;--card:#1a1d26;--card-border:#2e3240;--table-head:#243352;--table-head-text:#d1d5db;--table-alt:#1e2130;--table-border:#2e3240;--danger:#f87171;--success:#4ade80;--muted:#9ca3af;--divider:#2e3240;--highlight-bg:#3b2f14}}
+:root[data-theme="dark"]{--ink:#93b4e0;--text:#d1d5db;--accent:#daa520;--accent-light:#3b2f14;--surface:#111318;--card:#1a1d26;--card-border:#2e3240;--table-head:#243352;--table-head-text:#d1d5db;--table-alt:#1e2130;--table-border:#2e3240;--danger:#f87171;--success:#4ade80;--muted:#9ca3af;--divider:#2e3240;--highlight-bg:#3b2f14}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Tajawal','Segoe UI',sans-serif;background:var(--surface);color:var(--text);line-height:1.8;max-width:780px;margin:0 auto;padding:40px 24px 60px}
+h1,h2,h3{font-family:'Cairo','Segoe UI',sans-serif;color:var(--ink)}
+.doc-header{text-align:center;padding:32px 0 24px;border-bottom:3px solid var(--ink);margin-bottom:36px}
+.doc-header h1{font-size:2.2rem;font-weight:800;letter-spacing:.02em}
+.doc-header .subtitle{font-family:'Tajawal',sans-serif;font-size:1.05rem;color:var(--muted);margin-top:6px}
+.section{background:var(--card);border:1px solid var(--card-border);border-radius:6px;padding:24px 28px;margin-bottom:24px;page-break-inside:avoid}
+.section h2{font-size:1.35rem;font-weight:700;margin:0 0 16px;padding-bottom:10px;border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:10px}
+.section h2 .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--ink);color:var(--table-head-text);border-radius:50%;font-size:.85rem;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+.section h3{font-size:1.05rem;font-weight:700;margin:18px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-variant-numeric:tabular-nums}
+table th{background:var(--table-head);color:var(--table-head-text);font-family:'Cairo',sans-serif;font-weight:600;font-size:.9rem;padding:10px 14px;text-align:center}
+table th:first-child{border-radius:0 6px 0 0}table th:last-child{border-radius:6px 0 0 0}
+table td{padding:10px 14px;border-bottom:1px solid var(--table-border);text-align:center;font-size:.95rem}
+table tr:nth-child(even) td{background:var(--table-alt)}table td:last-child{font-weight:500}
+.val{color:var(--accent);font-weight:700;font-family:'Cairo',sans-serif}
+.danger{color:var(--danger);font-weight:700}
+.formula{background:var(--accent-light);border-right:4px solid var(--accent);padding:12px 18px;border-radius:0 4px 4px 0;margin:12px 0;font-family:'Cairo',sans-serif;font-weight:600;font-size:1rem}
+ul{padding-right:20px;margin:8px 0}ul li{margin-bottom:6px}
+.highlight{background:var(--highlight-bg);padding:2px 8px;border-radius:3px;font-weight:600}
+.emergency-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.emergency-item{display:flex;align-items:center;justify-content:space-between;background:var(--table-alt);padding:12px 16px;border-radius:6px;border:1px solid var(--card-border)}
+.emergency-item .label{font-weight:500;font-size:.95rem}
+.emergency-item .number{font-family:'Cairo',sans-serif;font-weight:800;font-size:1.4rem;color:var(--danger);font-variant-numeric:tabular-nums}
+.note{font-size:.88rem;color:var(--muted);margin-top:8px;padding-right:8px;border-right:3px solid var(--divider)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two-col>div{background:var(--table-alt);padding:14px 16px;border-radius:6px;border:1px solid var(--card-border)}
+.two-col>div strong{display:block;font-family:'Cairo',sans-serif;color:var(--ink);margin-bottom:4px}
+.tire-types{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.tire-type{text-align:center;padding:14px 10px;border-radius:6px;border:1px solid var(--card-border);background:var(--table-alt)}
+.tire-type .grade{font-family:'Cairo',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px}
+.tire-type .en{font-size:.8rem;color:var(--muted)}
+.tire-type.best{border-color:var(--success)}.tire-type.mid{border-color:var(--accent)}.tire-type.low{border-color:var(--danger)}
+.breath-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.breath-card{text-align:center;padding:14px 10px;border-radius:6px;border:1px solid var(--card-border);background:var(--table-alt)}
+.breath-card .cat{font-family:'Cairo',sans-serif;font-weight:700;color:var(--ink);margin-bottom:6px;font-size:.9rem}
+.breath-card .rate{font-family:'Cairo',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent)}
+.breath-card .unit{font-size:.8rem;color:var(--muted)}
+.pas-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0}
+.pas-step{text-align:center;padding:16px 10px;border-radius:6px;background:var(--table-alt);border:1px solid var(--card-border)}
+.pas-step .step-num{font-family:'Cairo',sans-serif;font-weight:800;font-size:1.3rem;color:var(--accent)}
+.pas-step .step-label{font-family:'Cairo',sans-serif;font-weight:700;color:var(--ink);margin-top:4px}
+.points-list{list-style:none;padding:0}
+.points-list li{padding:8px 12px;border-bottom:1px solid var(--divider);display:flex;align-items:baseline;gap:8px}
+.points-list li::before{content:"\25C6";color:var(--accent);font-size:.7rem;flex-shrink:0}
+@media print{body{max-width:100%;padding:20px}.section{break-inside:avoid;box-shadow:none;border:1px solid #ccc}}
+@media(max-width:600px){body{padding:16px 12px}.section{padding:16px}.two-col,.tire-types,.breath-grid,.pas-steps,.emergency-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="doc-header"><h1>قانون الطريق</h1><div class="subtitle">ملخّص شامل للمراجعة</div></div>
+<div class="section"><h2><span class="num">1</span> السرعة</h2><table><tr><th>المنطقة</th><th>طقس جاف</th><th>طقس ممطر</th></tr><tr><td>داخل مناطق العمران</td><td><span class="val">50</span> كلم/س</td><td><span class="val">40</span> كلم/س <span class="danger">(-10)</span></td></tr><tr><td>خارج مناطق العمران</td><td><span class="val">90</span> كلم/س</td><td><span class="val">70</span> كلم/س <span class="danger">(-20)</span></td></tr><tr><td>طريق السيّارة</td><td><span class="val">110</span> كلم/س</td><td><span class="val">90</span> كلم/س <span class="danger">(-20)</span></td></tr></table><h3>طريق السيّارة</h3><div class="two-col"><div><strong>أدنى سرعة</strong><span class="val">60</span> كلم/س</div><div><strong>أقصى سرعة</strong><span class="val">110</span> كلم/س</div></div><h3>العقوبات ذات التشديد البدني (الاحتجاز)</h3><ul><li>سرعته = <span class="val">25</span> كلم/س (منطقة المشاة)</li><li class="danger">ممنوع الجولان في طريق السيّارة</li></ul></div>
+<div class="section"><h2><span class="num">2</span> تجديد رخصة السياقة</h2><table><tr><th>الفئة العمرية</th><th>مدّة التجديد</th></tr><tr><td>من 18 إلى 60 سنة</td><td>كل <span class="val">10</span> سنوات</td></tr><tr><td>من 60 إلى 76 سنة</td><td>كل <span class="val">5</span> سنوات</td></tr><tr><td>من 76 سنة إلى الوفاة</td><td>كل <span class="val">3</span> سنوات</td></tr></table><div class="formula">ضرورة الاستظهار بشهادة طبّية مع كلّ تجديد</div></div>
+<div class="section"><h2><span class="num">3</span> مثلّثي الخطر</h2><table><tr><th>المنطقة</th><th>يوضع على بُعد</th><th>يُشاهد من بُعد</th></tr><tr><td>داخل مناطق العمران</td><td><span class="val">30</span> م</td><td><span class="val">50</span> م</td></tr><tr><td>خارج مناطق العمران</td><td><span class="val">30</span> م</td><td><span class="val">50</span> م</td></tr><tr><td>طريق السيّارة</td><td><span class="val">100</span> م</td><td><span class="val">50</span> م</td></tr></table><div class="formula">مثلّثي الخطر ضروري داخل السيّارة</div></div>
+<div class="section"><h2><span class="num">4</span> الحمولة</h2><ul><li><strong>من الأمام:</strong> يجب أن لا تتجاوز مقدّمة العربية</li><li><strong>من الخلف:</strong> يجب أن لا تتجاوز الحمولة من الخلف <span class="val">3 م</span></li><li>لكن إذا تجاوزت <span class="val">1 م</span> ← يجب وضع <span class="danger">إشارة حمراء</span> على الجانب الأيسر للحمولة</li></ul></div>
+<div class="section"><h2><span class="num">5</span> المسافة الجانبية</h2><div class="two-col"><div><strong>المتوجّل / الدرّاجة / الدرّاجة النارية / عربة يجرّها حيوان</strong>نترك مسافة جانبية <span class="val">1 م</span></div><div><strong>العربات / الشاحنات / الحافلات</strong>نترك مسافة جانبية <span class="val">0.5 م</span></div></div></div>
+<div class="section"><h2><span class="num">6</span> مسافة الأمان</h2><div class="formula">القاعدة: السرعة &times; 3 &divide; 10</div><h3>أمثلة (قاعدة فاطمة خضري)</h3><table><tr><th>السرعة (كلم/س)</th><th>الحساب</th><th>مسافة الأمان</th></tr><tr><td>20</td><td>20 &times; 3 &divide; 10</td><td><span class="val">6</span> م</td></tr><tr><td>30</td><td>30 &times; 3 &divide; 10</td><td><span class="val">9</span> م</td></tr><tr><td>40</td><td>40 &times; 3 &divide; 10</td><td><span class="val">12</span> م</td></tr><tr><td>50</td><td>50 &times; 3 &divide; 10</td><td><span class="val">15</span> م</td></tr></table></div>
+<div class="section"><h2><span class="num">7</span> مسافة التوقّف</h2><div class="two-col"><div><strong>طقس جاف</strong>القاعدة: (س &divide; 10) &times; نفسه</div><div><strong>طقس ممطر</strong>النتيجة + نصفها</div></div><div class="note">قاعدة فاطمة: نأخذ 0 &times; عدد نفسه ثمّ نضيف نصفها في الطقس الممطر</div><h3>أمثلة</h3><table><tr><th>السرعة (كلم/س)</th><th>طقس جاف</th><th>طقس ممطر</th></tr><tr><td>20</td><td>2 &times; 2 = <span class="val">4</span> م</td><td>4 + 2 = <span class="val">6</span> م</td></tr><tr><td>40</td><td>4 &times; 4 = <span class="val">16</span> م</td><td>16 + 8 = <span class="val">24</span> م</td></tr><tr><td>60</td><td>6 &times; 6 = <span class="val">36</span> م</td><td>36 + 18 = <span class="val">54</span> م</td></tr><tr><td>80</td><td>8 &times; 8 = <span class="val">64</span> م</td><td>64 + 32 = <span class="val">96</span> م</td></tr></table></div>
+<div class="section"><h2><span class="num">8</span> المقاطعة (التقاطع)</h2><div class="formula">تُفتح المقاطعة من اليمين (أولوية اليمين)</div><h3>3 شروط</h3><ul><li>نفس القياس (الطرقات بنفس الحجم)</li><li>بجنب بعضهم</li><li>عكس بعضهم</li></ul></div>
+<div class="section"><h2><span class="num">9</span> الإطلاقات المطاطية (العجلات)</h2><h3>3 أنواع</h3><div class="tire-types"><div class="tire-type best"><div class="grade">شعاعي</div><div class="en">Radiale</div><div style="margin-top:4px">ممتاز</div></div><div class="tire-type mid"><div class="grade">قطري محزّم</div><div class="en">Bias-Belted</div><div style="margin-top:4px">متوسّط</div></div><div class="tire-type low"><div class="grade">قطري</div><div class="en">Bias</div><div style="margin-top:4px">سيّء</div></div></div><ul><li>الإطلاقات من الخلف يجب أن تكون <strong>مثل أو أحسن</strong> من الإطلاقات من الأمام</li><li><strong>هل يمكن تركيب إطلاقات مختلفة على نفس المحور؟</strong><br>لا — إلّا في حالة وحيدة: <span class="highlight">الجمل (انقلاق عجلة)</span> = العجلة الاحتياطية</li><li>مؤشّر التشهّري (عمق الأخاديد الأدنى) = <span class="val">1.6 مم</span></li><li>الفارق بين مؤتي مختلفي الهياكل على نفس المحور = <span class="val">5 مم</span></li><li class="danger">يجب أن لا يقلّ عمق الأخاديد عن 1 مم</li><li>الأخاديد تمنع التزلّج المائي</li></ul></div>
+<div class="section"><h2><span class="num">10</span> لوحتي التمرين</h2><ul><li>مدّة اللوحتي للتمرين: حتّى الحصول على الرخصة</li><li>يجب أن لا تتجاوز السرعة <span class="val">80</span> كلم/س خارج مناطق العمران وطريق السيّارة</li><li>اللوحة: أبيض في الأعلى (حرف أ)، أسود في الأسفل</li></ul><h3>رخصة السباقة (الأنقاط)</h3><ul><li>ملاحظة: عندما يتحصّل المتربّص يسوق الحوية النفعية (Isuzu) والذهب</li><li>التربّص بعامين (من سنة)</li></ul></div>
+<div class="section"><h2><span class="num">11</span> رخصة السياقة بالنقاط</h2><div class="formula">رخصة السياقة = <span class="val" style="font-size:1.2rem">25</span> نقطة</div><ul class="points-list"><li>عند مخالفة تكوين مخصّص ← استرجاع <span class="val">4</span> نقاط</li><li>يمكن استرجاع النقاط خلال سنة</li><li>إذا المجموع تحت <span class="danger">8 نقاط</span> ← تكوين إجباري</li><li>يجب خلاص الخطايا في أجل <span class="val">6</span> أيّام</li><li>بعد <span class="val">12</span> يوما يتضاعف المبلغ</li><li>بعد شهرين ← رخصة سياقة <span class="danger">معلّقة</span></li><li>تسقط المطالبة باستخلاص الخطايا بعد <span class="val">5</span> سنوات</li></ul></div>
+<div class="section"><h2><span class="num">12</span> الحماية (حماية ـ إعلام ـ إسعاف)</h2><div class="pas-steps"><div class="pas-step"><div class="step-num">1</div><div class="step-label">حماية</div><div style="font-size:.85rem;margin-top:4px">حماية مكان الحادث (وقتلي الخطر)</div></div><div class="pas-step"><div class="step-num">2</div><div class="step-label">إعلام</div><div style="font-size:.85rem;margin-top:4px">الاتّصال بأرقام الطوارئ</div></div><div class="pas-step"><div class="step-num">3</div><div class="step-label">إسعاف</div><div style="font-size:.85rem;margin-top:4px">تقديم الإسعافات الأوّلية</div></div></div><h3>جرح في السبيل (نزيف)</h3><ul><li><strong>1 -</strong> الضغط السوي (الضغط المباشر)</li><li><strong>2 -</strong> نقطة الضغط</li><li><strong>3 -</strong> الرباط الضاغط (كتابة تاريخ وساعة وضعه)</li></ul><div class="formula">الرباط الضاغط يُفتح من قِبل طبيب مختصّ فقط</div></div>
+<div class="section"><h2><span class="num">13</span> الإسعافات الأوّلية</h2><h3>نسق التنفّس الاصطناعي</h3><div class="breath-grid"><div class="breath-card"><div class="cat">البالغ</div><div class="rate">14 – 16</div><div class="unit">حركة تنفّسية / د</div></div><div class="breath-card"><div class="cat">الطفل</div><div class="rate">18 – 25</div><div class="unit">حركة تنفّسية / د</div></div><div class="breath-card"><div class="cat">الرضيع</div><div class="rate">25 – 40</div><div class="unit">حركة تنفّسية / د</div></div></div><h3>وضعيات المصاب</h3><ul><li><strong>مصاب في حالة إغماء:</strong> نضعه في <span class="highlight">وضع الأمان الجانبي</span> مع ثني ركبته</li><li><strong>مصاب له جرح بالبطن:</strong> يوضع مستلقيا على <span class="highlight">ظهره مع ثني الركبتين</span></li></ul><h3>الكحول</h3><ul><li>نسبة الكحول في الدم: يكون التحليل <span class="danger">إيجابي</span> إذا انتقل اللون من الأصفر إلى الأخضر</li></ul></div>
+<div class="section"><h2><span class="num">14</span> أرقام الطوارئ</h2><div class="emergency-grid"><div class="emergency-item"><span class="label">الحرس الوطني</span><span class="number">193</span></div><div class="emergency-item"><span class="label">الشرطة</span><span class="number">197</span></div><div class="emergency-item"><span class="label">الحماية المدنية</span><span class="number">198</span></div><div class="emergency-item"><span class="label">الإسعاف الطبّي</span><span class="number">190</span></div></div></div>
+</body>
+</html>
