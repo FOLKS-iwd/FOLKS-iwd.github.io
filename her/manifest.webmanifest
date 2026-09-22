@@ -1,0 +1,12 @@
+{
+  "name": "She's on her way",
+  "short_name": "Arrival",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffd6e8",
+  "theme_color": "#ff5d8f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

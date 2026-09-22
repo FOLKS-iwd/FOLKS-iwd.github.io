@@ -6,6 +6,14 @@
 <!-- Unlisted: nothing links here, it is not in sitemap.xml, and it is noindex'd. -->
 <meta name="robots" content="noindex, nofollow">
 <title>She's on her way</title>
+<meta name="theme-color" content="#ff5d8f">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Arrival">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
@@ -112,9 +120,18 @@
   @keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1)}}
   .burst{position:fixed;pointer-events:none;font-size:26px;z-index:5;animation:fly 1.4s ease forwards}
   @keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3)}}
+
+  /* universal in-page alert banner — works on every phone, even without notification permission */
+  .toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-160%);z-index:30;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700;
+    padding:13px 18px;border-radius:16px;box-shadow:0 12px 34px rgba(214,73,127,.4);
+    max-width:92vw;text-align:center;font-size:.92rem;line-height:1.35;
+    transition:transform .38s cubic-bezier(.2,.85,.25,1)}
+  .toast.show{transform:translate(-50%,0)}
 </style>
 </head>
 <body>
+<div class="toast" id="toast"></div>
 <div class="hearts" id="hearts"></div>
 
 <div class="wrap">
@@ -155,10 +172,11 @@
 
     <div class="actions">
       <button class="b-primary" id="notifyBtn">🔔 Turn on alerts</button>
+      <button class="b-ghost" id="testBtn">✨ Test alert</button>
       <button class="b-ghost" id="icsBtn">📅 Add to calendar</button>
     </div>
     <div class="status" id="status">Two pings: when under 6 hours remain, and the moment she arrives.</div>
-    <p class="foot">In-page alerts need this tab open. The calendar file rings even if it's closed. 💛</p>
+    <p class="foot">The in-page banner works on any phone. System pings need permission (on iPhone: Share → Add to Home Screen first). The calendar file rings even when this is closed. 💛</p>
   </div>
 </div>
 
@@ -217,43 +235,93 @@
     }
   }
 
-  // ---------- notifications ----------
+  // ---------- notifications (desktop + phone) ----------
   function flag(k){ try{ return localStorage.getItem(k)==="1"; }catch(e){ return false; } }
   function setFlag(k){ try{ localStorage.setItem(k,"1"); }catch(e){} }
 
-  function ping(title, body){
+  var ICON="icon.svg", swReg=null;
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js").then(function(r){ swReg=r; }).catch(function(){});
+    navigator.serviceWorker.ready.then(function(r){ swReg=r; }).catch(function(){});
+  }
+  // make sure the SW is active before we lean on showNotification (Android's path)
+  function ensureSW(){
+    if(swReg || !("serviceWorker" in navigator)) return Promise.resolve(swReg);
+    return Promise.race([
+      navigator.serviceWorker.ready.then(function(r){ swReg=r; return r; }),
+      new Promise(function(res){ setTimeout(function(){ res(swReg); },1200); })
+    ]).catch(function(){ return null; });
+  }
+
+  // universal in-page banner — shows on every device, permission or not
+  var toastT;
+  function toast(msg){
+    var el=$("toast"); el.textContent=msg; el.classList.add("show");
+    clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove("show"); },5200);
+  }
+  function vibe(){ try{ if(navigator.vibrate) navigator.vibrate([120,60,120]); }catch(e){} }
+
+  // real OS notification; returns true if one was dispatched
+  function nativeNote(title, body){
+    if(!("Notification" in window) || Notification.permission!=="granted") return false;
+    var opts={ body:body, icon:ICON, badge:ICON, tag:"her-arrival", renotify:true, vibrate:[120,60,120] };
+    try{ if(swReg && swReg.showNotification){ swReg.showNotification(title,opts); return true; } }catch(e){}
+    try{ new Notification(title,opts); return true; }catch(e){}  // desktop fallback
+    return false;
+  }
+
+  // one entry point for every alert: OS notification if possible, always vibrate + banner
+  function alertNow(title, body){
+    var native=nativeNote(title, body);
+    vibe();
+    toast(body || title);
+    return native;
+  }
+
+  function askPermission(){
+    if(!("Notification" in window)) return Promise.resolve("unsupported");
+    if(Notification.permission!=="default") return Promise.resolve(Notification.permission);
     try{
-      if("Notification" in window && Notification.permission==="granted"){
-        new Notification(title,{ body:body, icon:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Ctext y='52' font-size='52'%3E🚄%3C/text%3E%3C/svg%3E" });
-      }
-    }catch(e){}
+      var r=Notification.requestPermission();
+      return (r && r.then) ? r : new Promise(function(res){ Notification.requestPermission(res); });
+    }catch(e){ return Promise.resolve("default"); }
   }
 
   function checkAlerts(now){
-    // "under 6 hours" — true for the whole window [SIX_HR, ARRIVE), so it's always accurate
     if(now>=SIX_HR.getTime() && now<ARRIVE.getTime() && !flag("db_six")){
       setFlag("db_six");
-      ping("Under 6 hours 🚄", Who+" will be at München Hbf at 12:49. Almost time. 💛");
+      alertNow("Under 6 hours 🚄", Who+" reaches München Hbf at 12:49. Almost time. 💛");
     }
     if(now>=ARRIVE.getTime() && !flag("db_arr")){
       setFlag("db_arr");
-      ping(Who+"'s here 💛", "Arrived at München Hbf. Go say hi. 🚆");
+      alertNow(Who+"'s here 💛", "Arrived at München Hbf. Go say hi. 🚆");
       burst();
     }
   }
 
   $("notifyBtn").addEventListener("click", function(){
-    if(!("Notification" in window)){ $("status").textContent="This browser can't do web notifications — use the calendar file instead."; return; }
-    Notification.requestPermission().then(function(p){
+    askPermission().then(function(p){ ensureSW().then(function(){
       if(p==="granted"){
         $("notifyBtn").textContent="🔔 Alerts on ✓";
-        $("status").textContent="Alerts armed. Keep this tab open and you'll get both pings.";
-        ping("Alerts on 💛", "You'll hear from me under 6 hours out, and again when "+who+" arrives.");
+        $("status").textContent="Alerts armed. Keep this page open (or installed) and you'll get both pings.";
+        alertNow("Alerts on 💛", "I'll ping under 6 hours out, and again when "+who+" arrives.");
         checkAlerts(Date.now());
+      } else if(p==="unsupported"){
+        $("status").textContent="No web notifications here (usual on iPhone Safari) — the banner + calendar file still work.";
       } else {
-        $("status").textContent="Notifications blocked in the browser — the calendar file will still ring.";
+        $("status").textContent="System notifications are off, so alerts show in-page. The calendar file rings in the background.";
       }
-    });
+    }); });
+  });
+
+  $("testBtn").addEventListener("click", function(){
+    askPermission().then(function(p){ ensureSW().then(function(){
+      var native=alertNow("Test alert ✨", "If you can see this, alerts work. 💛");
+      if(native) $("status").textContent="Test sent as a system notification ✓ — the real pings look just like this.";
+      else if(p==="denied") $("status").textContent="System notifications are blocked in settings, so that was the in-page banner. Enable them, or use the calendar file.";
+      else if(p==="unsupported") $("status").textContent="This browser (often iPhone Safari) has no web notifications — that was the in-page banner. The calendar file still rings.";
+      else $("status").textContent="That was the in-page banner. Tap “Turn on alerts” to allow system notifications too.";
+    }); });
   });
 
   // ---------- .ics calendar (works with the tab closed) ----------
