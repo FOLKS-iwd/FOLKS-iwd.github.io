@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Unlisted: nothing links here, it is not in sitemap.xml, and it is noindex'd. -->
+<meta name="robots" content="noindex, nofollow">
+<title>She's on her way</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#ffe3ec; --bg2:#ffd6e8; --bg3:#e7d9ff;
+    --card:rgba(255,255,255,.72); --ink:#5b3a4e; --soft:#9b6c86;
+    --accent:#ff5d8f; --accent2:#a06dff; --gold:#f4b740; --track:#f3c9db;
+    --shadow:0 18px 50px rgba(214,73,127,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg1:#2a1830; --bg2:#3a1d3a; --bg3:#241a44;
+      --card:rgba(52,32,54,.66); --ink:#ffe6f1; --soft:#e7b9d2;
+      --accent:#ff7ea8; --accent2:#c39bff; --gold:#ffcf6b; --track:#5a3450;
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Quicksand',system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+    background-attachment:fixed;
+    overflow-x:hidden;
+    display:flex;align-items:center;justify-content:center;
+    padding:28px 16px;
+  }
+  .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .hearts span{position:absolute;bottom:-40px;font-size:22px;opacity:.0;
+    animation:rise linear infinite}
+  @keyframes rise{
+    0%{transform:translateY(0) scale(.8) rotate(0);opacity:0}
+    10%{opacity:.9}
+    100%{transform:translateY(-112vh) scale(1.1) rotate(40deg);opacity:0}
+  }
+  .wrap{position:relative;z-index:1;width:100%;max-width:560px}
+  .card{
+    background:var(--card);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.5);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    padding:30px 26px 26px;
+    text-align:center;
+  }
+  .kicker{font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin:0 0 6px}
+  h1{font-family:'Pacifico',cursive;font-weight:400;margin:0 0 4px;
+    font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.1;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin:0 0 18px;color:var(--soft);font-weight:500}
+  .sub b{color:var(--ink)}
+
+  .count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 4px}
+  .cell{background:rgba(255,255,255,.45);border-radius:16px;padding:12px 4px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cell{background:rgba(255,255,255,.08)}}
+  .num{font-size:clamp(1.6rem,8vw,2.4rem);font-weight:700;line-height:1;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-top:6px}
+
+  .milestone{margin:16px 0 4px;font-weight:600;color:var(--accent);min-height:1.4em}
+  .milestone.soon{color:var(--gold)}
+
+  .journey{margin:20px 0 6px;text-align:left;background:rgba(255,255,255,.4);
+    border-radius:18px;padding:16px 16px 10px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .journey{background:rgba(255,255,255,.06)}}
+  .jhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .jhead .op{font-weight:700;font-size:.9rem}
+  .jhead .dt{font-size:.78rem;color:var(--soft)}
+
+  .track{position:relative;height:6px;background:var(--track);border-radius:99px;margin:26px 6px 8px}
+  .track .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+  .stop{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;
+    border-radius:50%;background:#fff;border:3px solid var(--accent)}
+  .stop.done{background:var(--accent)}
+  .stoplbl{position:absolute;top:14px;transform:translateX(-50%);font-size:.66rem;color:var(--soft);white-space:nowrap}
+  .train{position:absolute;top:-22px;transform:translateX(-50%);font-size:20px;transition:left .5s ease;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15))}
+
+  .legs{margin-top:34px;font-size:.82rem;color:var(--ink)}
+  .leg{display:flex;gap:10px;padding:7px 0;border-top:1px dashed rgba(155,108,134,.3)}
+  .leg:first-child{border-top:none}
+  .leg .t{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .leg .d{color:var(--soft);flex:1}
+  .leg .d b{color:var(--ink)}
+  .conn{font-size:.74rem;color:var(--soft);padding:2px 0 2px 4px;font-style:italic}
+
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  button{flex:1;min-width:150px;font-family:inherit;font-weight:700;font-size:.92rem;
+    border:none;border-radius:14px;padding:13px 14px;cursor:pointer;transition:transform .1s ease,box-shadow .2s}
+  button:active{transform:scale(.97)}
+  .b-primary{color:#fff;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 8px 20px rgba(255,93,143,.35)}
+  .b-ghost{color:var(--accent);background:rgba(255,255,255,.55);border:1.5px solid rgba(255,93,143,.4)}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .b-ghost{background:rgba(255,255,255,.08)}}
+  .status{margin-top:12px;font-size:.8rem;color:var(--soft);min-height:1.2em}
+
+  .foot{margin-top:16px;font-size:.72rem;color:var(--soft);opacity:.85}
+  .celebrate h1{animation:pop 1s ease}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .burst{position:fixed;pointer-events:none;font-size:26px;z-index:5;animation:fly 1.4s ease forwards}
+  @keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.3)}}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap">
+  <div class="card" id="card">
+    <p class="kicker">Deutsche Bahn &middot; ICE</p>
+    <h1 id="title">She's on her way</h1>
+    <p class="sub" id="subtitle">Arriving <b>München Hbf</b> &middot; Sat 10 Oct 2026, <b>12:49</b></p>
+
+    <div class="count" id="count">
+      <div class="cell"><div class="num" id="d">--</div><div class="lbl">days</div></div>
+      <div class="cell"><div class="num" id="h">--</div><div class="lbl">hours</div></div>
+      <div class="cell"><div class="num" id="m">--</div><div class="lbl">min</div></div>
+      <div class="cell"><div class="num" id="s">--</div><div class="lbl">sec</div></div>
+    </div>
+
+    <div class="milestone" id="milestone">&nbsp;</div>
+
+    <div class="journey">
+      <div class="jhead">
+        <span class="op">🚄 Paris → München</span>
+        <span class="dt">6 h 05 min &middot; 1 passenger</span>
+      </div>
+
+      <div class="track" id="track">
+        <div class="fill" id="fill"></div>
+        <div class="train" id="trainDot" style="left:0%">🚆</div>
+        <div class="stop" id="stopP" style="left:0%"></div><div class="stoplbl" style="left:0%">Paris</div>
+        <div class="stop" id="stopS" style="left:55%"></div><div class="stoplbl" style="left:55%">Stuttgart</div>
+        <div class="stop" id="stopM" style="left:100%"></div><div class="stoplbl" style="left:100%">München</div>
+      </div>
+
+      <div class="legs">
+        <div class="leg"><span class="t">06:44 → 10:12</span><span class="d"><b>ICE 9585</b> · Paris Gare de l'Est → Stuttgart Hbf<br>Coach 22 · Seat 44 · 3 h 28 min</span></div>
+        <div class="conn">↳ change at Stuttgart · 39 min</div>
+        <div class="leg"><span class="t">10:51 → 12:49</span><span class="d"><b>ICE 563</b> · Stuttgart Hbf → München Hbf · 1 h 58 min</span></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="b-primary" id="notifyBtn">🔔 Turn on alerts</button>
+      <button class="b-ghost" id="icsBtn">📅 Add to calendar</button>
+    </div>
+    <div class="status" id="status">Two pings: when under 6 hours remain, and the moment she arrives.</div>
+    <p class="foot">In-page alerts need this tab open. The calendar file rings even if it's closed. 💛</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── Edit this one line: put her name here (leave "" for neutral wording) ── */
+  var HER_NAME = "";
+
+  // Real ticket instants (Munich local = CEST, UTC+2 on this date)
+  var DEPART   = new Date("2026-10-10T06:44:00+02:00"); // Paris Gare de l'Est
+  var ST_ARR   = new Date("2026-10-10T10:12:00+02:00"); // Stuttgart arrive
+  var ARRIVE   = new Date("2026-10-10T12:49:00+02:00"); // München Hbf
+  var SIX_HR   = new Date(ARRIVE.getTime() - 6*3600*1000); // 06:49 — the "under 6h" moment
+
+  var who = HER_NAME ? HER_NAME : "she";
+  var Who = HER_NAME ? HER_NAME : "She";
+  if (HER_NAME){
+    document.getElementById("title").textContent = HER_NAME + " is on her way";
+    document.title = HER_NAME + " is on her way";
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var pad = function(n){ return (n<10?"0":"")+n; };
+
+  // ---------- floating hearts ----------
+  (function hearts(){
+    var box=$("hearts"), emo=["💗","💛","💖","🌸","✨","🚄"];
+    for(var i=0;i<16;i++){
+      var s=document.createElement("span");
+      s.textContent=emo[i%emo.length];
+      s.style.left=Math.random()*100+"vw";
+      s.style.fontSize=(14+Math.random()*20)+"px";
+      s.style.animationDuration=(9+Math.random()*10)+"s";
+      s.style.animationDelay=(-Math.random()*12)+"s";
+      box.appendChild(s);
+    }
+  })();
+
+  // ---------- burst on arrival ----------
+  function burst(){
+    var emo=["💛","💗","🎉","✨","🌸","🚄","💖"];
+    for(var i=0;i<28;i++){
+      (function(i){
+        var e=document.createElement("div");
+        e.className="burst";
+        e.textContent=emo[i%emo.length];
+        e.style.left=(45+Math.random()*10)+"vw";
+        e.style.top=(38+Math.random()*10)+"vh";
+        e.style.setProperty("--dx",((Math.random()-.5)*80)+"vw");
+        e.style.setProperty("--dy",(-30-Math.random()*50)+"vh");
+        document.body.appendChild(e);
+        setTimeout(function(){ e.remove(); },1500);
+      })(i);
+    }
+  }
+
+  // ---------- notifications ----------
+  function flag(k){ try{ return localStorage.getItem(k)==="1"; }catch(e){ return false; } }
+  function setFlag(k){ try{ localStorage.setItem(k,"1"); }catch(e){} }
+
+  function ping(title, body){
+    try{
+      if("Notification" in window && Notification.permission==="granted"){
+        new Notification(title,{ body:body, icon:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Ctext y='52' font-size='52'%3E🚄%3C/text%3E%3C/svg%3E" });
+      }
+    }catch(e){}
+  }
+
+  function checkAlerts(now){
+    // "under 6 hours" — true for the whole window [SIX_HR, ARRIVE), so it's always accurate
+    if(now>=SIX_HR.getTime() && now<ARRIVE.getTime() && !flag("db_six")){
+      setFlag("db_six");
+      ping("Under 6 hours 🚄", Who+" will be at München Hbf at 12:49. Almost time. 💛");
+    }
+    if(now>=ARRIVE.getTime() && !flag("db_arr")){
+      setFlag("db_arr");
+      ping(Who+"'s here 💛", "Arrived at München Hbf. Go say hi. 🚆");
+      burst();
+    }
+  }
+
+  $("notifyBtn").addEventListener("click", function(){
+    if(!("Notification" in window)){ $("status").textContent="This browser can't do web notifications — use the calendar file instead."; return; }
+    Notification.requestPermission().then(function(p){
+      if(p==="granted"){
+        $("notifyBtn").textContent="🔔 Alerts on ✓";
+        $("status").textContent="Alerts armed. Keep this tab open and you'll get both pings.";
+        ping("Alerts on 💛", "You'll hear from me under 6 hours out, and again when "+who+" arrives.");
+        checkAlerts(Date.now());
+      } else {
+        $("status").textContent="Notifications blocked in the browser — the calendar file will still ring.";
+      }
+    });
+  });
+
+  // ---------- .ics calendar (works with the tab closed) ----------
+  function toICS(dt){
+    return dt.getUTCFullYear()
+      + pad(dt.getUTCMonth()+1) + pad(dt.getUTCDate()) + "T"
+      + pad(dt.getUTCHours()) + pad(dt.getUTCMinutes()) + pad(dt.getUTCSeconds()) + "Z";
+  }
+  $("icsBtn").addEventListener("click", function(){
+    var end=new Date(ARRIVE.getTime()+15*60000);
+    var summary = (HER_NAME ? HER_NAME : "She") + " arrives — München Hbf";
+    var lines=[
+      "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//her//countdown//EN","CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      "UID:her-arrival-20261010@folks-iwd",
+      "DTSTAMP:"+toICS(new Date()),
+      "DTSTART:"+toICS(ARRIVE),
+      "DTEND:"+toICS(end),
+      "SUMMARY:"+summary,
+      "LOCATION:München Hbf",
+      "DESCRIPTION:ICE 9585 Paris Gare de l'Est 06:44 -> Stuttgart 10:12 (coach 22 seat 44)\\, change\\, ICE 563 -> München Hbf 12:49.",
+      "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Under 6 hours until she arrives in München","TRIGGER:-PT6H","END:VALARM",
+      "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:She's arriving at München Hbf now","TRIGGER:PT0S","END:VALARM",
+      "END:VEVENT","END:VCALENDAR"
+    ];
+    var blob=new Blob([lines.join("\r\n")],{type:"text/calendar;charset=utf-8"});
+    var url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download="her-arrival.ics"; document.body.appendChild(a); a.click();
+    a.remove(); setTimeout(function(){ URL.revokeObjectURL(url); },1000);
+    $("status").textContent="Calendar saved — it'll alert 6 hours before and at 12:49, tab open or not.";
+  });
+
+  // ---------- countdown + progress ----------
+  function pos(now){
+    // fraction of the whole journey (Paris→München) for the moving train
+    var f=(now-DEPART.getTime())/(ARRIVE.getTime()-DEPART.getTime());
+    return Math.max(0,Math.min(1,f))*100;
+  }
+
+  function tick(){
+    var now=Date.now(), left=ARRIVE.getTime()-now;
+
+    // progress dots
+    if(now>=DEPART.getTime()) $("stopP").classList.add("done");
+    if(now>=ST_ARR.getTime()) $("stopS").classList.add("done");
+    if(now>=ARRIVE.getTime()) $("stopM").classList.add("done");
+    var p=pos(now);
+    $("fill").style.width=p+"%";
+    $("trainDot").style.left=p+"%";
+
+    var ms=$("milestone");
+
+    if(left<=0){
+      $("d").textContent="00";$("h").textContent="00";$("m").textContent="00";$("s").textContent="00";
+      $("title").textContent=(HER_NAME?HER_NAME:"She")+"'s here 💛";
+      $("subtitle").innerHTML="Arrived at <b>München Hbf</b> · 12:49";
+      $("card").classList.add("celebrate");
+      ms.textContent="🚉 Home. Go say hi.";
+      checkAlerts(now);
+      return;
+    }
+
+    var d=Math.floor(left/86400000);
+    var h=Math.floor(left/3600000)%24;
+    var m=Math.floor(left/60000)%60;
+    var s=Math.floor(left/1000)%60;
+    $("d").textContent=pad(d);$("h").textContent=pad(h);$("m").textContent=pad(m);$("s").textContent=pad(s);
+
+    if(now>=DEPART.getTime()){
+      ms.className="milestone soon";
+      ms.textContent="🚄 On the train — Paris → Stuttgart → München";
+    } else if(now>=SIX_HR.getTime()){
+      ms.className="milestone soon";
+      ms.textContent="🥹 Under 6 hours to go";
+    } else {
+      ms.className="milestone";
+      var toSix=SIX_HR.getTime()-now, dh=Math.floor(toSix/3600000), dd=Math.floor(toSix/86400000);
+      ms.textContent = dd>=1
+        ? "💗 "+dd+" day"+(dd>1?"s":"")+" until the 6-hour alert"
+        : "💗 6-hour alert in "+dh+"h "+(Math.floor(toSix/60000)%60)+"m";
+    }
+    checkAlerts(now);
+  }
+
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
