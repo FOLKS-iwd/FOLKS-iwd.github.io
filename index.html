@@ -717,9 +717,23 @@ footer .accent { color: var(--accent); }
     <div class="section-header">
       <p class="section-tag">// Research</p>
       <h2 class="section-title">Writeups</h2>
-      <p class="section-subtitle">Technical deep-dives on CVEs I found and disclosed - plus cert reviews &amp; research notes</p>
+      <p class="section-subtitle">Technical deep-dives on CVEs I found and disclosed, CTF challenge solutions, cert reviews &amp; research notes</p>
     </div>
     <div class="writeups-grid">
+      <a href="writeups/intigriti-0926.html" target="_blank" rel="noopener noreferrer" class="writeup-card">
+        <div class="writeup-header">
+          <span class="writeup-cve">Intigriti CTF</span>
+          <span class="writeup-cvss">8.7 HIGH</span>
+        </div>
+        <div class="writeup-title">Critter Gallery SQLi - Intigriti September 2026 Challenge</div>
+        <div class="writeup-desc">
+          A case-sensitivity differential between the emoji lookup and the description lookup revealed a MySQL backend behind a base64-encoded parameter. UNION-based injection extracts a hidden flag from a secret_vault table - no authentication required.
+        </div>
+        <div class="writeup-footer">
+          <span class="writeup-date">Sep 21, 2026 &middot; 10 min read</span>
+          <span class="writeup-link">read writeup &rarr;</span>
+        </div>
+      </a>
       <a href="writeups/caimlpen-review.html" class="writeup-card cert-card-item">
         <div class="writeup-header">
           <span class="writeup-cve">C-AI/MLPen</span>

