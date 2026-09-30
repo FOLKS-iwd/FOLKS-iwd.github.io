@@ -1032,6 +1032,12 @@ footer .accent { color: var(--accent); }
     </div>
     <div class="certs-grid">
       <div class="cert-card">
+        <div class="cert-badge">&#9729;</div>
+        <h3>SC-900</h3>
+        <p class="cert-id">Microsoft &bull; Security, Compliance &amp; Identity</p>
+        <p class="cert-date">September 2026</p>
+      </div>
+      <div class="cert-card">
         <div class="cert-badge">&#129302;</div>
         <h3>C-AI/MLPen</h3>
         <p class="cert-id">The SecOps Group &bull; 100%</p>
@@ -1199,7 +1205,7 @@ const counterObserver = new IntersectionObserver((entries) => {
       animateCounter(document.getElementById('counter-wins'), 7, 1500);
       animateCounter(document.getElementById('counter-years'), 5, 1200);
       animateCounter(document.getElementById('counter-cves'), 6, 800);
-      animateCounter(document.getElementById('counter-certs'), 8, 1000);
+      animateCounter(document.getElementById('counter-certs'), 11, 1000);
       counterObserver.disconnect();
     }
   });
