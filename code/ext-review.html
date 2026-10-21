@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExtReview - Browser Extension Security Analyzer</title>
+<meta name="description" content="Analyze browser extensions for security vulnerabilities, dangerous permissions, and suspicious behavior. Upload .crx, .xpi, or .zip files for instant analysis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0a0f;--bg2:#10101a;--bg3:#161625;--surface:#1a1a2e;
+--border:#2a2a4a;--text:#e0e0f0;--text-dim:#8888aa;
+--accent:#00ff88;--accent2:#00ccff;--accent3:#ff6b6b;
+--accent-glow:rgba(0,255,136,0.15);--accent2-glow:rgba(0,204,255,0.15);
+--sev-critical:#ff4444;--sev-high:#ff8c00;--sev-medium:#ffc107;--sev-low:#00ccff;--sev-info:#8888aa;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+::selection{background:var(--accent);color:var(--bg)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Header */
+header{border-bottom:1px solid var(--border);padding:20px 0;background:var(--bg2)}
+header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent)}
+.brand h1 span{color:var(--text-dim);font-weight:300}
+.brand-sub{font-size:.8rem;color:var(--text-dim)}
+header nav a{color:var(--text-dim);font-size:.85rem;margin-left:20px;transition:color .2s}
+header nav a:hover{color:var(--accent);text-decoration:none}
+
+/* Upload Section */
+.upload-section{padding:48px 0 32px}
+.upload-zone{border:2px dashed var(--border);background:var(--bg2);padding:48px 32px;text-align:center;cursor:pointer;transition:border-color .25s,background .25s}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--bg3)}
+.upload-zone.dragover{box-shadow:inset 0 0 30px var(--accent-glow)}
+.upload-icon{font-size:2.5rem;margin-bottom:12px;opacity:.6}
+.upload-zone h3{font-size:1rem;margin-bottom:6px;font-weight:500}
+.upload-zone p{font-size:.8rem;color:var(--text-dim)}
+.upload-zone input{display:none}
+.file-types{margin-top:10px;display:flex;gap:8px;justify-content:center}
+.file-types span{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:2px 8px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim)}
+
+/* Progress */
+.progress-wrap{display:none;margin-top:24px}
+.progress-wrap.active{display:block}
+.progress-bar{height:3px;background:var(--bg3);overflow:hidden;margin-bottom:8px}
+.progress-bar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+.progress-status{font-size:.8rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+
+/* Results */
+.results-section{display:none;padding:0 0 48px}
+.results-section.active{display:block}
+
+/* Overview Card */
+.overview{display:grid;grid-template-columns:auto 1fr;gap:24px;padding:24px;background:var(--bg2);border:1px solid var(--border);margin-bottom:24px}
+.risk-circle{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:3px solid;position:relative}
+.risk-circle .score{font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:700;line-height:1}
+.risk-circle .label{font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.risk-low{border-color:var(--accent);color:var(--accent)}
+.risk-medium{border-color:var(--sev-medium);color:var(--sev-medium)}
+.risk-high{border-color:var(--sev-high);color:var(--sev-high)}
+.risk-critical{border-color:var(--sev-critical);color:var(--sev-critical)}
+.overview-info h2{font-size:1.2rem;font-weight:600;margin-bottom:4px}
+.overview-info .meta{font-size:.8rem;color:var(--text-dim);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.overview-info .desc{font-size:.85rem;color:var(--text-dim);line-height:1.5}
+.overview-stats{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.stat{padding:6px 12px;background:var(--bg3);border:1px solid var(--border);font-size:.75rem;font-family:'JetBrains Mono',monospace}
+.stat strong{color:var(--accent)}
+
+/* Section cards */
+.section-card{background:var(--bg2);border:1px solid var(--border);margin-bottom:16px}
+.section-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:background .2s}
+.section-header:hover{background:var(--bg3)}
+.section-header h3{font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.section-header .count{font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--bg3);padding:2px 8px;border:1px solid var(--border);color:var(--text-dim)}
+.section-header .chevron{transition:transform .2s;color:var(--text-dim);font-size:.8rem}
+.section-card.open .chevron{transform:rotate(90deg)}
+.section-body{display:none;padding:0 20px 16px;max-height:600px;overflow-y:auto}
+.section-card.open .section-body{display:block}
+
+/* Permission list */
+.perm-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.perm-item:last-child{border-bottom:none}
+.sev-badge{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:2px 6px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;font-weight:600}
+.sev-critical{background:rgba(255,68,68,.15);color:var(--sev-critical);border:1px solid rgba(255,68,68,.3)}
+.sev-high{background:rgba(255,140,0,.15);color:var(--sev-high);border:1px solid rgba(255,140,0,.3)}
+.sev-medium{background:rgba(255,193,7,.12);color:var(--sev-medium);border:1px solid rgba(255,193,7,.25)}
+.sev-low{background:rgba(0,204,255,.1);color:var(--sev-low);border:1px solid rgba(0,204,255,.2)}
+.sev-info{background:rgba(136,136,170,.1);color:var(--sev-info);border:1px solid rgba(136,136,170,.2)}
+.perm-detail .name{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text)}
+.perm-detail .warn{font-size:.75rem;color:var(--text-dim);margin-top:2px}
+
+/* Finding item */
+.finding-item{padding:12px 0;border-bottom:1px solid var(--border)}
+.finding-item:last-child{border-bottom:none}
+.finding-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.finding-title{font-size:.85rem;font-weight:500}
+.finding-loc{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent2);cursor:pointer}
+.finding-loc:hover{text-decoration:underline}
+.finding-desc{font-size:.75rem;color:var(--text-dim);margin-bottom:6px}
+.finding-code{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:var(--bg);padding:8px 12px;border:1px solid var(--border);overflow-x:auto;color:var(--text-dim);white-space:pre;max-width:100%}
+
+/* Intel */
+.intel-group{margin-bottom:16px}
+.intel-group h4{font-size:.8rem;color:var(--text-dim);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.intel-list{display:flex;flex-wrap:wrap;gap:4px}
+.intel-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 8px;background:var(--bg);border:1px solid var(--border);color:var(--text-dim);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.intel-tag.url{max-width:500px}
+.intel-empty{font-size:.8rem;color:var(--text-dim);font-style:italic}
+
+/* Files */
+.file-tree{list-style:none}
+.file-tree li{padding:4px 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(42,42,74,.3)}
+.file-tree li:last-child{border-bottom:none}
+.file-cat{font-size:.6rem;padding:1px 6px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim);text-transform:uppercase;min-width:36px;text-align:center}
+.file-name{color:var(--accent2);cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.file-name:hover{color:var(--accent)}
+.file-size{color:var(--text-dim);font-size:.7rem;flex-shrink:0}
+
+/* Source viewer modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:900px;max-height:90vh;display:flex;flex-direction:column}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-header h4{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-close{background:none;border:1px solid var(--border);color:var(--text-dim);cursor:pointer;padding:4px 10px;font-size:.8rem;transition:all .2s}
+.modal-close:hover{border-color:var(--accent3);color:var(--accent3)}
+.modal-body{overflow:auto;flex:1}
+.modal-body pre{padding:16px;font-size:.75rem;line-height:1.6;white-space:pre;tab-size:2}
+.modal-body .line-num{display:inline-block;width:42px;color:var(--text-dim);opacity:.4;text-align:right;margin-right:16px;user-select:none}
+
+/* Manifest */
+.manifest-pre{font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--bg);padding:16px;border:1px solid var(--border);overflow-x:auto;white-space:pre;max-height:400px;overflow-y:auto;line-height:1.5}
+
+/* Recent analyses */
+.recent-section{padding:0 0 32px}
+.recent-section h3{font-size:.9rem;color:var(--text-dim);margin-bottom:12px;font-weight:500}
+.recent-list{display:grid;gap:8px}
+.recent-item{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:border-color .2s}
+.recent-item:hover{border-color:var(--accent)}
+.recent-item .ri-score{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.9rem;width:32px;text-align:center}
+.recent-item .ri-name{font-size:.85rem;flex:1}
+.recent-item .ri-ver{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-dim)}
+.recent-item .ri-time{font-size:.7rem;color:var(--text-dim)}
+.recent-item .ri-del{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:.75rem;padding:4px;transition:color .2s}
+.recent-item .ri-del:hover{color:var(--accent3)}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:20px 0;text-align:center;font-size:.75rem;color:var(--text-dim)}
+footer a{color:var(--accent)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:32px;color:var(--text-dim);font-size:.85rem}
+
+@media(max-width:640px){
+  .overview{grid-template-columns:1fr;text-align:center}
+  .overview-stats{justify-content:center}
+  .risk-circle{margin:0 auto}
+  .upload-zone{padding:32px 16px}
+  .container{padding:0 16px}
+  header .container{flex-direction:column;text-align:center}
+  .intel-tag.url{max-width:260px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">
+      <h1>Ext<span>Review</span></h1>
+      <span class="brand-sub">Browser Extension Security Analyzer</span>
+    </div>
+    <nav>
+      <a href="/code/ext-review.html">Analyze</a>
+      <a href="/">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="upload-section">
+    <div class="container">
+      <div class="upload-zone" id="dropZone">
+        <div class="upload-icon">&#x1F50D;</div>
+        <h3>Drop extension file here or click to browse</h3>
+        <p>Upload a browser extension to analyze its security posture</p>
+        <div class="file-types">
+          <span>.crx</span><span>.xpi</span><span>.zip</span>
+        </div>
+        <input type="file" id="fileInput" accept=".crx,.xpi,.zip">
+      </div>
+      <div class="progress-wrap" id="progress">
+        <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+        <div class="progress-status" id="progressStatus">Initializing...</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="results-section" id="results">
+    <div class="container">
+      <div class="overview" id="overview"></div>
+      <div id="sectionCards"></div>
+    </div>
+  </section>
+
+  <section class="recent-section" id="recentSection">
+    <div class="container">
+      <h3>Recent Analyses</h3>
+      <div class="recent-list" id="recentList"></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="sourceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="modalTitle">file.js</h4>
+      <button class="modal-close" id="modalClose">ESC</button>
+    </div>
+    <div class="modal-body">
+      <pre id="modalCode"></pre>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    Built by <a href="/">FOLKS-iwd</a> &middot; All analysis runs locally in your browser
+  </div>
+</footer>
+
+<script>
+// ============================================================================
+// PERMISSION DATABASE
+// ============================================================================
+const PERMISSIONS={
+"<all_urls>":{risk:"critical",desc:"Access to ALL websites",warning:"Can read/modify every page you visit"},
+debugger:{risk:"critical",desc:"Chrome debugger API",warning:"Full control over browser debugging"},
+nativeMessaging:{risk:"critical",desc:"Communicate with native apps",warning:"Can execute programs on your computer"},
+experimental:{risk:"critical",desc:"Access experimental APIs",warning:"Unstable APIs with potentially dangerous capabilities"},
+platformKeys:{risk:"critical",desc:"Access platform cryptographic keys",warning:"Can use client certificates for authentication"},
+vpnProvider:{risk:"critical",desc:"VPN provider API",warning:"Can route all traffic through extension-controlled VPN"},
+pkcs11:{risk:"critical",desc:"PKCS#11 security modules",warning:"Can manage cryptographic tokens and certificates"},
+tabs:{risk:"high",desc:"Access browser tabs",warning:"Can see all open URLs and titles"},
+webRequest:{risk:"high",desc:"Intercept network requests",warning:"Can see/modify all web traffic"},
+webRequestBlocking:{risk:"high",desc:"Block/modify requests",warning:"Can alter web traffic in real-time"},
+declarativeNetRequest:{risk:"high",desc:"Modify network requests declaratively",warning:"Can redirect or block network traffic"},
+cookies:{risk:"high",desc:"Access cookies",warning:"Can steal session tokens"},
+history:{risk:"high",desc:"Access browsing history",warning:"Can see all sites you've visited"},
+bookmarks:{risk:"high",desc:"Access bookmarks",warning:"Can read all bookmarks"},
+downloads:{risk:"high",desc:"Manage downloads",warning:"Can download files silently"},
+management:{risk:"high",desc:"Manage other extensions",warning:"Can disable security extensions"},
+proxy:{risk:"high",desc:"Control proxy settings",warning:"Can route traffic through attacker"},
+privacy:{risk:"high",desc:"Control privacy settings",warning:"Can weaken browser privacy"},
+contentSettings:{risk:"high",desc:"Change content settings",warning:"Can enable JS, plugins on any site"},
+browsingData:{risk:"high",desc:"Clear browsing data",warning:"Can delete history, cookies, cache without consent"},
+topSites:{risk:"high",desc:"Access most-visited sites",warning:"Can see your top visited websites"},
+sessions:{risk:"high",desc:"Access recently closed tabs/sessions",warning:"Can see your session history"},
+pageCapture:{risk:"high",desc:"Save pages as MHTML",warning:"Can capture full page content including sensitive data"},
+tabCapture:{risk:"high",desc:"Capture tab audio/video",warning:"Can record tab content"},
+desktopCapture:{risk:"high",desc:"Capture desktop screen",warning:"Can record your entire screen"},
+webNavigation:{risk:"high",desc:"Observe navigation events",warning:"Can track all page navigations"},
+scripting:{risk:"high",desc:"Execute scripts in pages",warning:"Can inject and run code on websites"},
+browserSettings:{risk:"high",desc:"Change browser settings",warning:"Can modify homepage, search engine, etc."},
+tabHide:{risk:"high",desc:"Hide/show tabs",warning:"Can hide tabs from the user"},
+activeTab:{risk:"medium",desc:"Access active tab on click",warning:"Limited but can read current page"},
+storage:{risk:"medium",desc:"Store data locally",warning:"Can persist tracking data"},
+unlimitedStorage:{risk:"medium",desc:"Unlimited local storage",warning:"Can store large amounts of data locally"},
+notifications:{risk:"medium",desc:"Show notifications",warning:"Can show misleading alerts"},
+clipboardRead:{risk:"medium",desc:"Read clipboard",warning:"Can steal copied passwords/data"},
+clipboardWrite:{risk:"medium",desc:"Write to clipboard",warning:"Can replace copied crypto addresses"},
+geolocation:{risk:"medium",desc:"Access location",warning:"Can track physical location"},
+identity:{risk:"medium",desc:"Access user identity",warning:"Can see email/profile info"},
+background:{risk:"medium",desc:"Run in background",warning:"Stays active when browser appears closed"},
+"system.cpu":{risk:"medium",desc:"Access CPU info",warning:"Can fingerprint your hardware"},
+"system.memory":{risk:"medium",desc:"Access memory info",warning:"Can fingerprint your hardware"},
+offscreen:{risk:"medium",desc:"Create offscreen documents",warning:"Can run hidden DOM operations"},
+find:{risk:"medium",desc:"Find in page",warning:"Can search page content programmatically"},
+alarms:{risk:"low",desc:"Schedule tasks",warning:"Generally benign"},
+contextMenus:{risk:"low",desc:"Add context menu items",warning:"Generally benign"},
+idle:{risk:"low",desc:"Detect idle state",warning:"Can detect when you're away"},
+tts:{risk:"low",desc:"Text-to-speech output",warning:"Generally benign"},
+commands:{risk:"low",desc:"Keyboard shortcuts",warning:"Generally benign"},
+action:{risk:"low",desc:"Browser action button",warning:"Generally benign"},
+browser_action:{risk:"low",desc:"Browser action button (MV2)",warning:"Generally benign"},
+page_action:{risk:"low",desc:"Page action button (MV2)",warning:"Generally benign"},
+omnibox:{risk:"low",desc:"Address bar suggestions",warning:"Can suggest URLs when typing"},
+runtime:{risk:"low",desc:"Extension runtime",warning:"Generally benign"},
+i18n:{risk:"low",desc:"Internationalization",warning:"Generally benign"},
+search:{risk:"low",desc:"Trigger searches",warning:"Can open search results"},
+gcm:{risk:"low",desc:"Google Cloud Messaging",warning:"Can receive push messages"},
+menus:{risk:"low",desc:"Context menu items",warning:"Generally benign"},
+};
+
+const RISK_WEIGHTS={critical:25,high:15,medium:8,low:2,info:0};
+const SEV_WEIGHTS={critical:20,high:10,medium:5,low:2,info:0};
+
+// ============================================================================
+// SECURITY PATTERNS
+// ============================================================================
+const SECURITY_PATTERNS=[
+{pattern:/(?:coinhive|cryptonight|monero|minero|CoinImp|coin-hive|jsecoin|miner\.start)/i,severity:"critical",category:"cryptominer",title:"Cryptocurrency mining code",description:"Code related to in-browser cryptocurrency mining detected"},
+{pattern:/chrome\.runtime\.sendNativeMessage|browser\.runtime\.sendNativeMessage/i,severity:"critical",category:"native_messaging",title:"Native application messaging",description:"Communicates with locally installed native applications"},
+{pattern:/\beval\s*\(/i,severity:"high",category:"code_execution",title:"eval() usage",description:"Dynamic code execution -- can run arbitrary JavaScript"},
+{pattern:/new\s+Function\s*\(/i,severity:"high",category:"code_execution",title:"Dynamic Function constructor",description:"Creates a function from a string -- equivalent to eval()"},
+{pattern:/setTimeout\s*\(\s*['"`]|setInterval\s*\(\s*['"`]/i,severity:"high",category:"code_execution",title:"String-based timer execution",description:"Passes a string to setTimeout/setInterval (implicit eval)"},
+{pattern:/chrome\.webRequest\.onBeforeRequest|browser\.webRequest\.onBeforeRequest/i,severity:"high",category:"request_interception",title:"Request interception (onBeforeRequest)",description:"Intercepts web requests before they are sent"},
+{pattern:/chrome\.webRequest\.onBeforeSendHeaders|browser\.webRequest\.onBeforeSendHeaders/i,severity:"high",category:"request_interception",title:"Request header modification",description:"Can modify HTTP headers on outgoing requests"},
+{pattern:/chrome\.downloads\.download|browser\.downloads\.download/i,severity:"high",category:"file_access",title:"Silent file download",description:"Can trigger file downloads programmatically"},
+{pattern:/chrome\.tabs\.executeScript|chrome\.scripting\.executeScript|browser\.tabs\.executeScript/i,severity:"high",category:"code_injection",title:"Script injection into tabs",description:"Injects and executes scripts in web pages"},
+{pattern:/chrome\.debugger\.attach|browser\.debugger\.attach/i,severity:"high",category:"debugger",title:"Debugger attachment",description:"Attaches the debugger to a tab for full inspection/control"},
+{pattern:/chrome\.management\.setEnabled|chrome\.management\.uninstall/i,severity:"high",category:"extension_management",title:"Extension management manipulation",description:"Can enable/disable/uninstall other extensions"},
+{pattern:/document\.cookie/i,severity:"medium",category:"data_access",title:"Cookie access",description:"Reads or writes browser cookies"},
+{pattern:/\.innerHTML\s*=/i,severity:"medium",category:"dom_manipulation",title:"innerHTML assignment (potential XSS)",description:"Sets element HTML directly -- can introduce XSS if using untrusted data"},
+{pattern:/document\.write\s*\(/i,severity:"medium",category:"dom_manipulation",title:"document.write usage",description:"Writes directly to the document -- can overwrite page content"},
+{pattern:/navigator\.clipboard/i,severity:"medium",category:"data_access",title:"Clipboard API access",description:"Uses the async Clipboard API to read or write clipboard data"},
+{pattern:/String\.fromCharCode/i,severity:"medium",category:"obfuscation",title:"Character code obfuscation",description:"Builds strings from character codes -- common obfuscation technique"},
+{pattern:/(?:keydown|keyup|keypress)\s*['",]|addEventListener\s*\(\s*['"](?:keydown|keyup|keypress)['"]/i,severity:"medium",category:"keylogger",title:"Keystroke monitoring",description:"Listens for keyboard events -- could be used for keylogging"},
+{pattern:/chrome\.cookies\.getAll|browser\.cookies\.getAll/i,severity:"medium",category:"data_access",title:"Bulk cookie access",description:"Retrieves all cookies, potentially including session tokens"},
+{pattern:/chrome\.history\.search|browser\.history\.search/i,severity:"medium",category:"data_access",title:"Browsing history access",description:"Searches through browsing history"},
+{pattern:/window\.open\s*\(/i,severity:"medium",category:"popups",title:"Popup window creation",description:"Opens new browser windows programmatically"},
+{pattern:/WebSocket\s*\(/i,severity:"medium",category:"network",title:"WebSocket connection",description:"Opens persistent WebSocket connections -- could be used for C2"},
+{pattern:/document\.createElement\s*\(\s*['"]script['"]/i,severity:"medium",category:"code_injection",title:"Dynamic script element creation",description:"Creates script elements dynamically -- may load external code"},
+{pattern:/XMLHttpRequest|fetch\s*\(/i,severity:"low",category:"network",title:"External network request",description:"Makes HTTP requests to external servers"},
+{pattern:/\batob\s*\(|\bbtoa\s*\(/i,severity:"low",category:"obfuscation",title:"Base64 encoding/decoding",description:"Encodes or decodes base64 strings -- may be hiding data"},
+{pattern:/localStorage\.|sessionStorage\./i,severity:"low",category:"data_access",title:"Web storage access",description:"Uses localStorage or sessionStorage for data persistence"},
+{pattern:/navigator\.(?:userAgent|platform|language|hardwareConcurrency|deviceMemory)/i,severity:"low",category:"fingerprinting",title:"Browser fingerprinting data",description:"Accesses browser/device information that could be used for fingerprinting"},
+{pattern:/canvas\.toDataURL|\.getImageData|\.toBlob/i,severity:"low",category:"fingerprinting",title:"Canvas fingerprinting potential",description:"Uses canvas APIs that could be used for browser fingerprinting"},
+];
+
+// ============================================================================
+// INTEL PATTERNS
+// ============================================================================
+const INTEL_RE={
+url:/https?:\/\/[^\s'"<>\)\]\},;`\\]{4,}/gi,
+domain:/\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:com|net|org|io|dev|co|uk|de|fr|ru|cn|info|biz|me|tv|app|xyz|online|site|tech|store|pro|cloud|ai|sh|to|ly|nl|be|at|ch|se|fi|no|dk|pl|cz|es|it|pt|br|au|nz|jp|kr)\b/gi,
+ipv4:/\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\b/g,
+email:/\b[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}\b/g,
+btc:/\b(?:1[a-km-zA-HJ-NP-Z1-9]{25,34}|3[a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[a-zA-HJ-NP-Z0-9]{25,90})\b/g,
+base64:/\b(?:[A-Za-z0-9+\/]{4}){8,}(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?\b/g,
+};
+const NOISE_URLS=["schemas.xmlsoap.org","www.w3.org/","xmlns.com","purl.org","json-schema.org","creativecommons.org/licenses","opensource.org/licenses","spdx.org"];
+const NOISE_DOMAINS=new Set(["w3.org","www.w3.org","schemas.xmlsoap.org","xmlns.com","purl.org","json-schema.org","mozilla.org","example.com","example.org","example.net","localhost"]);
+const TEXT_EXT=new Set([".js",".jsx",".ts",".tsx",".mjs",".cjs",".json",".html",".htm",".xhtml",".css",".scss",".less",".xml",".svg",".txt",".md",".yaml",".yml",".map"]);
+const SCAN_EXT=new Set([".js",".jsx",".ts",".tsx",".mjs",".cjs",".html",".htm",".xhtml"]);
+const FILE_CATS={html:new Set([".html",".htm",".xhtml"]),js:new Set([".js",".jsx",".ts",".tsx",".mjs",".cjs"]),css:new Set([".css",".scss",".less",".sass"]),json:new Set([".json"]),images:new Set([".png",".jpg",".jpeg",".gif",".svg",".ico",".bmp",".webp"]),fonts:new Set([".woff",".woff2",".ttf",".otf",".eot"])};
+
+function getExt(name){const i=name.lastIndexOf(".");return i>=0?name.slice(i).toLowerCase():"";}
+function fileCat(name){const e=getExt(name);for(const[c,s]of Object.entries(FILE_CATS))if(s.has(e))return c;return"other";}
+function fmtSize(b){if(b<1024)return b+"B";if(b<1048576)return(b/1024).toFixed(1)+"KB";return(b/1048576).toFixed(1)+"MB";}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+// ============================================================================
+// CRX HEADER STRIPPING
+// ============================================================================
+function stripCrxHeader(buf){
+  const dv=new DataView(buf);
+  if(buf.byteLength<16)return buf;
+  const magic=String.fromCharCode(dv.getUint8(0),dv.getUint8(1),dv.getUint8(2),dv.getUint8(3));
+  if(magic!=="Cr24"){
+    if(dv.getUint8(0)===0x50&&dv.getUint8(1)===0x4B)return buf;
+    throw new Error("Not a valid CRX file");
+  }
+  const version=dv.getUint32(4,true);
+  let zipStart;
+  if(version===3){
+    const headerSize=dv.getUint32(8,true);
+    zipStart=12+headerSize;
+  }else if(version===2){
+    const pubLen=dv.getUint32(8,true);
+    const sigLen=dv.getUint32(12,true);
+    zipStart=16+pubLen+sigLen;
+  }else{
+    throw new Error("Unknown CRX version: "+version);
+  }
+  if(zipStart>=buf.byteLength)throw new Error("CRX header extends beyond file size");
+  return buf.slice(zipStart);
+}
+
+// ============================================================================
+// ANALYSIS ENGINE
+// ============================================================================
+let currentFiles={};
+let currentReport=null;
+
+async function analyzeFile(file){
+  const progressEl=document.getElementById("progress");
+  const fillEl=document.getElementById("progressFill");
+  const statusEl=document.getElementById("progressStatus");
+  const resultsEl=document.getElementById("results");
+
+  progressEl.classList.add("active");
+  resultsEl.classList.remove("active");
+  fillEl.style.width="5%";
+  statusEl.textContent="Reading file...";
+
+  try{
+    let buf=await file.arrayBuffer();
+    fillEl.style.width="10%";
+    statusEl.textContent="Checking format...";
+
+    const ext=getExt(file.name);
+    if(ext===".crx"||new Uint8Array(buf,0,4).reduce((s,b)=>s+String.fromCharCode(b),"")==="Cr24"){
+      statusEl.textContent="Stripping CRX header...";
+      buf=stripCrxHeader(buf);
+    }
+    fillEl.style.width="15%";
+    statusEl.textContent="Extracting ZIP archive...";
+
+    const zip=await JSZip.loadAsync(buf);
+    const entries=Object.keys(zip.files).filter(n=>!zip.files[n].dir);
+    fillEl.style.width="25%";
+    statusEl.textContent="Reading "+entries.length+" files...";
+
+    // Read all text files
+    const fileContents={};
+    const fileSizes={};
+    const allFiles=[];
+    let loaded=0;
+    for(const name of entries){
+      const e=zip.files[name];
+      const s=getExt(name);
+      const data=await e.async("arraybuffer");
+      fileSizes[name]=data.byteLength;
+      allFiles.push({path:name,size:data.byteLength,cat:fileCat(name)});
+      if(TEXT_EXT.has(s)&&data.byteLength<5*1024*1024){
+        try{fileContents[name]=new TextDecoder("utf-8",{fatal:false}).decode(data);}catch(e){}
+      }
+      loaded++;
+      if(loaded%20===0){
+        fillEl.style.width=(25+30*(loaded/entries.length))+"%";
+        statusEl.textContent="Reading files... "+loaded+"/"+entries.length;
+        await new Promise(r=>setTimeout(r,0));
+      }
+    }
+    currentFiles=fileContents;
+    fillEl.style.width="55%";
+    statusEl.textContent="Parsing manifest...";
+
+    // Parse manifest
+    let manifest=null;
+    if(fileContents["manifest.json"]){
+      manifest=JSON.parse(fileContents["manifest.json"]);
+    }else{
+      for(const k of Object.keys(fileContents)){
+        if(k.endsWith("/manifest.json")&&k.split("/").length===2){
+          manifest=JSON.parse(fileContents[k]);break;
+        }
+      }
+    }
+    if(!manifest)throw new Error("No manifest.json found in extension");
+
+    // i18n name resolution
+    let extName=manifest.name||"Unknown";
+    if(extName.startsWith("__MSG_")&&extName.endsWith("__")){
+      const key=extName.slice(6,-2).toLowerCase();
+      const locales=["_locales/en/messages.json","_locales/en_US/messages.json"];
+      for(const lp of locales){
+        if(fileContents[lp]){
+          try{
+            const msgs=JSON.parse(fileContents[lp]);
+            for(const[k,v]of Object.entries(msgs)){
+              if(k.toLowerCase()===key){extName=v.message||extName;break;}
+            }
+          }catch(e){}
+          break;
+        }
+      }
+    }
+
+    fillEl.style.width="65%";
+    statusEl.textContent="Analyzing permissions...";
+
+    // Permission analysis
+    const permResults=analyzePermissions(manifest);
+    const permScore=computePermScore(permResults);
+
+    fillEl.style.width="75%";
+    statusEl.textContent="Scanning for security issues...";
+    await new Promise(r=>setTimeout(r,0));
+
+    // Security scan
+    const scanResults=scanFiles(fileContents);
+    const secScore=computeSecScore(scanResults);
+
+    fillEl.style.width="85%";
+    statusEl.textContent="Extracting intelligence...";
+    await new Promise(r=>setTimeout(r,0));
+
+    // Intel extraction
+    const intel=extractIntel(fileContents);
+
+    // Risk score
+    const riskScore=computeRiskScore(permScore,secScore,intel);
+    const riskLevel=riskScore>=75?"critical":riskScore>=50?"high":riskScore>=25?"medium":riskScore>=10?"low":"info";
+
+    fillEl.style.width="95%";
+    statusEl.textContent="Generating report...";
+
+    const extType=manifest.browser_specific_settings||manifest.applications?"firefox":"chrome";
+    const report={
+      id:"ext_"+Date.now().toString(36),
+      timestamp:new Date().toISOString(),
+      basic_info:{name:extName,version:manifest.version||"0.0.0",author:manifest.author||(manifest.developer&&manifest.developer.name)||"Unknown",description:manifest.description||"",manifest_version:manifest.manifest_version||2,type:extType},
+      risk_score:riskScore,risk_level:riskLevel,
+      files:allFiles,permissions:permResults,
+      security:scanResults,intel:intel,manifest:manifest
+    };
+    currentReport=report;
+
+    fillEl.style.width="100%";
+    statusEl.textContent="Analysis complete";
+
+    saveToHistory(report);
+    renderReport(report);
+    setTimeout(()=>{progressEl.classList.remove("active");},800);
+
+  }catch(err){
+    statusEl.textContent="Error: "+err.message;
+    fillEl.style.width="100%";
+    fillEl.style.background="var(--accent3)";
+    setTimeout(()=>{fillEl.style.background="";progressEl.classList.remove("active");},3000);
+  }
+}
+
+// ============================================================================
+// PERMISSION ANALYSIS
+// ============================================================================
+function classifyHostPerm(pattern){
+  const allP=new Set(["<all_urls>","*://*/*","http://*/*","https://*/*","*://*"]);
+  if(allP.has(pattern))return{name:pattern,risk:"critical",desc:"Access to ALL websites",warning:"Can read/modify every page you visit"};
+  const m=pattern.match(/^(\*|https?|ftp|file):\/\/(\*|\*\.[^/]+|[^/]+)(\/.*)?$/);
+  if(!m)return{name:pattern,risk:"medium",desc:"URL pattern: "+pattern,warning:"Non-standard URL pattern"};
+  const[,scheme,host]=m;
+  if(host==="*")return{name:pattern,risk:"critical",desc:"Access to ALL "+(scheme==="https"?"secure ":"")+"websites",warning:"Unrestricted host access"};
+  if(host.startsWith("*.")){
+    const dom=host.slice(2);
+    const broad=new Set(["google.com","googleapis.com","gstatic.com","facebook.com","amazon.com","microsoft.com","apple.com","cloudfront.net","amazonaws.com","github.com"]);
+    if(broad.has(dom))return{name:pattern,risk:"high",desc:"Access to all "+dom+" subdomains",warning:"Broad access across "+dom+" infrastructure"};
+    return{name:pattern,risk:"medium",desc:"Access to "+dom+" and subdomains",warning:"Can read/modify pages on *."+dom};
+  }
+  return{name:pattern,risk:"low",desc:"Access to "+host,warning:"Limited to "+host+" only"};
+}
+
+function analyzePermissions(manifest){
+  const results=[];const seen=new Set();
+  for(const key of["permissions","optional_permissions","host_permissions"]){
+    for(const p of manifest[key]||[]){
+      if(seen.has(p))continue;seen.add(p);
+      if(PERMISSIONS[p]){
+        const info=PERMISSIONS[p];
+        results.push({name:p,risk:info.risk,desc:info.desc,warning:info.warning});
+      }else if(/^(\*|https?|ftp|file):\/\//.test(p)||p==="<all_urls>"){
+        results.push(classifyHostPerm(p));
+      }else{
+        results.push({name:p,risk:"medium",desc:"Unknown permission: "+p,warning:"Unrecognized permission -- review manually"});
+      }
+    }
+  }
+  for(const cs of manifest.content_scripts||[]){
+    for(const pat of cs.matches||[]){
+      if(seen.has(pat))continue;seen.add(pat);
+      const h=classifyHostPerm(pat);
+      h.desc="Content script: "+h.desc;
+      results.push(h);
+    }
+  }
+  return results;
+}
+function computePermScore(perms){let s=0;for(const p of perms)s+=RISK_WEIGHTS[p.risk]||0;return Math.min(s,100);}
+
+// ============================================================================
+// SECURITY SCANNER
+// ============================================================================
+function scanFiles(fileContents){
+  const findings=[];
+  const seen=new Set();
+  for(const[path,content]of Object.entries(fileContents)){
+    const ext=getExt(path);
+    if(!SCAN_EXT.has(ext))continue;
+    const lines=content.split("\n");
+    for(const sp of SECURITY_PATTERNS){
+      sp.pattern.lastIndex=0;
+      let m;
+      while((m=sp.pattern.exec(content))!==null){
+        let ln=1;for(let i=0;i<m.index;i++)if(content[i]==="\n")ln++;
+        const key=path+":"+ln+":"+sp.title;
+        if(seen.has(key))continue;seen.add(key);
+        const codeLine=lines[ln-1]?lines[ln-1].trim().slice(0,300):"";
+        findings.push({severity:sp.severity,category:sp.category,title:sp.title,file:path,line:ln,code:codeLine,description:sp.description});
+      }
+    }
+    // Obfuscation check
+    if(new Set([".js",".mjs",".cjs"]).has(ext)){
+      const nonEmpty=lines.filter(l=>l.trim());
+      if(nonEmpty.length<=3&&nonEmpty.length>0){
+        const avgLen=nonEmpty.reduce((a,l)=>a+l.length,0)/nonEmpty.length;
+        if(avgLen>10000){
+          const hexEsc=(content.match(/\\x[0-9a-fA-F]{2}/g)||[]).length;
+          const uniEsc=(content.match(/\\u[0-9a-fA-F]{4}/g)||[]).length;
+          if(hexEsc>50||uniEsc>50){
+            findings.push({severity:"high",category:"obfuscation",title:"Heavily obfuscated code detected",file:path,line:1,code:content.slice(0,200)+"...",description:hexEsc+" hex escapes, "+uniEsc+" unicode escapes in "+content.length+" bytes"});
+          }
+        }
+      }
+    }
+  }
+  const sevOrd={critical:0,high:1,medium:2,low:3,info:4};
+  findings.sort((a,b)=>(sevOrd[a.severity]||5)-(sevOrd[b.severity]||5)||a.file.localeCompare(b.file)||a.line-b.line);
+  const summary={critical:0,high:0,medium:0,low:0,info:0};
+  for(const f of findings)if(summary[f.severity]!==undefined)summary[f.severity]++;
+  return{findings,summary};
+}
+function computeSecScore(scan){let s=0;for(const f of scan.findings)s+=SEV_WEIGHTS[f.severity]||0;return Math.min(s,100);}
+
+// ============================================================================
+// INTEL EXTRACTION
+// ============================================================================
+function extractIntel(fileContents){
+  let urls=[],domains=[],ipv4=[],emails=[],btc=[],base64=[];
+  for(const[path,content]of Object.entries(fileContents)){
+    const ext=getExt(path);
+    if(!TEXT_EXT.has(ext))continue;
+    const u=content.match(INTEL_RE.url)||[];urls.push(...u);
+    const d=content.match(INTEL_RE.domain)||[];domains.push(...d);
+    const ip=content.match(INTEL_RE.ipv4)||[];ipv4.push(...ip);
+    const em=content.match(INTEL_RE.email)||[];emails.push(...em);
+    const bt=content.match(INTEL_RE.btc)||[];btc.push(...bt);
+    const b6=content.match(INTEL_RE.base64)||[];
+    for(const s of b6){if(s.length>=32)base64.push(s);}
+  }
+  // Filter
+  urls=[...new Set(urls.map(u=>u.replace(/[.,;:!?)'"`]+$/,"")).filter(u=>!NOISE_URLS.some(n=>u.includes(n))&&u.length<=500))].sort();
+  const urlDoms=new Set();
+  for(const u of urls){try{urlDoms.add(new URL(u).hostname.toLowerCase());}catch(e){}}
+  domains=[...new Set(domains.map(d=>d.toLowerCase()).filter(d=>!NOISE_DOMAINS.has(d)&&!urlDoms.has(d)))].sort();
+  ipv4=[...new Set(ipv4.filter(ip=>!ip.startsWith("0.")&&!ip.startsWith("127.")&&ip!=="255.255.255.255"))].sort();
+  emails=[...new Set(emails)].sort();
+  btc=[...new Set(btc)].sort();
+  base64=[...new Set(base64)].slice(0,50);
+  return{urls,domains,ipv4,emails,btc_addresses:btc,base64_strings:base64};
+}
+
+// ============================================================================
+// RISK SCORE
+// ============================================================================
+function computeRiskScore(permScore,secScore,intel){
+  let intelScore=0;
+  const uc=intel.urls.length;
+  if(uc>20)intelScore+=15;else if(uc>5)intelScore+=5;
+  const ipc=intel.ipv4.length;
+  if(ipc>0)intelScore+=Math.min(ipc*10,30);
+  if(intel.btc_addresses.length>0)intelScore+=Math.min(intel.btc_addresses.length*20,40);
+  if(intel.base64_strings.length>5)intelScore+=15;else if(intel.base64_strings.length>0)intelScore+=5;
+  intelScore=Math.min(intelScore,100);
+  return Math.min(Math.round(permScore*0.35+secScore*0.45+intelScore*0.20),100);
+}
+
+// ============================================================================
+// RENDER
+// ============================================================================
+function renderReport(r){
+  const resultsEl=document.getElementById("results");
+  resultsEl.classList.add("active");
+
+  // Overview
+  const bi=r.basic_info;
+  const rc=r.risk_score<30?"risk-low":r.risk_score<60?"risk-medium":r.risk_score<80?"risk-high":"risk-critical";
+  const totalFiles=r.files.length;
+  const totalSize=r.files.reduce((a,f)=>a+f.size,0);
+  document.getElementById("overview").innerHTML=`
+    <div class="risk-circle ${rc}">
+      <span class="score">${r.risk_score}</span>
+      <span class="label">${r.risk_level}</span>
+    </div>
+    <div class="overview-info">
+      <h2>${esc(bi.name)}</h2>
+      <div class="meta">v${esc(bi.version)} &middot; ${esc(bi.type)} &middot; MV${bi.manifest_version}${bi.author!=="Unknown"?" &middot; "+esc(bi.author):""}</div>
+      <div class="desc">${esc(bi.description).slice(0,300)}</div>
+      <div class="overview-stats">
+        <div class="stat"><strong>${r.permissions.length}</strong> permissions</div>
+        <div class="stat"><strong>${r.security.findings.length}</strong> findings</div>
+        <div class="stat"><strong>${totalFiles}</strong> files</div>
+        <div class="stat"><strong>${fmtSize(totalSize)}</strong> total</div>
+      </div>
+    </div>`;
+
+  // Build sections
+  const cards=document.getElementById("sectionCards");
+  cards.innerHTML="";
+
+  // Permissions
+  if(r.permissions.length>0){
+    const sevOrder={critical:0,high:1,medium:2,low:3,info:4};
+    const sorted=[...r.permissions].sort((a,b)=>(sevOrder[a.risk]||5)-(sevOrder[b.risk]||5));
+    let permHtml=sorted.map(p=>`<div class="perm-item"><span class="sev-badge sev-${p.risk}">${p.risk}</span><div class="perm-detail"><div class="name">${esc(p.name)}</div><div class="warn">${esc(p.warning)}</div></div></div>`).join("");
+    cards.innerHTML+=buildSection("Permissions",r.permissions.length,permHtml,true);
+  }
+
+  // Security Findings
+  if(r.security.findings.length>0){
+    const sm=r.security.summary;
+    const badge=sm.critical>0?"critical":sm.high>0?"high":sm.medium>0?"medium":"low";
+    let fHtml=r.security.findings.map(f=>`<div class="finding-item"><div class="finding-top"><span class="sev-badge sev-${f.severity}">${f.severity}</span><span class="finding-title">${esc(f.title)}</span></div><div class="finding-loc" onclick="openSource('${esc(f.file)}',${f.line})">${esc(f.file)}:${f.line}</div><div class="finding-desc">${esc(f.description)}</div>${f.code?`<div class="finding-code">${esc(f.code)}</div>`:""}</div>`).join("");
+    cards.innerHTML+=buildSection("Security Findings",r.security.findings.length,fHtml,true);
+  }
+
+  // Intelligence
+  const intel=r.intel;
+  let intelHtml="";
+  const groups=[
+    ["URLs",intel.urls,"url"],["Domains",intel.domains,""],["IPv4 Addresses",intel.ipv4,""],
+    ["Email Addresses",intel.emails,""],["Bitcoin Addresses",intel.btc_addresses,""],
+    ["Base64 Strings",intel.base64_strings,""]
+  ];
+  for(const[label,items,cls]of groups){
+    if(items.length===0)continue;
+    const display=items.slice(0,100);
+    intelHtml+=`<div class="intel-group"><h4>${label} (${items.length})</h4><div class="intel-list">${display.map(it=>`<span class="intel-tag ${cls}">${esc(typeof it==="object"?it:it)}</span>`).join("")}${items.length>100?`<span class="intel-tag">+${items.length-100} more</span>`:""}</div></div>`;
+  }
+  const totalIntel=intel.urls.length+intel.domains.length+intel.ipv4.length+intel.emails.length+intel.btc_addresses.length+intel.base64_strings.length;
+  if(totalIntel>0)cards.innerHTML+=buildSection("Intelligence",totalIntel,intelHtml||'<div class="empty-state">No intelligence extracted</div>',false);
+
+  // Files
+  const cats={};
+  for(const f of r.files){if(!cats[f.cat])cats[f.cat]=[];cats[f.cat].push(f);}
+  let filesHtml='<ul class="file-tree">';
+  const catOrder=["js","html","css","json","images","fonts","other"];
+  for(const cat of catOrder){
+    if(!cats[cat])continue;
+    for(const f of cats[cat]){
+      const clickable=currentFiles[f.path]?` onclick="openSource('${esc(f.path)}')"`:""  ;
+      const cls="file-name";
+      filesHtml+=`<li><span class="file-cat">${cat}</span><span class="${cls}"${clickable}>${esc(f.path)}</span><span class="file-size">${fmtSize(f.size)}</span></li>`;
+    }
+  }
+  filesHtml+="</ul>";
+  cards.innerHTML+=buildSection("Files",r.files.length,filesHtml,false);
+
+  // Manifest
+  cards.innerHTML+=buildSection("Manifest","",`<div class="manifest-pre">${esc(JSON.stringify(r.manifest,null,2))}</div>`,false);
+
+  // Wire up section toggles
+  for(const el of cards.querySelectorAll(".section-header")){
+    el.addEventListener("click",()=>el.parentElement.classList.toggle("open"));
+  }
+
+  resultsEl.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function buildSection(title,count,bodyHtml,openByDefault){
+  return`<div class="section-card${openByDefault?" open":""}"><div class="section-header"><h3>${title}${count!==""?` <span class="count">${count}</span>`:""}</h3><span class="chevron">&#9654;</span></div><div class="section-body">${bodyHtml}</div></div>`;
+}
+
+// ============================================================================
+// SOURCE VIEWER
+// ============================================================================
+function openSource(path,line){
+  const content=currentFiles[path];
+  if(!content)return;
+  const modal=document.getElementById("sourceModal");
+  document.getElementById("modalTitle").textContent=path;
+  const lines=content.split("\n");
+  let html="";
+  for(let i=0;i<lines.length;i++){
+    const ln=i+1;
+    const highlight=ln===line?' style="background:rgba(255,140,0,.15)"':"";
+    html+=`<span class="line-num">${ln}</span><span${highlight}>${esc(lines[i])}</span>\n`;
+  }
+  document.getElementById("modalCode").innerHTML=html;
+  modal.classList.add("active");
+  if(line){
+    setTimeout(()=>{
+      const target=document.querySelector(`#modalCode .line-num:nth-child(${(line-1)*2+1})`);
+      if(target)target.scrollIntoView({block:"center"});
+    },50);
+  }
+}
+document.getElementById("modalClose").addEventListener("click",()=>document.getElementById("sourceModal").classList.remove("active"));
+document.getElementById("sourceModal").addEventListener("click",e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove("active");});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("sourceModal").classList.remove("active");});
+
+// ============================================================================
+// FILE UPLOAD HANDLING
+// ============================================================================
+const dropZone=document.getElementById("dropZone");
+const fileInput=document.getElementById("fileInput");
+dropZone.addEventListener("click",()=>fileInput.click());
+dropZone.addEventListener("dragover",e=>{e.preventDefault();dropZone.classList.add("dragover");});
+dropZone.addEventListener("dragleave",()=>dropZone.classList.remove("dragover"));
+dropZone.addEventListener("drop",e=>{e.preventDefault();dropZone.classList.remove("dragover");if(e.dataTransfer.files.length)analyzeFile(e.dataTransfer.files[0]);});
+fileInput.addEventListener("change",e=>{if(e.target.files.length)analyzeFile(e.target.files[0]);});
+
+// ============================================================================
+// LOCALSTORAGE HISTORY
+// ============================================================================
+function saveToHistory(report){
+  let hist=JSON.parse(localStorage.getItem("extreview_history")||"[]");
+  hist.unshift({id:report.id,name:report.basic_info.name,version:report.basic_info.version,risk_score:report.risk_score,risk_level:report.risk_level,timestamp:report.timestamp});
+  if(hist.length>20)hist=hist.slice(0,20);
+  localStorage.setItem("extreview_history",JSON.stringify(hist));
+  localStorage.setItem("extreview_report_"+report.id,JSON.stringify(report));
+  renderRecent();
+}
+function loadReport(id){
+  const data=localStorage.getItem("extreview_report_"+id);
+  if(!data)return;
+  const report=JSON.parse(data);
+  currentReport=report;
+  currentFiles={};
+  renderReport(report);
+}
+function deleteReport(id,ev){
+  ev.stopPropagation();
+  let hist=JSON.parse(localStorage.getItem("extreview_history")||"[]");
+  hist=hist.filter(h=>h.id!==id);
+  localStorage.setItem("extreview_history",JSON.stringify(hist));
+  localStorage.removeItem("extreview_report_"+id);
+  renderRecent();
+}
+function renderRecent(){
+  const hist=JSON.parse(localStorage.getItem("extreview_history")||"[]");
+  const section=document.getElementById("recentSection");
+  const list=document.getElementById("recentList");
+  if(hist.length===0){section.style.display="none";return;}
+  section.style.display="";
+  list.innerHTML=hist.map(h=>{
+    const c=h.risk_score<30?"var(--accent)":h.risk_score<60?"var(--sev-medium)":h.risk_score<80?"var(--sev-high)":"var(--sev-critical)";
+    const t=new Date(h.timestamp);
+    const ts=t.toLocaleDateString()+" "+t.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});
+    return`<div class="recent-item" onclick="loadReport('${h.id}')"><span class="ri-score" style="color:${c}">${h.risk_score}</span><span class="ri-name">${esc(h.name)}</span><span class="ri-ver">v${esc(h.version)}</span><span class="ri-time">${ts}</span><button class="ri-del" onclick="deleteReport('${h.id}',event)" title="Delete">&times;</button></div>`;
+  }).join("");
+}
+renderRecent();
+</script>
+</body>
+</html>
