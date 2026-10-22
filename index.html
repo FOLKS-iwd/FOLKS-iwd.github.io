@@ -543,7 +543,7 @@ footer .accent { color: var(--accent); }
       <span class="typed" id="typed-text"></span><span class="cursor"></span>
     </div>
     <p class="hero-desc">
-      Senior Offensive Security Engineer with 5+ years across penetration testing, purple teaming, vulnerability research, and DFIR. Author of 6 published zero-day CVEs (2M+ installs), active bug bounty researcher with 50+ reports across European programs, and 6x CTF champion.
+      Author of 6 published zero-day CVEs affecting plugins with 2M+ active installs. Senior Offensive Security Engineer leading pentesting, purple-team, and TIBER-EU programs at ODDO BHF. Active bug bounty researcher with 50+ accepted reports on Intigriti, YesWeHack, and Google OSS VRP. 6x CTF champion. Open to EU relocation.
     </p>
     <div class="hero-buttons">
       <a href="#contact" class="btn btn-primary">
@@ -603,7 +603,7 @@ footer .accent { color: var(--accent); }
           <p class="output">alaaeddine.knani</p>
           <br>
           <p><span class="prompt">$</span> <span class="cmd">cat role.txt</span></p>
-          <p class="output">Senior Offensive Security Engineer @ ODDO BHF</p>
+          <p class="output">Senior Offensive Security Engineer @ ODDO BHF (Group Cybersecurity)</p>
           <p class="output">Cybersecurity Consultant (Freelance)</p>
           <br>
           <p><span class="prompt">$</span> <span class="cmd">cat location.txt</span></p>
@@ -613,16 +613,16 @@ footer .accent { color: var(--accent); }
           <p class="output">Arabic (Native) | English (Bilingual) | French (Bilingual)</p>
           <br>
           <p><span class="prompt">$</span> <span class="cmd">cat education.txt</span></p>
-          <p class="output">B.Eng Network Security - Tek-Up University</p>
+          <p class="output">B.Eng Network Security - Tek-Up University (evening program, 2027)</p>
           <p class="output">B.Sc Computer Networks - ISITCom Sousse</p>
         </div>
       </div>
       <div class="about-text">
         <h3>Breaking Systems to Build Stronger Ones</h3>
         <p>
-          Senior Offensive Security Engineer leading offensive operations at ODDO BHF,
-          securing enterprise banking infrastructure. Active bug bounty researcher with 50+ reports
-          across Intigriti, YesWeHack, and Google OSS VRP. 6x CTF champion across MENA and global competitions.
+          Author of 6 published zero-day CVEs affecting plugins with 2M+ active installs.
+          Senior Offensive Security Engineer leading pentesting, purple-team, and TIBER-EU programs
+          at ODDO BHF (Group Cybersecurity). Active bug bounty researcher with 50+ accepted reports. Open to EU relocation.
         </p>
         <p>
           My work spans penetration testing, purple teaming and TIBER-EU adversary simulations,
@@ -655,12 +655,12 @@ footer .accent { color: var(--accent); }
         <span class="timeline-date">March 2023 - Present</span>
         <div class="timeline-card">
           <h3>Senior Offensive Security Engineer</h3>
-          <p class="company">ODDO BHF Tunis, Tunisia</p>
+          <p class="company">ODDO BHF, Group Cybersecurity - Tunis, Tunisia (group-wide scope)</p>
           <ul>
-            <li>Lead 20+ penetration tests annually across banking applications and internal infrastructure (AD, network, web, API)</li>
-            <li>Execute purple-team engagements and TIBER-EU adversary simulations; tune 150+ detection rules in IBM QRadar and CrowdStrike Falcon</li>
-            <li>Investigate 30+ security incidents; drive containment and forensics using Volatility and KAPE, achieving sub-4h mean response time</li>
-            <li>Perform secure code review and SAST (Checkmarx, Semgrep); mentor 2 junior analysts on offensive methodology</li>
+            <li>Lead 20+ penetration tests annually across banking applications, Active Directory, network, and APIs; identify critical vulnerabilities in production payment systems</li>
+            <li>Plan and execute purple-team engagements and TIBER-EU adversary simulations using C2 frameworks (Cobalt Strike, Sliver); author and tune 150+ detection rules in IBM QRadar and CrowdStrike Falcon</li>
+            <li>Investigate and contain 30+ security incidents annually; reduced mean time to respond from 8h to under 4h</li>
+            <li>Perform secure code review and SAST (Checkmarx, Semgrep); mentor 2 junior analysts, building the team's internal pentest capability</li>
           </ul>
         </div>
       </div>
@@ -671,8 +671,8 @@ footer .accent { color: var(--accent); }
           <h3>Cybersecurity Consultant</h3>
           <p class="company">Freelance Remote</p>
           <ul>
-            <li>Deliver 15+ offensive security assessments (web, mobile, API, network) annually for fintech, SaaS, and e-commerce clients</li>
-            <li>Identify an average of 10+ critical/high findings per engagement; provide remediation validation and incident-response support</li>
+            <li>Deliver 15+ offensive security assessments annually (web, mobile, API, infrastructure) for fintech, SaaS, and e-commerce clients</li>
+            <li>Average 10+ critical/high findings per engagement with 95%+ remediation adoption rate; provide retesting and incident-response support</li>
           </ul>
         </div>
       </div>
@@ -1031,6 +1031,12 @@ footer .accent { color: var(--accent); }
     </div>
     <div class="certs-grid">
       <div class="cert-card">
+        <div class="cert-badge">&#128300;</div>
+        <h3>eAIS</h3>
+        <p class="cert-id">INE Security</p>
+        <p class="cert-date">October 2026</p>
+      </div>
+      <div class="cert-card">
         <div class="cert-badge">&#9729;</div>
         <h3>SC-900</h3>
         <p class="cert-id">Microsoft &bull; <a href="https://learn.microsoft.com/fr-fr/users/AlaaeddineKnani-8081/credentials/A292F6FC0135EE1" target="_blank" style="color:inherit;text-decoration:underline dotted">#A292F6FC0135EE1</a></p>
@@ -1204,7 +1210,7 @@ const counterObserver = new IntersectionObserver((entries) => {
       animateCounter(document.getElementById('counter-wins'), 7, 1500);
       animateCounter(document.getElementById('counter-years'), 5, 1200);
       animateCounter(document.getElementById('counter-cves'), 6, 800);
-      animateCounter(document.getElementById('counter-certs'), 11, 1000);
+      animateCounter(document.getElementById('counter-certs'), 12, 1000);
       counterObserver.disconnect();
     }
   });
